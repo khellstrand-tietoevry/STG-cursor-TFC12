@@ -1,0 +1,1930 @@
+       Identification Division.                                         00010017
+       Program-Id. FTFCL120.                                            00020017
+       Author. Z1132HB                                                  00030022
+      *################################################################*00040017
+      *                                                                *00050017
+      * Servo - logilevel   / L-module - Logic module                  *00060017
+      * uses STG, in accordance with new Servo Standards.              *00070017
+      *                                                                *00080017
+      * TFC12/01 - Opplegg omkostninger                                *00090017
+      *                                                                *00100017
+      * Kode between <META> and </META> tags must not be modified. Do  *00110017
+      * your modifications in the specified user sections !            *00120017
+      *                                                                *00130017
+      *################################################################*00140017
+      * Date ! Si! Type of change                                ! 3A !*00150017
+      *------+---+-----------------------------------------------+----+*00151099
+      *160312!NDL! Charge-Text and charge-amount-base            !    !*00152099
+      *------+---+-----------------------------------------------+----+*00152199
+      *010702!NDL! Min charge when methcalc = pct of CA          !LO18!*00152299
+      *------+---+-----------------------------------------------+----+*00153099
+      *001207!LG ! Percent charges - amount is used if equal minv.lR02!*00154099
+      *------+---+-----------------------------------------------+----+*00160017
+      *070900!NDL! Percent charges                               !LR02!*00170099
+      *990315!&&&! New module                                    !&&&&!*00171099
+      *################################################################*00180017
+       Environment Division.                                            00190017
+       Configuration Section.                                           00200017
+       Special-Names.                                                   00210017
+           Decimal-Point Is Comma.                                      00220017
+      *################################################################*00230017
+       Data Division.                                                   00240017
+       Working-Storage Section.                                         00250017
+      *                                                                 00260017
+       01  W-Work-Fields.                                               00270017
+      *                                                                 00280017
+      *<META WA-START>                                                  00290017
+           05  Filler                     Pic   X(08) Value 'WA-START'. 00300017
+      *</META>                                                          00310017
+      *                                                                 00320017
+           05  WA-Part-Main-Switch        Pic   9.                      00330033
+               88  SW-Part                            Value 1.          00340033
+               88  SW-Main                            Value 2.          00350033
+           05  WA-Charge-Calc-Switch      Pic   9.                      00360033
+               88  SW-Accumulate-Amount               Value 1.          00370033
+               88  SW-Replace-Amount                  Value 2.          00380033
+               88  SW-Percentage                      Value 3.          00390034
+      *                                                                 00400017
+           05  Ws-Text-Fin-Inst-No        Pic  X(18).                   00400199
+           05  Filler         Redefines   Ws-Text-Fin-Inst-No.          00400299
+             10  Ws-Inst-No               Pic   9(04).                  00400399
+             10  Filler                   Pic   9(14).                  00400499
+      *                                                                 00401099
+           05  WA-Charge-Amount           Pic  S9(14)V9(03) Comp-3.     00410017
+           05  WA-Currency                Pic   X(03).                  00420042
+           05  WA-Percentage              Pic   9(03)V9(03).            00430099
+      *                                                                 00440017
+           05  WA-Ind1                    Pic  S9(02)       Comp.       00450017
+           05  WA-Ind2                    Pic  S9(02)       Comp.       00460017
+      *                                                                 00470097
+           05  WA-Amount-Check            Pic  S9(14)V9(03) Comp-3.     00480098
+           05  WA-CA-Or-PA-Amount         Pic  S9(14)V9(03) Comp-3.     00490098
+      *                                                                 00500098
+           05  WD-Max-Min-Charge.                                       00510097
+               10  WD-Maximum-Charge      Pic  -9(14),9(03).            00520099
+               10  WD-Minimum-Charge      Pic  -9(14),9(03).            00530099
+      *                                                                 00540099
+           05 WA-Overriding-Charge       Pic   9.                       00550099
+              88  SW-Using-Input-Charge               Value 0.          00560099
+              88  SW-Using-Min-Charge                 Value 1.          00570099
+              88  SW-Using-Max-Charge                 Value 2.          00580099
+      *                                                                 00581099
+      *    05 WA-Logg                    Pic   9.                       00582099
+      *    05 Wa-belop                   Pic  -9(14)v999.               00583099
+      *    05 Wa-pct                     Pic  -9(03)v999.               00584099
+      *                                                                 00590017
+      *<META WA-STOP>                                                   00600017
+           05  Filler                     Pic   X(08) Value 'WA-STOP '. 00610017
+      *</META>                                                          00620017
+      *                                                                 00630017
+      *----------------------------------------------------------------*00640017
+      *                                                                 00650017
+      * Misc. copy books:                                               00660017
+      *                                                                 00670017
+       01  Filler.                                                      00680017
+      *                                                                 00690017
+      *<META MISC-COPY1>                                                00700017
+      *</META>                                                          00710017
+      *<META MISC-COPY2>                                                00720017
+      *</META>                                                          00730017
+      *                                                                 00740098
+      * DBI TF_Contract_Amount.                                         00750098
+           Copy R115ICA0.                                               00760098
+      *                                                                 00770017
+      * DBI TF_Main_Charge.                                             00780017
+           Copy R115ICH0.                                               00790017
+      *                                                                 00800098
+      * DBI TF_Main_Contract.                                           00810098
+           Copy R115IMC0.                                               00820098
+      *                                                                 00830098
+      * DBI TF_Part_Amount.                                             00840098
+           Copy R115IPA0.                                               00850098
+      *                                                                 00860017
+      * DBI TF_Part_Charge.                                             00870017
+           Copy R115IPC0.                                               00880017
+      *                                                                 00890099
+      * DBI TF_Sys_Code.                                                00900099
+           Copy R115ISC0.                                               00910099
+      *                                                                 00920099
+      * DBI TF_Sys_Code_Rel.                                            00930099
+           Copy R115ISR0.                                               00940099
+      *                                                                 00950017
+      * LMOD Set MC Timestamp.                                          00960047
+           Copy R115L030.                                               00970047
+      *                                                                 00980017
+      * LMOD Compute sum total of charges.                              00990017
+           Copy R115L060.                                               01000017
+      *                                                                 01010086
+      * LMOD Compute sum total of charges.                              01020086
+           Copy R115L070.                                               01030086
+      *                                                                 01040099
+      * LMOD Move charges.                                              01050099
+           Copy R115L080.                                               01060099
+      *                                                                 01070036
+      * LMOD Create/accept shadow.                                      01080036
+           Copy R115L140.                                               01090036
+      *                                                                 01091099
+      * VA Currency-Xchange.                                            01092099
+           Copy R116L030.                                               01093099
+      *                                                                 01100017
+           COPY R115L990.                                               01101099
+      *################################################################*01110076
+       Linkage Section.                                                 01120076
+      *                                                                 01130017
+      * Fixed header from STG                                           01140017
+      *                                                                 01150017
+       01  L-STG-Header.                                                01160017
+           Copy R400CH02.                                               01170017
+      *                                                                 01180017
+      * Function data                                                   01190017
+      *                                                                 01200017
+       01  L-Data.                                                      01210017
+           Copy RTFCE120.                                               01220017
+      *                                                                 01230017
+      * Standard error area                                             01240017
+      *                                                                 01250017
+       Copy  R7919999.                                                  01260017
+      *                                                                 01270017
+      *################################################################*01280076
+       Procedure Division                Using L-Stg-Header             01290017
+                                               L-Data                   01300017
+                                               R7919999-Error.          01310017
+      *                                                                 01320017
+       A000-Main                         Section.                       01330017
+      *                                                                 01340017
+           Perform B000-Initialize                                      01350017
+      *                                                                 01360017
+           Perform D000-Preparations                                    01370017
+           Perform E000-Processing                                      01380017
+           Perform U000-Out-Fields                                      01390017
+           .                                                            01400017
+      *                                                                 01410017
+       A000-Main-Ex.                                                    01420017
+           Goback.                                                      01430017
+                                                                        01440017
+      *################################################################*01450017
+      * Initialiserer necessary work fields                            *01460017
+      *                                                                *01470017
+      *----------------------------------------------------------------*01480017
+       B000-Initialize                   Section.                       01490017
+      *                                                                 01500017
+           Initialize                          R7919999-Error           01510017
+           Initialize                          W-Work-Fields            01520017
+           .                                                            01530017
+      *                                                                 01540017
+       B000-Initialize-Ex.                                              01550017
+           Exit.                                                        01560017
+                                                                        01570017
+      *################################################################*01580017
+      * Add necessary preparation code here. Add Perform to other      *01590017
+      * Dxxx- sections.                                                *01600017
+      *----------------------------------------------------------------*01610017
+       D000-Preparations                 Section.                       01620017
+      *                                                                 01630099
+           Perform G030-Read-Main-Contract                              01640099
+           If R115IMC0-In-Progress-No                                   01650099
+             Perform G060-Create-Shadow                                 01660099
+           End-If                                                       01670099
+      *                                                                 01680017
+           Perform D100-Read-Sys-Code-Rel                               01690099
+      *                                                                 01700099
+           If RTFCE120-I-Part-Amount-No-I =  'U'                        01710099
+             Perform D200-Move-Charges                                  01720099
+           End-If                                                       01730099
+           .                                                            01740017
+      *                                                                 01750017
+       D000-Preparations-Ex.                                            01760017
+           Exit.                                                        01770017
+                                                                        01780017
+      *################################################################*01790099
+       D100-Read-Sys-Code-Rel            Section.                       01800099
+      *                                                                 01810099
+           Initialize                          R115ISR0-Sys-Code-Rel    01820099
+           Set   R115ISR0-Version        To    True                     01830099
+           Set   R115ISR0-In-Get-1st     To    True                     01840099
+           Set   R115ISR0-In-CC-Count    To    True                     01850099
+      *                                                                 01860099
+           Move  RTFCE120-I-Fin-Inst-No-D                               01870099
+                                         To    R115ISR0-In-F-I-No       01880099
+           Move  'OPERATION-TYPE'        To    R115ISR0-In-From-ST-Type 01890099
+           Move  RTFCE120-I-Operation-Type-D                            01900099
+                                         To  R115ISR0-In-From-SC-Code   01910099
+           Move  Spaces                  To  R115ISR0-In-From-Contr-Type01920099
+      *                                                                 01930099
+           Move  'STATUS'                To    R115ISR0-In-To-ST-Type   01940099
+           Move  '*'                     To    R115ISR0-In-To-SC-Code   01950099
+           Move  Spaces                  To    R115ISR0-In-To-Contr-Type01960099
+      *                                                                 01970099
+           Move  'VALID-OP-ST'           To    R115ISR0-In-Relation-Type01980099
+                                                                        01990099
+           Call  'F115ISR0'              Using R115ISR0-Sys-Code-Rel    02000099
+                                               R7919999-Error-Area      02010099
+           End-Call                                                     02020099
+      *                                                                 02030099
+           Evaluate True                                                02040099
+             When R7919999-Return-Abend                                 02050099
+               Move  'D101'              To    R7919999-Paragraph       02060099
+               Move  'FM'                To    R400CH01-Message-Code    02070099
+               Perform Z900-Abend                                       02080099
+      *                                                                 02090099
+             When R7919999-Return-Error                                 02100099
+               Move  'D102'              To    R7919999-Paragraph       02110099
+               Move  'FM'                To    R400CH01-Message-Code    02120099
+               Perform Z900-Abend                                       02130099
+      *                                                                 02140099
+             When R7919999-Return-OK                                    02150099
+             and  R115ISR0-Out-Total-Rows > 1                           02160099
+               Move  'VAR1'              To    R400CH01-Message-Key(1)  02170099
+               Move  RTFCE120-I-Operation-Type-D                        02180099
+                                         To    R400CH01-Message-Data(1) 02190099
+               Move  'TF-SY-STATUS-NOT-UNIQUE'                          02200099
+                                         To    R400CH01-Message-Code    02210099
+               Perform Z900-Abend                                       02220099
+      *                                                                 02230099
+             When other                                                 02240099
+               Continue                                                 02250099
+      *                                                                 02260099
+           End-Evaluate                                                 02270099
+           .                                                            02280099
+      *                                                                 02290099
+       D100-Read-Sys-Code-Rel-Ex.                                       02300099
+           Exit.                                                        02310099
+                                                                        02320099
+      *################################################################*02330099
+       D200-Move-Charges                 Section.                       02340099
+      *                                                                 02350099
+      * Moving charges (when necessary) from Main_ to Part_Charge.      02360099
+      *                                                                 02370099
+           Initialize                          R115L080-Comp-Charge     02380099
+           Set   R115L080-Version        To    True                     02390099
+           Set   R115L080-In-Work        To    True                     02400099
+      *                                                                 02410099
+           Move  RTFCE120-I-Fin-Inst-No-D                               02420099
+                                         To    R115L080-In-Fin-Inst-No  02430099
+           Move  R400CH01-Bank           To    R115L080-In-Reg-No       02431099
+      *                                                                 02440099
+           Move  RTFCE120-I-Contract-Type-D                             02450099
+                                         To    R115L080-In-Contract-Type02460099
+           Move  RTFCE120-I-Contract-No-D                               02470099
+                                         To    R115L080-In-Contract-No  02480099
+      *                                                                 02490099
+           Move  RTFCE120-I-Part-Amount-No-D                            02500099
+                                         To    R115L080-In-PA-Seq-No    02510099
+      *                                                                 02520099
+           Move  RTFCE120-I-Operation-Type-D                            02530099
+                                         To   R115L080-In-Operation-Type02540099
+      *                                                                 02550099
+           Call  'F115L080'              Using R115L080-Comp-Charge     02560099
+                                               R7919999-Error-Area      02570099
+           End-Call                                                     02580099
+      *                                                                 02590099
+           Evaluate True                                                02600099
+             When R7919999-Return-Abend                                 02610099
+               Move  'FM'                To    R400CH01-Message-Code    02620099
+               Move  'D201'              To    R7919999-Paragraph       02630099
+               Perform Z900-Abend                                       02640099
+                                                                        02650099
+             When R7919999-Return-Error                                 02660099
+               Move  'FM'                To    R400CH01-Message-Code    02670099
+               Move  'D202'              To    R7919999-Paragraph       02680099
+               Perform Z700-Error-AE                                    02690099
+                                                                        02700099
+             When R7919999-Return-OK                                    02710099
+               Continue                                                 02720099
+                                                                        02730099
+           End-Evaluate                                                 02740099
+           .                                                            02750099
+      *                                                                 02760099
+       D200-Move-Charges-Ex.                                            02770099
+           Exit.                                                        02780099
+                                                                        02790099
+                                                                        02810599
+      *################################################################*02810699
+      * Place the processing control logic here. Useperform statements *02811099
+      * to other sections.                                             *02820017
+      *----------------------------------------------------------------*02830017
+       E000-Processing                   Section.                       02840017
+      *                                                                 02850017
+           Perform F000-Modification                                    02860017
+           Perform G000-Update                                          02870017
+           .                                                            02880017
+      *                                                                 02890017
+       E000-Processing-Ex.                                              02900017
+           Exit.                                                        02910017
+                                                                        02920017
+      *################################################################*02930017
+      * You can put code to perform necessary modification of data     *02940019
+      * fields etc. here                                               *02950017
+      *----------------------------------------------------------------*02960017
+       F000-Modification                 Section.                       02970017
+      *                                                                 02980086
+           Perform F100-Modify-Input-Charges                            02990086
+           .                                                            03000017
+      *                                                                 03010017
+       F000-Modification-Ex.                                            03020017
+           Exit.                                                        03030017
+                                                                        03040017
+      *################################################################*03050017
+       F100-Modify-Input-Charges         Section.                       03060086
+      *                                                                 03070083
+           Initialize                          R115L070-Comp-Charge     03080084
+           Set   R115L070-Version        To    True                     03090084
+           Set   R115L070-In-Work        To    True                     03100084
+           Set   R115L070-In-Subtract    To    True                     03110084
+      *                                                                 03120084
+      *----------------------------------------------------------------*03130084
+      * In-Key.                                                         03140084
+      *                                                                 03150084
+           Move  RTFCE120-I-Fin-Inst-No-D                               03160084
+                                         To    R115L070-In-Fin-Inst-No  03170084
+           Move  R400CH01-Bank           To    R115L070-In-Reg-No       03171099
+      *                                                                 03180084
+           Move  RTFCE120-I-Contract-Type-D                             03190084
+                                         To    R115L070-In-Contract-Type03200084
+           Move  RTFCE120-I-Contract-No-D                               03210084
+                                         To    R115L070-In-Contract-No  03220084
+      *                                                                 03230084
+           If RTFCE120-I-Part-Amount-No-I =    'U'                      03240084
+             Move  RTFCE120-I-Part-Amount-No-D                          03250084
+                                         To    R115L070-In-PA-Seq-No    03260084
+           End-If                                                       03270084
+      *                                                                 03280084
+           Move  RTFCE120-I-Operation-Type-D                            03290084
+                                         To   R115L070-In-Operation-Type03300084
+      *                                                                 03310084
+      *----------------------------------------------------------------*03320084
+      * Data to be modified.                                            03330086
+      *                                                                 03340088
+           Move  RTFCE120-I-Charge-Type-A                               03350088
+                                         To    R115L070-No-Tab-Occ      03360088
+      *                                                                 03370084
+           Perform varying WA-Ind1                                      03380084
+           from +1 by +1 until WA-Ind1   >     RTFCE120-I-Charge-Type-A 03390084
+      *                                                                 03400086
+             If RTFCE120-I-Charge-Am-Base-I (WA-Ind1) = 'U'             03401099
+                Perform F200-Calc-Ch-Am                                 03402099
+             End-If                                                     03403099
+      *                                                                 03404099
+             Move  RTFCE120-I-Charge-Type-D    (WA-Ind1)                03410086
+             to    R115L070-Charge-Type        (WA-Ind1)                03420086
+      *                                                                 03430085
+             Move  RTFCE120-I-Paying-Party-D   (WA-Ind1)                03440086
+             to    R115L070-Charge-Role-Type   (WA-Ind1)                03450086
+      *                                                                 03460085
+             If RTFCE120-I-Charge-Amount-I(WA-Ind1) = 'U'               03470087
+               Move  RTFCE120-I-Charge-Amount-D(WA-Ind1)                03480087
+               to    R115L070-Charge-Amount    (WA-Ind1)                03490087
+             End-If                                                     03500087
+      *                                                                 03510086
+             If RTFCE120-I-Percent-Comm-I(WA-Ind1)  = 'U'               03520087
+               Move  RTFCE120-I-Percent-Comm-D (WA-Ind1)                03530087
+               to    R115L070-Charge-Percentage(WA-Ind1)                03540087
+             End-If                                                     03550087
+      *                                                                 03560084
+           End-Perform                                                  03570084
+      *                                                                 03580084
+      *----------------------------------------------------------------*03590084
+      * Perform data modification.                                      03600094
+      *                                                                 03610084
+           Call  'F115L070'              Using R115L070-Comp-Charge     03620084
+                                               R7919999-Error-Area      03630084
+           End-Call                                                     03640084
+      *                                                                 03650084
+           Evaluate True                                                03660084
+             When R7919999-Return-Abend                                 03670084
+               Move  'FM'                To    R400CH01-Message-Code    03680086
+               Move  'F101'              To    R7919999-Paragraph       03690086
+               Perform Z900-Abend                                       03700084
+                                                                        03710084
+             When R7919999-Return-Error                                 03720084
+               Move  'FM'                To    R400CH01-Message-Code    03730089
+               Move  'F102'              To    R7919999-Paragraph       03740086
+               Perform Z700-Error-AE                                    03750084
+                                                                        03760084
+             When R7919999-Return-OK                                    03770084
+               If R115L070-No-Read       >     R115L070-Read-To         03780090
+                 Move  'TF-SY-TABLE-TOO-SMALL-VAR1'                     03790090
+                                         To    R400CH01-Message-Code    03800090
+                 Move  'VAR1'            To    R400CH01-Message-Key(1)  03810094
+                 Move  R115L070-No-Read  To    R400CH01-Message-Data(1) 03820094
+                 Move  'F103'            To    R7919999-Paragraph       03830090
+                 Perform Z900-Abend                                     03840090
+               End-If                                                   03850090
+      *                                                                 03860090
+           End-Evaluate                                                 03870084
+      *                                                                 03880086
+      *----------------------------------------------------------------*03890086
+      * Loading modified data.                                          03900086
+      *                                                                 03910086
+           Perform varying WA-Ind1                                      03920086
+           from +1 by +1 until WA-Ind1   >     RTFCE120-I-Charge-Type-A 03930086
+      *                                                                 03940086
+             Move  R115L070-Charge-Type        (WA-Ind1)                03950086
+             to    RTFCE120-I-Charge-Type-D    (WA-Ind1)                03960086
+      *                                                                 03970086
+             Move  R115L070-Charge-Role-Type   (WA-Ind1)                03980086
+             to    RTFCE120-I-Paying-Party-D   (WA-Ind1)                03990086
+      *                                                                 04000086
+             Move  R115L070-Charge-Amount      (WA-Ind1)                04010086
+             to    RTFCE120-I-Charge-Amount-D  (WA-Ind1)                04020086
+      *                                                                 04030086
+             Move  R115L070-Charge-Percentage  (WA-Ind1)                04040086
+             to    RTFCE120-I-Percent-Comm-D   (WA-Ind1)                04050086
+      *                                                                 04060086
+           End-Perform                                                  04070086
+           .                                                            04080086
+      *                                                                 04090083
+       F100-Modify-Input-Charges-Ex.                                    04100086
+           Exit.                                                        04110083
+                                                                        04120083
+      *################################################################*04121099
+       F200-Calc-Ch-Am                   Section.                       04122099
+      *                                                                 04123099
+      * Calculate carge amount when base amount are input               04124099
+      *                                                                 04125099
+           Perform F250-Read-Contract-Amount                            04126099
+      *                                                                 04127099
+           Initialize                     R116L030-Currency-Xchange     04128099
+           Set   R116L030-Version        To    True                     04129099
+           Move R115ICA0-Currency        To    R116L030-In-To-Currency  04129199
+           Move RTFCE120-I-Charge-Am-Base-D (WA-Ind1)                   04129299
+                                         To    R116L030-In-From-Amount  04129399
+           Move 'NOK'                    To    R116L030-In-From-Currency04129499
+      *                                                                 04129699
+      * At least one of these:                                          04129799
+           Move  RTFCE120-I-Fin-Inst-No-D                               04129899
+                                         To    Ws-Text-Fin-Inst-No      04129999
+           Move  Ws-Inst-No                                             04130099
+                                         To    R116L030-In-Fin-Inst-No  04130199
+      *                                                                 04130299
+           Call  'F116L030'              Using R116L030-Currency-Xchange04130399
+                                               R7919999-Error           04130499
+           End-Call                                                     04130599
+      *                                                                 04130699
+           Evaluate True                                                04130799
+             When R7919999-Retur-Abend                                  04130899
+               Move  'F201'              To    R7919999-Paragraf        04130999
+               Perform Z900-Abend                                       04131099
+      *                                                                 04131199
+             When R7919999-Retur-Feil                                   04131299
+      *        ...currency not valid / rate not found...                04131399
+               Move  'F202'              To R7919999-Paragraph          04131499
+               Move  'FM'                To R400CH01-Message-Code       04131599
+               Perform Z700-Error-AE                                    04131699
+      *                                                                 04131799
+             When R7919999-Return-OK                                    04131899
+               Move 'U'                  To                             04131999
+                                   RTFCE120-I-Charge-Amount-I(WA-Ind1)  04132099
+               Move R116L030-To-Amount   To                             04132199
+                                   RTFCE120-I-Charge-Amount-D(WA-Ind1)  04132299
+      *        ...midlertidig pga feil i klient      ...                04132399
+               Move 'U'                  To                             04132499
+                                   RTFCE120-I-Percent-Comm-I(WA-Ind1)   04132599
+               Move 0       To     RTFCE120-I-Percent-Comm-D (WA-Ind1)  04132699
+                                                                        04132799
+           End-Evaluate                                                 04132899
+           .                                                            04132999
+      *                                                                 04133099
+       F200-Calc-Ch-Am-Ex.                                              04133199
+           Exit.                                                        04133299
+                                                                        04133399
+      *################################################################*04133499
+       F250-Read-Contract-Amount         Section.                       04133599
+      *                                                                 04133699
+           Initialize                          R115ICA0-Contract-Amount 04133799
+           Set   R115ICA0-Version        To    True                     04133899
+           Set   R115ICA0-In-Get-1st     To    True                     04133999
+           Set   R115ICA0-In-Work        To    True                     04134099
+      *                                                                 04134199
+           Move  RTFCE120-I-Fin-Inst-No-D                               04134299
+                                         To    R115ICA0-In-Fin-Inst-No  04134399
+           Move  RTFCE120-I-Contract-Type-D                             04134499
+                                         To    R115ICA0-In-Contract-Type04134599
+           Move  RTFCE120-I-Contract-No-D                               04134699
+                                         To    R115ICA0-In-Contract-No  04134799
+      *                                                                 04134899
+           Call  'F115ICA0'              Using R115ICA0-Contract-Amount 04134999
+                                               R7919999-Error-Area      04135099
+           End-Call                                                     04135199
+      *                                                                 04135299
+           Evaluate True                                                04135399
+             When R7919999-Return-Abend                                 04135499
+               Move  'F251'              To    R7919999-Paragraph       04135599
+               Move  'FM'                To    R400CH01-Message-Code    04135699
+               Perform Z900-Abend                                       04135799
+      *                                                                 04135899
+             When R7919999-Return-Error                                 04135999
+               Move  'F252'              To    R7919999-Paragraph       04136099
+               Move  'FM'                To    R400CH01-Message-Code    04136199
+               Perform Z900-Abend                                       04136299
+      *                                                                 04136399
+           End-Evaluate                                                 04136499
+           .                                                            04136599
+      *                                                                 04136699
+       F250-Read-Co-Am-Ex.                                              04136799
+           Exit.                                                        04136899
+      *################################################################*04137083
+      * Control your database updates/queries from here. use Perform   *04140017
+      * statements to the different database parts that will be        *04150017
+      * accessed in such a way that one section only controls update of*04160017
+      * one database element.                                          *04170017
+      *----------------------------------------------------------------*04180017
+       G000-Update                       Section.                       04190017
+      *                                                                 04200017
+           Evaluate True Also True                                      04210017
+             When RTFCE120-I-Part-Amount-No-I = 'U'                     04220017
+             also RTFCE120-I-Part-Amount-No-D > +0                      04230017
+               Set SW-Part               To  True                       04240030
+      *                                                                 04250017
+             When Other                                                 04260017
+               Set SW-Main               To  True                       04270030
+      *                                                                 04280017
+           End-Evaluate                                                 04290017
+      *                                                                 04300099
+           Perform H000-General-Procedure                               04310099
+      *                                                                 04320045
+      * Updating Main_Contract timestamp.                               04330045
+      *                                                                 04340045
+           Perform H900-Upd-Timestamp                                   04350045
+      *                                                                 04360099
+      * Checking if the Warning Status is to be set.                    04370099
+      *                                                                 04380099
+      * Removed 19.12.2000                                              04381099
+      *    Evaluate True                                                04390099
+      *      When SW-Using-Min-Charge                                   04400099
+      *      When SW-Using-Max-Charge                                   04410099
+      *        Move 'TF-SY-USING-MIN-MAX-CHARGE'                        04420099
+      *                                  To    R400CH01-Message-Code    04430099
+      *        Perform Z600-Error-AW                                    04440099
+      *                                                                 04450099
+      *      When other                                                 04460099
+      *        Continue                                                 04470099
+      *                                                                 04480099
+      *    End-Evaluate                                                 04490099
+           .                                                            04500017
+      *                                                                 04510017
+       G000-Update-Ex.                                                  04520017
+           Exit.                                                        04530017
+                                                                        04540017
+      *################################################################*04550030
+       G030-Read-Main-Contract           Section.                       04560099
+      *                                                                 04570030
+           Initialize                          R115IMC0-Main-Contract   04580030
+           Set   R115IMC0-Version        To    True                     04590030
+           Set   R115IMC0-In-Select      To    True                     04600030
+           Set   R115IMC0-In-Actual      To    True                     04610030
+      *                                                                 04620030
+           Move  RTFCE120-I-Fin-Inst-No-D                               04630030
+                                         To    R115IMC0-In-Fin-Inst-No  04640030
+      *                                                                 04650030
+           Move  RTFCE120-I-Contract-Type-D                             04660030
+                                         To    R115IMC0-In-Contract-Type04670030
+           Move  RTFCE120-I-Contract-No-D                               04680030
+                                         To    R115IMC0-In-Contract-No  04690030
+      *                                                                 04700030
+           Call  'F115IMC0'              Using R115IMC0-Main-Contract   04710030
+                                               R7919999-Error-Area      04720030
+           End-Call                                                     04730030
+      *                                                                 04740030
+           Evaluate True                                                04750030
+             When R7919999-Return-Abend                                 04760030
+               Move  'G031'              To    R7919999-Paragraph       04770030
+               Move  'FM'                To    R400CH01-Message-Code    04780030
+               Perform Z900-Abend                                       04790030
+      *                                                                 04800030
+             When R7919999-Return-Error                                 04810030
+               Move  'G032'              To    R7919999-Paragraph       04820030
+               Move  'FM'                To    R400CH01-Message-Code    04830030
+               Perform Z700-Error-AE                                    04840030
+      *                                                                 04850030
+             When R7919999-Return-OK                                    04860030
+               Continue                                                 04870030
+      *                                                                 04880030
+           End-Evaluate                                                 04890030
+           .                                                            04900030
+      *                                                                 04910030
+       G030-Read-Main-Contract-Ex.                                      04920030
+           Exit.                                                        04930030
+                                                                        04940030
+      *################################################################*04950030
+       G060-Create-Shadow                Section.                       04960030
+      *                                                                 04970030
+           Initialize                          R115L140-Shadow          04980030
+           Set   R115L140-Version        To    True                     04990030
+      *                                                                 05000030
+           Move  R400CH01-Function       To    R115L140-Function        05010030
+           Move  R400CH01-Medium         To    R115L140-Medium          05020030
+      *                                                                 05030030
+           Move  RTFCE120-I-Fin-Inst-No-D                               05040030
+                                         To    R115L140-Fin-Inst-No     05050030
+           Move  RTFCE120-I-Contract-Type-D                             05060030
+                                         To    R115L140-Contract-Type   05070030
+           Move  RTFCE120-I-Contract-No-D                               05080030
+                                         To    R115L140-Contract-No     05090030
+      *                                                                 05100030
+           Set   R115L140-Create-Shadow  To    True                     05110030
+      *                                                                 05120030
+           Call  'F115L140'              Using R115L140-Shadow          05130030
+                                               R7919999-Error-Area      05140030
+           End-Call                                                     05150030
+      *                                                                 05160030
+           Evaluate True                                                05170030
+             When R7919999-Return-Abend                                 05180030
+               Move  'G061'              To    R7919999-Paragraph       05190030
+               Move  'FM'                To    R400CH01-Message-Code    05200030
+               Perform Z900-Abend                                       05210030
+      *                                                                 05220030
+             When R7919999-Return-Error                                 05230030
+               Move  'G061'              To    R7919999-Paragraph       05240030
+               Move  'FM'                To    R400CH01-Message-Code    05250030
+               Perform Z700-Error-AE                                    05260030
+      *                                                                 05270030
+             When R7919999-Return-OK                                    05280030
+               Continue                                                 05290030
+      *                                                                 05300030
+           End-Evaluate                                                 05310030
+           .                                                            05320030
+      *                                                                 05330030
+       G060-Create-Shadow-Ex.                                           05340030
+           Exit.                                                        05350030
+                                                                        05360030
+      *################################################################*05370037
+       G110-Read-TF-CH                   Section.                       05380017
+      *                                                                 05390017
+           Initialize                          R115ICH0-Main-Charge     05400023
+           Set   R115ICH0-Version        To    True                     05410017
+           Set   R115ICH0-In-Work        To    True                     05420030
+           Set   R115ICH0-In-Get-1st     To    True                     05430070
+      *                                                                 05440017
+           Move  RTFCE120-I-Fin-Inst-No-D                               05450017
+                                         To    R115ICH0-In-Fin-Inst-No  05460017
+           Move  RTFCE120-I-Contract-Type-D                             05470017
+                                         To    R115ICH0-In-Contract-Type05480017
+           Move  RTFCE120-I-Contract-No-D                               05490017
+                                         To    R115ICH0-In-Contract-No  05500099
+      *                                                                 05510017
+           Move  R115L060-CA-Currency    To    R115ICH0-In-CA-Currency  05520099
+      *                                                                 05530099
+           If RTFCE120-I-Part-Amount-No-I =    'U'                      05540099
+             Move  RTFCE120-I-Part-Amount-No-D                          05550099
+                                         To    R115ICH0-In-PA-Seq-No    05560070
+           End-If                                                       05570099
+      *                                                                 05580099
+           Move  R115L060-Charge-Role-Type (WA-Ind1)                    05590080
+                                         To    R115ICH0-In-RP-Role-Type 05600017
+      *                                                                 05610017
+           Move  R115L060-Charge-Type      (WA-Ind1)                    05620080
+                                         To    R115ICH0-In-Charge-Type  05630017
+      *                                                                 05640017
+           Perform G150-Call-DBI-TF-CH                                  05650017
+           .                                                            05660017
+      *                                                                 05670017
+       G110-Read-TF-CH-Ex.                                              05680017
+           Exit.                                                        05690017
+                                                                        05700017
+      *################################################################*05710017
+       G120-Update-TF-CH                 Section.                       05720017
+      *                                                                 05730017
+           Set   R115ICH0-In-Update      To    True                     05740072
+      *                                                                 05750072
+           Evaluate True                                                05760099
+             When R115L060-MethCalc-Settlement (WA-Ind1)                05770099
+             When R115L060-MethCalc-Part-Amount(WA-Ind1)                05780099
+               Move  WA-Charge-Amount    To    R115ICH0-Charge-Amount   05790099
+               Move  WA-Currency         To    R115ICH0-Currency        05800099
+               Move  Zero                To    R115ICH0-Charge-Pct      05810099
+      *                                                                 05820099
+             When R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)                05830099
+             When R115L060-MethCalc-Pct-Of-PA  (WA-Ind1)                05840099
+      *        If RTFCE120-I-Operation-Type-D(1:7)                      05850099
+      *                                  =     'SETTLE-'                05860099
+                 If  RTFCE120-I-Charge-Amount-I (WA-Ind2) = 'U'         05861099
+                 And RTFCE120-I-Charge-Amount-D (WA-Ind2) > 0           05861199
+      * Feilretting NDL, legger inn beløp hvis min eller max er oppnådd 05861299
+                 OR (SW-Using-Min-Charge                                05861399
+                 OR  SW-Using-Max-Charge)                               05861499
+      * Feilretting slutt                                               05861599
+                   Move  +0              To    R115ICH0-Charge-Pct      05862099
+                   Move  WA-Charge-Amount                               05863099
+                                         To    R115ICH0-Charge-Amount   05864099
+                 Else                                                   05865099
+                   Move  WA-Percentage   To    R115ICH0-Charge-Pct      05866099
+                   Move  +0              To    R115ICH0-Charge-Amount   05867099
+                 End-If                                                 05868099
+      *          Move  WA-Charge-Amount  To    R115ICH0-Charge-Amount   05870099
+      *        Else                                                     05880099
+      *          Move  Zero              To    R115ICH0-Charge-Amount   05890099
+      *        End-If                                                   05900099
+               Move  WA-Currency         To    R115ICH0-Currency        05910099
+      *        Move  WA-Percentage       To    R115ICH0-Charge-Pct      05920099
+      *                                                                 05930099
+           End-Evaluate                                                 05940099
+      *                                                                 05950017
+      *                                                                 05951099
+ndl        If RTFCE120-I-Charge-Text-I (WA-Ind2) =   'U'                05952099
+160312       Move  RTFCE120-I-Charge-Text-D (WA-Ind2)                   05953099
+                                         To    R115ICH0-Charge-Text     05954099
+           End-If                                                       05955099
+      *                                                                 05956099
+           Compute  R115ICH0-Text-Len                                   05957099
+               =   Length Of R115ICH0-Charge-Text                       05958099
+           End-Compute                                                  05959099
+slutt *                                                                 05959199
+           Perform G150-Call-DBI-TF-CH                                  05960017
+           .                                                            05970017
+      *                                                                 05980017
+       G110-Update-TF-CH-Ex.                                            05990017
+           Exit.                                                        06000017
+                                                                        06010017
+      *################################################################*06020017
+       G130-Create-TF-CH                 Section.                       06030017
+      *                                                                 06040017
+           Initialize                          R115ICH0-Main-Charge     06050023
+           Set   R115ICH0-Version        To    True                     06060017
+           Set   R115ICH0-In-Work        To    True                     06070030
+           Set   R115ICH0-In-Insert      To    True                     06080017
+      *                                                                 06090017
+           Move  RTFCE120-I-Fin-Inst-No-D                               06100099
+                                         To    R115ICH0-Fin-Inst-No     06110099
+           Move  RTFCE120-I-Contract-Type-D                             06120017
+                                         To    R115ICH0-Contract-Type   06130017
+           Move  RTFCE120-I-Contract-No-D                               06140017
+                                         To    R115ICH0-Contract-No     06150017
+           Move  R115L060-CA-Currency    To    R115ICH0-CA-Currency     06160099
+      *                                                                 06170099
+           If RTFCE120-I-Part-Amount-No-I =    'U'                      06180099
+             Move  RTFCE120-I-Part-Amount-No-D                          06190099
+                                         To    R115ICH0-PA-Seq-No       06200017
+           End-If                                                       06210099
+      *                                                                 06211099
+ndl        If RTFCE120-I-Charge-Text-I (WA-Ind2) =   'U'                06212099
+160312       Move  RTFCE120-I-Charge-Text-D (WA-Ind2)                   06213099
+                                         To    R115ICH0-Charge-Text     06214099
+           End-If                                                       06216099
+      *                                                                 06216199
+           Compute  R115ICH0-Text-Len                                   06217099
+               =   Length Of R115ICH0-Charge-Text                       06218099
+           End-Compute                                                  06219099
+      *                                                                 06220099
+           Move  RTFCE120-I-Paying-Party-D(WA-Ind2)                     06230017
+                                         To    R115ICH0-RP-Role-Type    06240017
+           Move  RTFCE120-I-Charge-Type-D(WA-Ind2)                      06250017
+                                         To    R115ICH0-Charge-Type     06260017
+      *                                                                 06270099
+           Evaluate True                                                06280099
+             When R115L060-MethCalc-Settlement (WA-Ind1)                06290099
+             When R115L060-MethCalc-Part-Amount(WA-Ind1)                06300099
+               Move  WA-Charge-Amount    To    R115ICH0-Charge-Amount   06310099
+               Move  WA-Currency         To    R115ICH0-Currency        06320099
+               Move  Zero                To    R115ICH0-Charge-Pct      06330099
+      *                                                                 06340099
+             When R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)                06350099
+             When R115L060-MethCalc-Pct-Of-PA  (WA-Ind1)                06360099
+      *        If RTFCE120-I-Operation-Type-D(1:7)                      06370099
+      *                                  =     'SETTLE-'                06380099
+               If SW-Using-Input-Charge                                 06380199
+                 If RTFCE120-I-Charge-Amount-D (WA-Ind2) > 0            06381099
+                   Move  +0              To    R115ICH0-Charge-Pct      06382099
+                   Move  WA-Charge-Amount                               06390099
+                                         To    R115ICH0-Charge-Amount   06390199
+                 Else                                                   06391099
+                   Move  WA-Percentage   To    R115ICH0-Charge-Pct      06391199
+                   Move  +0              To    R115ICH0-Charge-Amount   06392099
+                 End-If                                                 06393099
+               Else                                                     06394099
+                   Move  WA-Charge-Amount                               06395099
+                                         To    R115ICH0-Charge-Amount   06396099
+                   Move  WA-Percentage   To    R115ICH0-Charge-Pct      06397099
+               End-If                                                   06398099
+      *        Else                                                     06400099
+      *          Move  Zero              To    R115ICH0-Charge-Amount   06410099
+      *        End-If                                                   06420099
+               Move  WA-Currency         To    R115ICH0-Currency        06430099
+      *                                                                 06450099
+           End-Evaluate                                                 06460099
+      *                                                                 06470099
+           Perform G150-Call-DBI-TF-CH                                  06480017
+           .                                                            06490017
+      *                                                                 06500017
+       G130-Create-TF-CH-Ex.                                            06510017
+           Exit.                                                        06520017
+                                                                        06530017
+      *################################################################*06540017
+       G140-Delete-TF-CH                 Section.                       06550017
+      *                                                                 06560017
+           Set   R115ICH0-In-Delete      To    True                     06570089
+      *                                                                 06580074
+      *    Move  R115ICH0-In-From-Contr-No                              06590099
+      *                                  To    R115ICH0-In-Contract-No  06600099
+           Move  R115ICH0-CH-Seq-No      To    R115ICH0-In-CH-Seq-No    06610099
+      *                                                                 06620074
+           Perform G150-Call-DBI-TF-CH                                  06630017
+           .                                                            06640017
+      *                                                                 06650017
+       G140-Delete-TF-CH-Ex.                                            06660017
+           Exit.                                                        06670017
+                                                                        06680017
+      *################################################################*06690017
+       G150-Call-DBI-TF-CH               Section.                       06700017
+      *                                                                 06710017
+           Call  'F115ICH0'              Using R115ICH0-Main-Charge     06720023
+                                               R7919999-Error-Area      06730017
+           End-Call                                                     06740017
+      *                                                                 06750017
+           Evaluate True                                                06760017
+             When R7919999-Return-Abend                                 06770017
+               Move  'FM'                To    R400CH01-Message-Code    06780017
+               Move  'G151'              To    R7919999-Paragraph       06790017
+               Perform Z900-Abend                                       06800017
+      *                                                                 06810017
+             When R7919999-Return-Error                                 06820017
+               Move  'FM'                To    R400CH01-Message-Code    06830017
+               Move  'G152'              To    R7919999-Paragraph       06840017
+               Perform Z700-Error-AE                                    06850017
+      *                                                                 06860017
+             When R7919999-Return-OK                                    06870017
+               Continue                                                 06880017
+      *                                                                 06890017
+           End-Evaluate                                                 06900017
+           .                                                            06910017
+      *                                                                 06920017
+       G150-Call-DBI-TF-CH-Ex.                                          06930017
+           Exit.                                                        06940017
+                                                                        06950017
+      *################################################################*06960017
+       G210-Read-TF-PC                   Section.                       06970017
+      *                                                                 06980017
+           Initialize                          R115IPC0-Part-Charge     06990023
+           Set   R115IPC0-Version        To    True                     07000017
+           Set   R115IPC0-In-Work        To    True                     07010030
+           Set   R115IPC0-In-Select      To    True                     07020017
+      *                                                                 07030017
+           Move  RTFCE120-I-Fin-Inst-No-D                               07040017
+                                         To    R115IPC0-In-Fin-Inst-No  07050017
+      *                                                                 07060017
+           Move  RTFCE120-I-Contract-Type-D                             07070017
+                                         To    R115IPC0-In-Contract-Type07080017
+           Move  RTFCE120-I-Contract-No-D                               07090017
+                                         To    R115IPC0-In-Contract-No  07100017
+      *                                                                 07110017
+           Move  R115L060-CA-Currency    To    R115IPC0-In-CA-Currency  07120099
+           Move  RTFCE120-I-Part-Amount-No-D                            07130099
+                                         To    R115IPC0-In-PA-Seq-No    07140017
+      *                                                                 07150017
+           Move  RTFCE120-I-Paying-Party-D(WA-Ind2)                     07160017
+                                         To    R115IPC0-In-Role-Type    07170017
+      *                                                                 07180017
+           Move  RTFCE120-I-Charge-Type-D(WA-Ind2)                      07190017
+                                         To    R115IPC0-In-CT-Type      07200017
+      *                                                                 07210017
+           Perform G250-Call-DBI-TF-PC                                  07220017
+           .                                                            07230017
+      *                                                                 07240017
+       G210-Read-TF-PC-Ex.                                              07250017
+           Exit.                                                        07260017
+                                                                        07270017
+      *################################################################*07280017
+       G220-Update-TF-PC                 Section.                       07290017
+      *                                                                 07300018
+           Set   R115IPC0-In-Update      To    True                     07310030
+      *                                                                 07320017
+           Evaluate True                                                07330099
+             When R115L060-MethCalc-Settlement (WA-Ind1)                07340099
+             When R115L060-MethCalc-Part-Amount(WA-Ind1)                07350099
+               Move  WA-Charge-Amount    To    R115IPC0-Amount          07360099
+               Move  WA-Currency         To    R115IPC0-Currency        07370099
+               Move  Zero                To    R115IPC0-Charge-Pct      07380099
+      *                                                                 07390099
+             When R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)                07400099
+             When R115L060-MethCalc-Pct-Of-PA  (WA-Ind1)                07410099
+      *        If RTFCE120-I-Operation-Type-D(1:7)                      07420099
+      *                                  =     'SETTLE-'                07430099
+                 Move  WA-Charge-Amount  To    R115IPC0-Amount          07440099
+      *        Else                                                     07450099
+      *          Move  Zero              To    R115IPC0-Amount          07460099
+      *        End-If                                                   07470099
+               Move  WA-Currency         To    R115IPC0-Currency        07480099
+               Move  WA-Percentage       To    R115IPC0-Charge-Pct      07490099
+      *                                                                 07500099
+           End-Evaluate                                                 07510099
+      *                                                                 07520017
+ndl        If RTFCE120-I-Charge-Text-I (WA-Ind2) =   'U'                07521099
+160312       Move  RTFCE120-I-Charge-Text-D (WA-Ind2)                   07522099
+                                         To    R115IPC0-Charge-Text     07523099
+           End-If                                                       07524099
+      *                                                                 07525099
+           Compute  R115IPC0-Text-Len                                   07526099
+               =   Length Of R115IPC0-Charge-Text                       07527099
+           End-Compute                                                  07528099
+slutt *                                                                 07529099
+           Perform G250-Call-DBI-TF-PC                                  07530017
+           .                                                            07540017
+      *                                                                 07550017
+       G220-Update-TF-PC-Ex.                                            07560017
+           Exit.                                                        07570017
+                                                                        07580017
+      *################################################################*07590017
+       G230-Create-TF-PC                 Section.                       07600017
+      *                                                                 07610017
+           Initialize                          R115IPC0-Part-Charge     07620023
+           Set   R115IPC0-Version        To    True                     07630017
+           Set   R115IPC0-In-Work        To    True                     07640030
+           Set   R115IPC0-In-Insert      To    True                     07650017
+      *                                                                 07660017
+           Move  RTFCE120-I-Fin-Inst-No-D                               07670099
+                                         To    R115IPC0-Fin-Inst-No     07680099
+           Move  RTFCE120-I-Contract-Type-D                             07690017
+                                         To    R115IPC0-Contract-Type   07700017
+           Move  RTFCE120-I-Contract-No-D                               07710017
+                                         To    R115IPC0-Contract-No     07720017
+           Move  R115L060-CA-Currency    To    R115IPC0-CA-Currency     07730099
+           Move  RTFCE120-I-Part-Amount-No-D                            07740017
+                                         To    R115IPC0-PA-Seq-No       07750017
+           Move  RTFCE120-I-Paying-Party-D(WA-Ind2)                     07760017
+                                         To    R115IPC0-Role-Type       07770017
+           Move  RTFCE120-I-Charge-Type-D(WA-Ind2)                      07780017
+                                         To    R115IPC0-CT-Type         07790017
+           Move  RTFCE120-I-Paying-Party-D(WA-Ind2)                     07800099
+                                         To    R115IPC0-Role-Paying-Pty 07810099
+      *                                                                 07810999
+ndl        If RTFCE120-I-Charge-Text-I (WA-Ind2) =   'U'                07819199
+160312       Move  RTFCE120-I-Charge-Text-D (WA-Ind2)                   07819299
+                                         To    R115IPC0-Charge-Text     07819399
+           End-If                                                       07819499
+      *                                                                 07819599
+           Compute  R115IPC0-Text-Len                                   07819699
+               =   Length Of R115IPC0-Charge-Text                       07819799
+           End-Compute                                                  07819899
+      *                                                                 07820099
+           Evaluate True                                                07830099
+             When R115L060-MethCalc-Settlement (WA-Ind1)                07840099
+             When R115L060-MethCalc-Part-Amount(WA-Ind1)                07850099
+               Move  WA-Charge-Amount    To    R115IPC0-Amount          07860099
+               Move  WA-Currency         To    R115IPC0-Currency        07870099
+               Move  Zero                To    R115IPC0-Charge-Pct      07880099
+      *                                                                 07890099
+             When R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)                07900099
+             When R115L060-MethCalc-Pct-Of-PA  (WA-Ind1)                07910099
+      *        If RTFCE120-I-Operation-Type-D(1:7)                      07920099
+      *                                  =     'SETTLE-'                07930099
+                 Move  WA-Charge-Amount  To    R115IPC0-Amount          07940099
+      *        Else                                                     07950099
+      *          Move  Zero              To    R115IPC0-Amount          07960099
+      *        End-If                                                   07970099
+               Move  WA-Currency         To    R115IPC0-Currency        07980099
+               Move  WA-Percentage       To    R115IPC0-Charge-Pct      07990099
+      *                                                                 08000099
+           End-Evaluate                                                 08010099
+      *                                                                 08020099
+           Perform G250-Call-DBI-TF-PC                                  08030017
+           .                                                            08040017
+      *                                                                 08050017
+       G230-Create-TF-PC-Ex.                                            08060017
+           Exit.                                                        08070017
+                                                                        08080017
+      *################################################################*08090017
+       G240-Delete-TF-PC                 Section.                       08100017
+      *                                                                 08110017
+           Initialize                          R115IPC0-Part-Charge     08120023
+           Set   R115IPC0-Version        To    True                     08130017
+           Set   R115IPC0-In-Work        To    True                     08140030
+           Set   R115IPC0-In-Delete      To    True                     08150017
+      *                                                                 08160017
+           Move  RTFCE120-I-Fin-Inst-No-D                               08170017
+                                         To    R115IPC0-In-Fin-Inst-No  08180017
+      *                                                                 08190017
+           Move  RTFCE120-I-Contract-Type-D                             08200017
+                                         To    R115IPC0-In-Contract-Type08210017
+           Move  RTFCE120-I-Contract-No-D                               08220017
+                                         To    R115IPC0-In-Contract-No  08230017
+      *                                                                 08240017
+           Move  R115L060-CA-Currency    To    R115IPC0-In-CA-Currency  08250099
+           Move  RTFCE120-I-Part-Amount-No-D                            08260017
+                                         To    R115IPC0-In-PA-Seq-No    08270017
+      *                                                                 08280017
+           Move  R115L060-Charge-Role-Type(WA-Ind1)                     08290099
+                                         To    R115IPC0-In-Role-Type    08300017
+      *                                                                 08310017
+           Move  R115L060-Charge-Type(WA-Ind1)                          08320099
+                                         To    R115IPC0-In-CT-Type      08330017
+      *                                                                 08340017
+           Perform G250-Call-DBI-TF-PC                                  08350017
+           .                                                            08360017
+      *                                                                 08370017
+       G240-Delete-TF-PC-Ex.                                            08380017
+           Exit.                                                        08390017
+                                                                        08400017
+      *################################################################*08410017
+       G250-Call-DBI-TF-PC               Section.                       08420017
+      *                                                                 08430017
+           Call  'F115IPC0'              Using R115IPC0-Part-Charge     08440023
+                                               R7919999-Error-Area      08450017
+           End-Call                                                     08460017
+      *                                                                 08470017
+           Evaluate True                                                08480017
+             When R7919999-Return-Abend                                 08490017
+               Move  'FM'                To    R400CH01-Message-Code    08500017
+               Move  'G251'              To    R7919999-Paragraph       08510017
+               Perform Z900-Abend                                       08520017
+      *                                                                 08530017
+             When R7919999-Return-Error                                 08540017
+               Move  'FM'                To    R400CH01-Message-Code    08550017
+               Move  'G252'              To    R7919999-Paragraph       08560017
+               Perform Z900-Abend                                       08570099
+      *                                                                 08580017
+             When R7919999-Return-OK                                    08590017
+               Continue                                                 08600017
+      *                                                                 08610017
+           End-Evaluate                                                 08620017
+           .                                                            08630017
+      *                                                                 08640017
+       G250-Call-DBI-TF-PC-Ex.                                          08650017
+           Exit.                                                        08660017
+                                                                        08670017
+      *################################################################*08680017
+       H000-General-Procedure            Section.                       08690017
+      *                                                                 08700017
+      * Checking which charges are permissible and which charges        08710017
+      * are already registered.                                         08720017
+      *                                                                 08730017
+           Perform H100-Call-LMOD-Comp-Charge                           08740017
+      *                                                                 08750031
+      * Checking that impermissible charge types do not occur on        08760032
+      * the input list.                                                 08770096
+      *                                                                 08780032
+           Perform H200-Check-Input-Op-Ch-Val                           08790064
+      *                                                                 08800027
+      * Synchronising database fields and input values:                 08810032
+      *                                                                 08820027
+      * - taking each occurence on the list of permissible charge types 08830027
+      *                                                                 08840017
+           Perform varying WA-Ind1                                      08850064
+           from +1 by +1 until WA-Ind1   >     R115L060-No-Tab-Occ      08860064
+      *                                                                 08870027
+      * - and searching for that charge type on the input list.         08880027
+      *                                                                 08890017
+      *       -----------------------------------------                 08900065
+      *                                                                 08910065
+               Perform varying WA-Ind2                                  08920067
+               from +1 by +1 until                                      08930064
+      *                                                                 08940065
+      *   a) Matching item found.                                       08950065
+      *                                                                 08960065
+               (     RTFCE120-I-Charge-Type-D  (WA-Ind2)                08970077
+                  =  R115L060-Charge-Type      (WA-Ind1)                08980077
+               and                                                      08990017
+                     RTFCE120-I-Paying-Party-D (WA-Ind2)                09000079
+                  =  R115L060-Charge-Role-Type (WA-Ind1)                09010077
+               and                                                      09020077
+                     RTFCE120-I-Selected-D     (WA-Ind2)                09030098
+                  =  'Y'     )                                          09040065
+               or                                                       09050017
+      *                                                                 09060065
+      *   b) No match found.                                            09070067
+      *                                                                 09080065
+               (     WA-Ind2                                            09090065
+                  >  RTFCE120-I-Charge-Type-A     )                     09100067
+      *                                                                 09110067
+              End-Perform                                               09120067
+      *                                                                 09130067
+      *       -----------------------------------------                 09140067
+      *                                                                 09150067
+              Perform H300-Synch-Charge-Fields                          09160067
+      *                                                                 09170065
+           End-Perform                                                  09180017
+           .                                                            09190017
+      *                                                                 09200017
+       H000-General-Procedure-Ex.                                       09210017
+           Exit.                                                        09220017
+                                                                        09230017
+      *################################################################*09240017
+       H100-Call-LMOD-Comp-Charge        Section.                       09250017
+      *                                                                 09260017
+           Initialize                          R115L060-Comp-Charge     09270017
+           Set   R115L060-Version        To    True                     09280017
+           Set   R115L060-In-Work        To    True                     09290039
+      *                                                                 09300017
+           Move  RTFCE120-I-Fin-Inst-No-D                               09310017
+                                         To    R115L060-In-Fin-Inst-No  09320017
+           Move  R400CH01-Bank           To    R115L060-In-Reg-No       09321099
+           Move  RTFCE120-I-Contract-Type-D                             09330017
+                                         To    R115L060-In-Contract-Type09340017
+           Move  RTFCE120-I-Contract-No-D                               09350017
+                                         To    R115L060-In-Contract-No  09360017
+      *                                                                 09370099
+           If RTFCE120-I-Part-Amount-No-I =    'U'                      09380099
+             Move  RTFCE120-I-Part-Amount-No-D                          09390099
+                                         To    R115L060-In-PA-Seq-No    09400017
+           End-If                                                       09410099
+      *                                                                 09420099
+           Move  RTFCE120-I-Operation-Type-D                            09430052
+                                         To   R115L060-In-Operation-Type09440052
+      *                                                                 09450017
+           Call  'F115L060'              Using R115L060-Comp-Charge     09460017
+                                               R7919999-Error-Area      09470017
+           End-Call                                                     09480017
+      *                                                                 09490017
+           Evaluate True                                                09500017
+             When R7919999-Return-Abend                                 09510017
+               Move  'FM'                To    R400CH01-Message-Code    09520099
+               Move  'H101'              To    R7919999-Paragraph       09530017
+               Perform Z900-Abend                                       09540017
+      *                                                                 09550090
+             When R7919999-Return-Error                                 09560017
+               Move  'FM'                To    R400CH01-Message-Code    09570099
+               Move  'H102'              To    R7919999-Paragraph       09580021
+               Perform Z700-Error-AE                                    09590049
+      *                                                                 09600090
+             When R7919999-Return-OK                                    09610017
+               If R115L060-No-Read       >     R115L060-Read-To         09620094
+                 Move  'TF-SY-TABLE-TOO-SMALL-VAR1'                     09630090
+                                         To    R400CH01-Message-Code    09640090
+                 Move  'VAR1'            To    R400CH01-Message-Key(1)  09650094
+                 Move  R115L060-No-Read  To    R400CH01-Message-Data(1) 09660094
+                 Move  'H103'            To    R7919999-Paragraph       09670090
+                 Perform Z900-Abend                                     09680090
+               Else                                                     09690099
+                 Move  R115L060-CA-Currency                             09700099
+                                         To    WA-Currency              09710099
+               End-If                                                   09720090
+      *                                                                 09730090
+           End-Evaluate                                                 09740017
+           .                                                            09750017
+      *                                                                 09760017
+       H100-Call-LMOD-Comp-Charge-Ex.                                   09770017
+           Exit.                                                        09780017
+                                                                        09790017
+      *################################################################*09800017
+       H200-Check-Input-Op-Ch-Val        Section.                       09810064
+      *                                                                 09820031
+      * Checking that the input charge/role types are valid for the     09830091
+      * input operation type:                                           09840031
+      *                                                                 09850031
+      * - taking each occurence on the input list                       09860031
+      *                                                                 09870031
+           Perform varying WA-Ind1                                      09880031
+           from +1 by +1 until  WA-Ind1  >     RTFCE120-I-Charge-Type-A 09890031
+      *                                                                 09900031
+      * - and searching for this occurence type on the list of          09910031
+      *   permissible charge types.                                     09920031
+      *                                                                 09930031
+      *        -------------------------------------------------------- 09940065
+      *                                                                 09950065
+               Perform varying WA-Ind2                                  09960067
+               from +1 by +1 until                                      09970066
+      *                                                                 09980065
+      *   a) Mathing item found.                                        09990065
+               (     R115L060-Charge-Type      (WA-Ind2)                10000067
+                  =  RTFCE120-I-Charge-Type-D  (WA-Ind1)                10010091
+               and                                                      10020091
+                     R115L060-Charge-Role-Type (WA-Ind2)                10030091
+                  =  RTFCE120-I-Paying-Party-D (WA-Ind1)     )          10040091
+               or                                                       10050065
+      *                                                                 10060065
+      *   b) No match found.                                            10070067
+               (     WA-Ind2                                            10080067
+                  >  R115L060-No-Tab-Occ                     )          10090067
+      *                                                                 10100067
+               End-Perform                                              10110067
+      *                                                                 10120067
+      *        -------------------------------------------------------- 10130067
+      *   If no match found:                                            10140099
+      *                                                                 10150099
+               If  WA-Ind2               >     R115L060-No-Tab-Occ      10160099
+                 Perform H230-Ch-List-Input-Error                       10170099
+               End-If                                                   10180099
+      *        -------------------------------------------------------- 10190067
+      *                                                                 10200031
+           End-Perform                                                  10210031
+           .                                                            10220031
+      *                                                                 10230031
+       H200-Check-Input-Op-Ch-Val-Ex.                                   10240064
+           Exit.                                                        10250031
+                                                                        10260031
+      *################################################################*10270057
+       H230-Ch-List-Input-Error          Section.                       10280099
+      *                                                                 10290099
+      *   Searching for matching Charge types only.                     10300099
+      *                                                                 10310099
+           Perform varying WA-Ind2                                      10320099
+           from +1 by +1 until                                          10330099
+      *                                                                 10340099
+      *   a) Mathing item found.                                        10350099
+                 R115L060-Charge-Type      (WA-Ind2)                    10360099
+              =  RTFCE120-I-Charge-Type-D  (WA-Ind1)                    10370099
+           or                                                           10380099
+      *                                                                 10390099
+      *   b) No match found.                                            10400099
+                 WA-Ind2                                                10410099
+              >  R115L060-No-Tab-Occ                                    10420099
+      *                                                                 10430099
+           End-Perform                                                  10440099
+      *                                                                 10450099
+      *    --------------------------------------------------------     10460099
+      *                                                                 10470099
+      *      If no match is found: Invalid Operaion Type/Charge Type    10480099
+      *      combination.  Else:   Invalid Charge-Type/Role Type        10490099
+      *      combination.                                               10500099
+      *                                                                 10510099
+           If  WA-Ind2                   >     R115L060-No-Tab-Occ      10520099
+             Move 'TF-SY-OP-VAR1-CH-VAR2-INVALID'                       10530099
+                                         To    R400CH01-Message-Code    10540099
+             Move 'VAR1'                 To    R400CH01-Message-Key(1)  10550099
+             Move 'VAR2'                 To    R400CH01-Message-Key(2)  10560099
+             Move RTFCE120-I-Operation-Type-D                           10570099
+                                         To    R400CH01-Message-Data(1) 10580099
+             Move RTFCE120-I-Charge-Type-D(WA-Ind1)                     10590099
+                                         To    R400CH01-Message-Data(2) 10600099
+             Move 'H201'                 To    R7919999-Paragraph       10610099
+             Perform Z900-Abend                                         10620099
+           Else                                                         10630099
+             Perform H260-Read-Sys-Code                                 10640099
+             Move 'TF-SY-ROLE-VAR1-CH-VAR2-INV'                         10650099
+                                         To    R400CH01-Message-Code    10660099
+             Move 'VAR1'                 To    R400CH01-Message-Key(1)  10670099
+             Move 'VAR2'                 To    R400CH01-Message-Key(2)  10680099
+             Move  R115ISC0-Description  To    R400CH01-Message-Data(1) 10690099
+             Move  R115L060-Charge-Description(WA-Ind2)                 10700099
+                                         To    R400CH01-Message-Data(2) 10710099
+             Perform Z700-Error-AE                                      10720099
+           End-If                                                       10730099
+           .                                                            10740099
+      *                                                                 10750099
+       H230-Ch-List-Input-Error-Ex.                                     10760099
+           Exit.                                                        10770099
+                                                                        10780099
+      *################################################################*10790099
+       H260-Read-Sys-Code                Section.                       10800099
+      *                                                                 10810099
+           Initialize                          R115ISC0-Sys-Code        10820099
+           Set   R115ISC0-Version        To    True                     10830099
+           Set   R115ISC0-In-Select      To    True                     10840099
+      *                                                                 10850099
+           Move  'RELATED-PARTY'         To    R115ISC0-In-ST-Type      10860099
+           Move  RTFCE120-I-Fin-Inst-No-D                               10870099
+                                         To    R115ISC0-In-Fin-Inst-No  10880099
+           Move  Space                   To    R115ISC0-In-Contr-type   10890099
+           Move  RTFCE120-I-Paying-Party-D(WA-Ind1)                     10900099
+                                         To    R115ISC0-In-SC-Code      10910099
+      *                                                                 10920099
+           Call  'F115ISC0'              Using R115ISC0-Sys-Code        10930099
+                                               R7919999-Error-Area      10940099
+           End-Call                                                     10950099
+      *                                                                 10960099
+           Evaluate True                                                10970099
+             When R7919999-Return-Abend                                 10980099
+               Move  'FM'                To    R400CH01-Message-Code    10990099
+               Move  'H261'              To    R7919999-Paragraph       11000099
+               Perform Z900-Abend                                       11010099
+      *                                                                 11020099
+             When R7919999-Return-Error                                 11030099
+               Move  'FM'                To    R400CH01-Message-Code    11040099
+               Move  'H262'              To    R7919999-Paragraph       11050099
+               Perform Z900-Abend                                       11060099
+      *                                                                 11070099
+             When R7919999-Return-OK                                    11080099
+               Continue                                                 11090099
+      *                                                                 11100099
+           End-Evaluate                                                 11110099
+           .                                                            11120099
+      *                                                                 11130099
+       H260-Read-Sys-Code-Ex.                                           11140099
+           Exit.                                                        11150099
+                                                                        11160099
+      *################################################################*11170099
+       H300-Synch-Charge-Fields          Section.                       11180064
+      *                                                                 11190059
+           If    RTFCE120-I-Charge-Type-D  (WA-Ind2)                    11200077
+              =  R115L060-Charge-Type      (WA-Ind1)                    11210077
+           and   RTFCE120-I-Paying-Party-D (WA-Ind2)                    11220079
+              =  R115L060-Charge-Role-Type (WA-Ind1)                    11230077
+           and   RTFCE120-I-Selected-D     (WA-Ind2)                    11240077
+              =  'Y'                                                    11250067
+      *                                                                 11260067
+      * Matching item found.                                            11270064
+                 Perform H400-Create-Update-Charges                     11280067
+      *                                                                 11290059
+           Else                                                         11300067
+      *                                                                 11310067
+      * No match found.                                                 11320067
+                 Perform H500-Delete-Charge                             11330067
+      *                                                                 11340067
+           End-If                                                       11350067
+           .                                                            11360059
+      *                                                                 11370059
+       H300-Synch-Charge-Fields-Ex.                                     11380064
+           Exit.                                                        11390059
+                                                                        11400059
+      *################################################################*11410059
+       H400-Create-Update-Charges        Section.                       11420064
+      *                                                                 11430099
+      *----------------------------------------------------------------*11440099
+      * Checking that the input charge does not violate                 11450099
+      * max/min values.                                                 11460099
+      *                                                                 11470099
+      * Feilretting: (ndl)                                              11470299
+      * Check if percent is input when its not allowed                  11470399
+           If  R115L060-MethCalc-Settlement    (WA-Ind1)                11471099
+           or  R115L060-MethCalc-Part-Amount   (WA-Ind1)                11472099
+               If RTFCE120-I-Percent-Comm-D(WA-Ind2) > 0                11473099
+                 Move  'F'         To RTFCE120-I-Percent-Comm-O(Wa-Ind2)11473199
+                 Move  'FELT1'             To    R400CH01-Message-Key(1)11473299
+                 Move  'Prosent-Provisjon' To   R400CH01-Message-Data(1)11473399
+                 Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code  11473499
+                 Perform  Z700-Error-AE                                 11473599
+               End-If                                                   11473699
+           End-If                                                       11473799
+      * feilretting slutt                                               11474099
+      *                                                                 11475099
+           If not R115L060-Minimum-Charge(WA-Ind1)  = Zero              11480098
+           or not R115L060-Maximum-Charge(WA-Ind1)  = Zero              11490098
+               Perform I000-Check-Max-Min-Limits                        11500098
+      *                                                                 11510099
+           Else                                                         11520099
+               Set   SW-Using-Input-Charge                              11530099
+                                         To    True                     11540099
+               Move  RTFCE120-I-Charge-Amount-D(WA-Ind2)                11550099
+                                         To    WA-Charge-Amount         11560099
+               Move  RTFCE120-I-Percent-Comm-D(WA-Ind2)                 11570099
+                                         To    WA-Percentage            11580099
+      *                                                                 11590099
+           End-If                                                       11600098
+      *                                                                 11610099
+      *----------------------------------------------------------------*11620099
+      * Deciding whether to create new row, update existing row,        11630099
+      * or continue without database call.                              11640099
+      *                                                                 11650099
+      *                                                                 11659299
+           If  R115L060-MethCalc-Settlement    (WA-Ind1)                11660099
+           or  R115L060-MethCalc-Part-Amount   (WA-Ind1)                11670099
+               Perform H410-Check-Charge-Amount                         11680099
+           End-If                                                       11690099
+      *                                                                 11700099
+           If  R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)                   11710099
+           or  R115L060-MethCalc-Pct-Of-PA  (WA-Ind1)                   11720099
+      *        If  RTFCE120-I-Operation-Type-D(1:7)                     11730099
+      *                                  =     'SETTLE-'                11740099
+      *            Perform H410-Check-Charge-Amount                     11750099
+      *        Else                                                     11760099
+                   Perform H420-Check-Charge-Pctage                     11770099
+      *        End-If                                                   11780099
+           End-If                                                       11790099
+           .                                                            11800017
+      *                                                                 11810017
+       H400-Update-Charges-Ex.                                          11820064
+           Exit.                                                        11830017
+                                                                        11840017
+      *################################################################*11850097
+       H410-Check-Charge-Amount          Section.                       11860099
+      *                                                                 11870099
+      *    Evaluate R115L060-Charge-Amount     (WA-Ind1)                11880099
+      *          =  RTFCE120-I-Charge-Amount-D (WA-Ind2)                11890099
+      *    also     R115L060-Charge-Amount     (WA-Ind1)                11900099
+      *                                                                 11910099
+      *      When True                                                  11920099
+      *      also Any                                                   11930099
+      *        Continue                                                 11940099
+      *                                                                 11950099
+      *      When False                                                 11960099
+      *      also Zeroes                                                11970099
+      *        Perform H440-Create-Charge                               11980099
+      *                                                                 11990099
+      *      When False                                                 12000099
+      *      also Any                                                   12010099
+      *        Perform H450-Update-Charge                               12020099
+      *                                                                 12030099
+      *    End-Evaluate                                                 12040099
+      *                                                                 12040199
+      *    Skriver om litt..........                                    12040299
+      *                                                                 12040399
+      *    Amount allready registered                                   12040499
+           If R115L060-Charge-Amount (WA-Ind1) > 0                      12041099
+              If R115L060-Charge-Amount (WA-Ind1)                       12041199
+                 Not =  RTFCE120-I-Charge-Amount-D (WA-Ind2)            12042099
+      *          We update amount                                       12043099
+                    Perform H450-Update-Charge                          12044099
+              End-If                                                    12045099
+           Else                                                         12046099
+      *    new amount?                                                  12047099
+              If RTFCE120-I-Charge-Amount-D (WA-Ind2)  > 0              12048099
+                 Perform H440-Create-Charge                             12049099
+              End-If                                                    12049199
+           End-If                                                       12049299
+           .                                                            12050099
+      *                                                                 12060099
+       H410-Check-Charge-Amount-Ex.                                     12070099
+           Exit.                                                        12080099
+                                                                        12090099
+      *################################################################*12100099
+       H420-Check-Charge-Pctage          Section.                       12110099
+      *                                                                 12124099
+      *    There exists something                                       12125099
+           If R115L060-Charge-Percentage (WA-Ind1) > 0                  12130099
+           or R115L060-Charge-Amount     (WA-Ind1) > 0                  12130199
+              If R115L060-Charge-Percentage (WA-Ind1)                   12131099
+                 Not =  RTFCE120-I-Percent-Comm-D  (WA-Ind2)            12140099
+      *          Percent is changed                                     12140199
+                 Perform H450-Update-Charge                             12141099
+              End-If                                                    12142099
+              If R115L060-Charge-Amount (WA-Ind1)                       12143099
+                 Not =  RTFCE120-I-Charge-Amount-D (WA-Ind2)            12144099
+      *          Amount is changed                                      12145099
+                 Perform H450-Update-Charge                             12146099
+              End-If                                                    12147099
+           Else                                                         12150099
+              If RTFCE120-I-Percent-Comm-D  (WA-Ind2) > 0               12150199
+              Or RTFCE120-I-Charge-Amount-D (WA-Ind2) > 0               12150299
+      *       We have a new charge                                      12151099
+                 Perform H440-Create-Charge                             12152099
+              End-If                                                    12153099
+           End-If                                                       12154099
+                                                                        12160099
+      *                                                                 12160199
+      *    Evaluate R115L060-Charge-Percentage (WA-Ind1)                12161099
+      *          =  RTFCE120-I-Percent-Comm-D  (WA-Ind2)                12162099
+      *    also     R115L060-Charge-Percentage (WA-Ind1)                12163099
+      *                                                                 12164099
+      *      When True                                                  12170099
+      *      also Any                                                   12180099
+      *        Continue                                                 12190099
+      *                                                                 12191099
+      *      When True                                                  12192099
+      *      also Zero                                                  12193099
+      *      Check charge amount                                        12193299
+      *        If R115L060-Charge-Amount (WA-Ind1) > 0                  12193399
+      *          If RTFCE120-I-Charge-Amount-D (WA-Ind2) Not =          12193499
+      *             R115L060-Charge-Amount (WA-Ind1)                    12193599
+      *             Perform H450-Update-Charge                          12193799
+      *          End-If                                                 12193899
+      *        Else                                                     12193999
+      *          If RTFCE120-I-Charge-Amount-D (WA-Ind2) > 0            12194099
+      *             Perform H440-Create-Charge                          12194299
+      *          End-If                                                 12194399
+      *        End-If                                                   12195099
+      *                                                                 12200099
+      *      When False                                                 12210099
+      *      also Zeroes                                                12220099
+      *                                                                 12221099
+      *         If  R115L060-Charge-Amount     (WA-Ind1)  > 0           12222099
+      *             Perform H450-Update-Charge                          12223099
+      *         Else                                                    12224099
+      *             Perform H440-Create-Charge                          12230099
+      *         End-If                                                  12231099
+      *                                                                 12240099
+      *      When False                                                 12250099
+      *      also Any                                                   12260099
+      *        Perform H450-Update-Charge                               12270099
+      *                                                                 12280099
+      *    End-Evaluate                                                 12290099
+      *                                                                 12291099
+           .                                                            12300099
+      *                                                                 12310099
+       H420-Check-Charge-Pctage-Ex.                                     12320099
+           Exit.                                                        12330099
+                                                                        12340099
+      *################################################################*12350099
+       H440-Create-Charge                Section.                       12360099
+      *                                                                 12370041
+      * Creating the charge.                                            12380042
+      *                                                                 12390042
+           Evaluate True                                                12400017
+             When SW-Main                                               12410017
+               Perform G130-Create-TF-CH                                12420017
+      *                                                                 12430017
+             When SW-Part                                               12440017
+               Perform G230-Create-TF-PC                                12450017
+      *                                                                 12460017
+           End-Evaluate                                                 12470017
+           .                                                            12480017
+      *                                                                 12490017
+       H440-Create-Charge-Ex.                                           12500099
+           Exit.                                                        12510017
+                                                                        12520017
+      *################################################################*12530017
+       H450-Update-Charge                Section.                       12540099
+      *                                                                 12550042
+      * Creating the charge.                                            12560042
+      *                                                                 12570017
+           Evaluate True                                                12580017
+             When SW-Main                                               12590017
+               Perform G110-Read-TF-CH                                  12600017
+               Perform G120-Update-TF-CH                                12610077
+      *                                                                 12620017
+             When SW-Part                                               12630017
+               Perform G210-Read-TF-PC                                  12640017
+               Perform G220-Update-TF-PC                                12650017
+      *                                                                 12660017
+           End-Evaluate                                                 12670017
+           .                                                            12680017
+      *                                                                 12690017
+       H450-Update-Charge-Ex.                                           12700099
+           Exit.                                                        12710017
+                                                                        12720017
+      *################################################################*12730017
+       H500-Delete-Charge                Section.                       12740064
+      *                                                                 12750017
+      * We have found a permissible chargetype which does not occur     12760017
+      * as input. If it is already registered as a charge, this charge  12770017
+      * must be deleted.                                                12780017
+      *                                                                 12790017
+           If  R115L060-Charge-Amount    (WA-Ind1)  =  Zeroes           12800077
+           and R115L060-Charge-Percentage(WA-Ind1)  =  Zeroes           12810038
+      * No charge is registered.                                        12820042
+               Continue                                                 12830017
+      *                                                                 12840017
+           Else                                                         12850017
+      *                                                                 12860017
+               Perform H510-Delete-Charge                               12870064
+      *                                                                 12880017
+           End-If                                                       12890017
+           .                                                            12900017
+      *                                                                 12910017
+       H500-Delete-Charge-Ex.                                           12920064
+           Exit.                                                        12930017
+                                                                        12940017
+      *################################################################*12950017
+       H510-Delete-Charge                Section.                       12960064
+      *                                                                 12970099
+      * If the contract is an import letter of credit, the registered   12980099
+      * charge is to be deleted only if its payable by Customer         12990099
+      * and creditable to Own-Bank.                                     13000099
+      *                                                                 13010099
+      *                                                                 13020099
+           Evaluate RTFCE120-I-Operation-Type-D                         13030099
+                                         =     'ACCEPT-ILC'             13040099
+           also     R115L060-Charge-Role-Type(WA-Ind1)                  13050099
+                                         =     'CUSTM'                  13060099
+           also     R115L060-Credit-Own-Bank(WA-Ind1)                   13070099
+      *                                                                 13080099
+             When  False  also  Any   also  Any                         13090099
+             When  True   also  True  also  True                        13100099
+               Evaluate True                                            13110099
+                 When SW-Main                                           13120099
+                   Perform G110-Read-TF-CH                              13130099
+                   Perform G140-Delete-TF-CH                            13140099
+      *                                                                 13150017
+                 When SW-Part                                           13160099
+                   Perform G240-Delete-TF-PC                            13170099
+      *                                                                 13180017
+               End-Evaluate                                             13190099
+      *                                                                 13200099
+             When other                                                 13210099
+               Continue                                                 13220099
+      *                                                                 13230099
+           End-Evaluate                                                 13240099
+           .                                                            13250017
+      *                                                                 13260017
+       H510-Delete-Charge-Ex.                                           13270064
+           Exit.                                                        13280017
+                                                                        13290017
+      *################################################################*13300017
+       H900-Upd-Timestamp                Section.                       13310045
+      *                                                                 13320045
+           Initialize                          R115L030-Set-Timestamp   13330045
+           Set   R115L030-Version        To    True                     13340045
+      *                                                                 13350045
+           Move  R400CH01-Function       To    R115L030-Function        13360045
+           Move  R400CH01-Medium         To    R115L030-Medium          13370045
+      *                                                                 13380045
+           Move  R400CH01-Exec-Date      To    R115L030-Exec-Date       13390045
+           Move  R400CH01-System-Date    To    R115L030-System-Date     13400045
+           Move  R400CH01-System-Time    To    R115L030-System-Time     13410045
+           Move  R400CH01-Userid         To    R115L030-Userid          13420045
+      *                                                                 13430099
+           Set   R115L030-Set-Status     To    True                     13440099
+           Move  R115ISR0-To-SC-Code     To    R115L030-Status          13450099
+      *                                                                 13460045
+           Move  RTFCE120-I-Fin-Inst-No-D                               13470045
+                                         To    R115L030-Fin-Inst-No     13480045
+           Move  RTFCE120-I-Contract-Type-D                             13490045
+                                         To    R115L030-Contract-Type   13500045
+           Move  RTFCE120-I-Contract-No-D                               13510045
+                                         To    R115L030-Contract-No     13520045
+      *                                                                 13530045
+           If RTFCE120-I-Part-Amount-No-I = 'U'                         13540099
+              Move R115L060-CA-Currency  To    R115L030-CA-Currency     13550099
+              Move RTFCE120-I-Part-Amount-No-D                          13560099
+                                         To    R115L030-PA-Seq-No       13570099
+           End-If                                                       13580099
+      *                                                                 13590099
+           Call  'F115L030'              Using R115L030-Set-Timestamp   13600045
+                                               R7919999-Error-Area      13610045
+           End-Call                                                     13620045
+      *                                                                 13630045
+           Evaluate True                                                13640045
+             When R7919999-Return-Abend                                 13650045
+               Move  'H901'              To    R7919999-Paragraph       13660045
+               Move  'FM'                To    R400CH01-Message-Code    13670045
+               Perform Z900-Abend                                       13680045
+                                                                        13690045
+             When R7919999-Return-Error                                 13700045
+               Move  'H902'              To    R7919999-Paragraph       13710045
+               Move  'FM'                To    R400CH01-Message-Code    13720045
+               Perform Z700-Error-AE                                    13730045
+                                                                        13740045
+             When R7919999-Return-OK                                    13750045
+               Continue                                                 13760045
+                                                                        13770045
+           End-Evaluate                                                 13780045
+           .                                                            13790045
+      *                                                                 13800045
+       H900-Upd-Timestamp-Ex.                                           13810045
+           Exit.                                                        13820045
+                                                                        13830045
+      *################################################################*13840098
+       I000-Check-Max-Min-Limits         Section.                       13850098
+      *                                                                 13860098
+      * Checking that the input charge does not violate                 13870098
+      * max/min values.                                                 13880098
+      *                                                                 13890098
+           If  RTFCE120-I-Charge-Amount-D      (WA-Ind2)                13941099
+                                         =     Zero                     13942099
+           and RTFCE120-I-Percent-Comm-D       (WA-Ind2)                13943099
+                                         not = Zero                     13944099
+      *                                                                 13945099
+             Perform I100-Find-CA-Or-PA-Amount                          13950098
+             Compute                           WA-Amount-Check          13960098
+                 =                             WA-CA-Or-PA-Amount       13970098
+                 *                             RTFCE120-I-Percent-Comm-D13980098
+                                                               (WA-Ind2)13990098
+                 /                             100                      14000098
+             End-Compute                                                14010098
+      *                                                                 14020098
+           Else                                                         14030098
+             Move  RTFCE120-I-Charge-Amount-D  (WA-Ind2)                14040098
+                                         To    WA-Amount-Check          14050098
+      *                                                                 14060098
+           End-If                                                       14070098
+      *                                                                 14080098
+      *    ------------------------------------------------------------ 14090099
+      *                                                                 14100099
+           If        R115L060-Minimum-Charge(WA-Ind1)                   14110099
+               <=    WA-Amount-Check                                    14120099
+           and (     WA-Amount-Check                                    14130099
+               <=    R115L060-Maximum-Charge(WA-Ind1)                   14140099
+               or                                                       14150099
+                     R115L060-Maximum-Charge(WA-Ind1)                   14160099
+                                         =     Zero                     14170099
+               )                                                        14180099
+      *                                                                 14190099
+           Then                                                         14200099
+               Set   SW-Using-Input-Charge                              14210099
+                                         To    True                     14220099
+               Move  RTFCE120-I-Charge-Amount-D(WA-Ind2)                14230099
+                                         To    WA-Charge-Amount         14240099
+               Move  RTFCE120-I-Percent-Comm-D(WA-Ind2)                 14250099
+                                         To    WA-Percentage            14260099
+      *                                                                 14270099
+           Else                                                         14280098
+               If    WA-Amount-Check                                    14290099
+                   < R115L060-Minimum-Charge(WA-Ind1)                   14300099
+                   Set   SW-Using-Min-Charge                            14310099
+                                         To    True                     14320099
+                   Move  R115L060-Minimum-Charge(WA-Ind1)               14330099
+                   to    WA-Charge-Amount                               14340099
+               Else                                                     14350099
+                   Set   SW-Using-Max-Charge                            14360099
+                                         To    True                     14370099
+                   Move  R115L060-Maximum-Charge(WA-Ind1)               14380099
+                   to    WA-Charge-Amount                               14390099
+               End-If                                                   14400099
+      *ndl feilretting - beregn prosent utfra max/min beløp             14400199
+      *lg kommenterer bort feilretting fordi den åpner for omkostning   14400299
+      *lavere enn min provisjonssats                                    14400399
+      *        If  R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)               14400499
+      *        or  R115L060-MethCalc-Pct-Of-PA  (WA-Ind1)               14400599
+      *            If WA-CA-Or-PA-Amount = 0                            14400699
+      *               Perform I100-Find-CA-Or-PA-Amount                 14400799
+      *            End-If                                               14400899
+      *            Compute                     WA-Percentage            14401099
+      *               =                        WA-Charge-Amount         14402099
+      *               *                        100                      14403099
+      *               /                        WA-CA-Or-PA-Amount       14405099
+      *            End-Compute                                          14406099
+      *        End-If                                                   14407099
+               Move  Zero                To    WA-Percentage            14410099
+      *ndl feilretting slutt                                            14411099
+      *                                                                 14420099
+           End-If                                                       14430098
+           .                                                            14440098
+      *                                                                 14450098
+       I000-Check-Max-Min-Limits-Ex.                                    14460098
+           Exit.                                                        14470098
+                                                                        14480098
+      *################################################################*14490045
+       I100-Find-CA-Or-PA-Amount         Section.                       14500098
+      *                                                                 14510098
+           If RTFCE120-I-Part-Amount-No-I =    'U'                      14520099
+      *  NDL Feilretting juli 01: Beregner utfra kontraktsbeløp dersom  14520199
+      *      methcalc = pct of CA                                       14520299
+           And NOT R115L060-MethCalc-Pct-Of-CA  (WA-Ind1)               14520399
+             Perform I300-Read-Part-Amount                              14520499
+           Else                                                         14540098
+             Perform I200-Read-Contract-Amount                          14550099
+           End-If                                                       14560098
+           .                                                            14570098
+      *                                                                 14580098
+       I100-Find-CA-Or-PA-Amount-Ex.                                    14590098
+           Exit.                                                        14600098
+                                                                        14610098
+      *################################################################*14620098
+       I200-Read-Contract-Amount         Section.                       14630098
+      *                                                                 14640098
+           Initialize                          R115ICA0-Contract-Amount 14650098
+           Set   R115ICA0-Version        To    True                     14660098
+           Set   R115ICA0-In-Work        To    True                     14670098
+           Set   R115ICA0-In-Select      To    True                     14680098
+      *                                                                 14690098
+           Move  RTFCE120-I-Fin-Inst-No-D                               14700098
+                                         To    R115ICA0-In-Fin-Inst-No  14710098
+           Move  RTFCE120-I-Contract-Type-D                             14720098
+                                         To    R115ICA0-In-Contract-Type14730098
+           Move  RTFCE120-I-Contract-No-D                               14740098
+                                         To    R115ICA0-In-Contract-No  14750098
+           Move  R115L060-CA-Currency    To    R115ICA0-In-Currency     14760099
+      *                                                                 14770098
+           Call  'F115ICA0'              Using R115ICA0-Contract-Amount 14780098
+                                               R7919999-Error-Area      14790098
+           End-Call                                                     14800098
+      *                                                                 14810098
+           Evaluate True                                                14820098
+             When R7919999-Return-Abend                                 14830098
+               Move  'FM'                To    R400CH01-Message-Code    14840098
+               Move  'I201'              To    R7919999-Paragraph       14850098
+               Perform Z900-Abend                                       14860098
+      *                                                                 14870098
+             When R7919999-Return-Error                                 14880098
+               Move  'FM'                To    R400CH01-Message-Code    14890098
+               Move  'I202'              To    R7919999-Paragraph       14900098
+               Perform Z700-Error-AE                                    14910098
+      *                                                                 14920098
+             When R7919999-Return-OK                                    14930098
+      *        Move  R115ICA0-Original-Amount                           14940099
+               Move  R115ICA0-Curr-O-Amount                             14940199
+                                         To    WA-CA-Or-PA-Amount       14950098
+      *                                                                 14960098
+           End-Evaluate                                                 14970098
+           .                                                            14980098
+      *                                                                 14990098
+       I200-Read-Contract-Amount-Ex.                                    15000098
+           Exit.                                                        15010098
+                                                                        15020098
+      *################################################################*15030098
+       I300-Read-Part-Amount             Section.                       15040098
+      *                                                                 15050098
+           Initialize                          R115IPA0-Part-Amount     15060098
+           Set   R115IPA0-Version        To    True                     15070098
+           Set   R115IPA0-In-Select      To    True                     15080098
+           Set   R115IPA0-In-Work        To    True                     15090098
+      *                                                                 15100098
+           Move  RTFCE120-I-Fin-Inst-No-D                               15110098
+                                         To    R115IPA0-In-Fin-Inst-No  15120098
+      *                                                                 15130098
+           Move  RTFCE120-I-Contract-Type-D                             15140098
+                                         To    R115IPA0-In-Contract-Type15150098
+           Move  RTFCE120-I-Contract-No-D                               15160098
+                                         To    R115IPA0-In-Contract-No  15170098
+      *                                                                 15180098
+           Move  R115L060-CA-Currency    To    R115IPA0-In-CA-Currency  15190099
+           Move  RTFCE120-I-Part-Amount-No-D                            15200098
+                                         To    R115IPA0-In-PA-Seq-No    15210098
+      *                                                                 15220098
+           Call  'F115IPA0'              Using R115IPA0-Part-Amount     15230098
+                                               R7919999-Error-Area      15240098
+           End-Call                                                     15250098
+      *                                                                 15260098
+           Evaluate True                                                15270098
+             When R7919999-Return-Abend                                 15280098
+               Move  'FM'                To    R400CH01-Message-Code    15290098
+               Move  'I301'              To    R7919999-Paragraph       15300098
+               Perform Z900-Abend                                       15310098
+      *                                                                 15320098
+             When R7919999-Return-Error                                 15330098
+               Move  'FM'                To    R400CH01-Message-Code    15340098
+               Move  'I302'              To    R7919999-Paragraph       15350098
+               Perform Z700-Error-AE                                    15360098
+      *                                                                 15370098
+             When R7919999-Return-OK                                    15380098
+               Move  R115IPA0-Amount     To    WA-CA-Or-PA-Amount       15390098
+      *                                                                 15400098
+           End-Evaluate                                                 15410098
+           .                                                            15420098
+      *                                                                 15430098
+       I300-Read-Part-Amount-Ex.                                        15440098
+           Exit.                                                        15450098
+                                                                        15460098
+      *################################################################*15470099
+      * Perform your move of data fields that must be delivered back   *15480098
+      * from this module here.                                         *15490017
+      *----------------------------------------------------------------*15500017
+       U000-Out-Fields                   Section.                       15510017
+      *                                                                 15520017
+           Move  'U'                     To RTFCE120-B-Last-Saved-Date-O15530046
+           Move  R115L030-Timestamp      To RTFCE120-B-Last-Saved-Date-D15540046
+           .                                                            15550017
+      *                                                                 15560017
+       U000-Out-Fields-Ex.                                              15570017
+           Exit.                                                        15580017
+                                                                        15590017
+      *################################################################*15600017
+      * Set Warning status                                             *15610017
+      *                                                                *15620017
+      *----------------------------------------------------------------*15630017
+      *<META Z600-ERROR-AW>                                             15640017
+       Z600-Error-AW                     Section.                       15650017
+      *                                                                 15660017
+           Set   R7919999-Return-Warning To    True                     15670017
+           Move  'FTFCL120'              To    R400CH01-Message-Text    15680017
+           .                                                            15690017
+      *                                                                 15700017
+       Z600-Error-AW-Ex.                                                15710017
+           Exit.                                                        15720017
+      *</META>                                                          15730017
+                                                                        15740017
+      *################################################################*15750017
+      * Syntax Error status                                            *15760017
+      *                                                                *15770017
+      *----------------------------------------------------------------*15780017
+      *<META Z700-ERROR-AE>                                             15790017
+       Z700-Error-AE                     Section.                       15800017
+      *                                                                 15810017
+           Set   R7919999-Return-Error   To    True                     15820017
+           If    R400CH01-Message-Code   =     'FM'                     15830017
+                 String   'FTFCL120'           Delimited By Size        15840017
+                          ': '                 Delimited By Size        15850017
+                       R7919999-Message        Delimited By Size        15860017
+                                         Into  R400CH01-Message-Text    15870017
+                 End-String                                             15880017
+           Else                                                         15890017
+                 Move  'FTFCL120'        To    R400CH01-Message-Text    15900017
+           End-If                                                       15910017
+           .                                                            15920017
+      *                                                                 15930017
+       Z700-Error-AE-Ex.                                                15940017
+           Goback.                                                      15950017
+      *</META>                                                          15960017
+                                                                        15970017
+      *################################################################*15980017
+      * Severe error. Will genereate USER-ABEND in STG when the        *15990017
+      * function is executed in batch.                                 *16000017
+      *----------------------------------------------------------------*16010017
+      *<META Z800-ERROR-AS>                                             16020017
+       Z800-Error-AS                     Section.                       16030017
+      *                                                                 16040017
+           Set   R7919999-Return-Abend   To    True                     16050017
+           If    R400CH01-Message-Code   =     'FM'                     16060017
+                 String   'FTFCL120'           Delimited By Size        16070017
+                          ': '                 Delimited By Size        16080017
+                       R7919999-Message        Delimited By Size        16090017
+                                         Into  R400CH01-Message-Text    16100017
+                 End-String                                             16110017
+           Else                                                         16120017
+                 Move  'FTFCL120'        To    R400CH01-Message-Text    16130017
+           End-If                                                       16140017
+           .                                                            16150017
+      *                                                                 16160017
+       Z800-Error-AS-Ex.                                                16170017
+           Goback.                                                      16180017
+      *</META>                                                          16190017
+                                                                        16200017
+      *################################################################*16210017
+      * Severe error. Will genereate USER-ABEND in STG when the        *16220017
+      * function is executed in batch.                                 *16230017
+      *----------------------------------------------------------------*16240017
+      *<META Z900-ABEND>                                                16250017
+       Z900-Abend                        Section.                       16260017
+      *                                                                 16270017
+           Set   R7919999-Return-Abend   To    True                     16280017
+           If    R400CH01-Message-Code   =     'FM'                     16290017
+                 String   'FTFCL120'           Delimited By Size        16300017
+                          ': '                 Delimited By Size        16310017
+                       R7919999-Message        Delimited By Size        16320017
+                                         Into  R400CH01-Message-Text    16330017
+                 End-String                                             16340017
+           Else                                                         16350017
+                 Move  'FTFCL120'        To    R400CH01-Message-Text    16360017
+           End-If                                                       16370017
+      *                                                                 16380017
+      *----------------------------------------------------------------*16390017
+      *                                                                 16400017
+           If  R7919999-Return-Code      Not   Numeric                  16410017
+           or  Not R7919999-Return-Abend                                16420017
+               Move  +0                  To    R7919999-Module-Ind      16430017
+           End-If                                                       16440017
+           Add   +1                      To    R7919999-Module-Ind      16450017
+           If  R7919999-Module-Ind       Not >                          16460017
+                             ( Length    Of    R7919999-Module-Tab      16470017
+                             / Length    Of    R7919999-Module-Element )16480017
+               Move  'FTFCL120'          To    R7919999-Module-Name     16490017
+                                               (R7919999-Module-Ind)    16500017
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     16510017
+                                               (R7919999-Module-Ind)    16520017
+           End-If                                                       16530017
+           Set   R7919999-Return-Abend   To    True                     16540017
+           .                                                            16550017
+      *                                                                 16560017
+       Z900-Abend-Ex.                                                   16570017
+           Goback.                                                      16580017
+      *</META>                                                          16590017
+      *                                                                 16600017
+       End Program FTFCL120.                                            16610017

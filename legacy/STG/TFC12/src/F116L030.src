@@ -1,0 +1,1183 @@
+       Identification Division.                                         00010000
+       Program-ID. F116L030.                                            00020000
+       Author.  Henning Langfeldt Rødland.                              00030000
+      *################################################################*00040000
+      *                                                                 00050000
+      * FD International Services                                       00060000
+      *                                                                 00070000
+      * Exchange of currency amounts.                                   00080055
+      *                                                                 00090001
+      *                                                                 00100001
+      * An ordinary call may look like this:                            00110001
+      *                                                                 00120001
+      *    Initialize                          R116L030-Currency-Xchange00130001
+      *    Set   R116L030-Version        To    True                     00140001
+      *                                                                 00150001
+      * One of these:                                                   00160001
+      * 1) Move  &from currency          To    R116L030-In-From-Currency00170001
+      * 2) Set   R116L030-In-From-Basic-Cur                             00180001
+      *                                  To    True                     00190001
+      *                                                                 00200001
+      * One of these:                                                   00210001
+      * 1) Move  &to currency            To    R116L030-In-To-Currency  00220001
+      * 2) Set   R116L030-In-To-Basic-Cur                               00230001
+      *                                  To    True                     00240001
+      *    Move  &from amount            To    R116L030-In-From-Amount  00250001
+      *                                                                 00260001
+      * At least one of these:                                          00270001
+      * 1) Move  &bank no.               To    R116L030-In-Fin-Inst-No  00280004
+      * 2) Move  &rate                   To    R116L030-In-Rate         00290001
+      *    Move  &denomination           To    R116L030-In-Denomination 00300001
+      *                                                                 00310001
+      * You may specify which rate is to be used.                       00320037
+      * This is relevant even when input rate is given, as this is used 00330037
+      * to check rate deviation.                                        00340037
+      * Default is parameter rate.                                      00350038
+      * 1) Set   R116L030-In-Use-Parameter-Rate                         00360037
+      *                                  To    True                     00370037
+      * 2) Set   R116L030-In-Use-Buy-Rate                               00380037
+      *                                  To    True                     00390037
+      * 3) Set   R116L030-In-Use-Sell-Rate                              00400037
+      *                                  To    True                     00410037
+      *                                                                 00420037
+      *    Call  'F116L030'              Using R116L030-Currency-Xchange00430001
+      *                                        R7919999-Error           00440001
+      *    End-Call                                                     00450001
+      *                                                                 00460001
+      *    Evaluate True                                                00470001
+      *      When R7919999-Retur-Abend                                  00480001
+      *        Move  '&&&&'              To    R7919999-Paragraf        00490001
+      *        Perform Z900-Abend                                       00500001
+      *                                                                 00510001
+      *      When R7919999-Retur-Feil                                   00520001
+      *        ...currency not valid / rate not found...                00530001
+      *                                                                 00540001
+      *      When R7919999-Retur-OK                                     00550001
+      *        Move  R116L030-To-Amount  To    &currency amount...      00560001
+      *                                                                 00570001
+      *    End-Evaluate                                                 00580001
+      *                                                                 00590001
+      *################################################################*00600000
+      * Date ! Si! Change description                            ! 3A ! 00610000
+      *------+---+-----------------------------------------------+----+ 00620000
+      *050802!LG ! C200: Stop exchange with equal cc and man.rate!la90! 00621056
+      *050500!HLR! D300: Changed the formula for "when other":   !LG10! 00630052
+      *      !   !   Old: Compute  W-Rate                        !    ! 00640052
+      *      !   !            =    W-From-Denomination           !    ! 00650052
+      *      !   !            *    W-To-Rate / W-From-Rate       !    ! 00660052
+      *      !   !            *    W-From-Denomination           !    ! 00670052
+      *      !   !   New: Compute  W-Rate                        !    ! 00680052
+      *      !   !            =    W-From-Denomination           !    ! 00690052
+      *      !   !            *    W-To-Rate / W-From-Rate       !    ! 00700052
+      *110400!HLR! Checks that fin.inst.no is filled in.         !LG10! 00710052
+      *      !   ! Checks that currencies are filled in.         !    ! 00720050
+      *      !   ! We accept that fin.inst.no is not the fin.    !    ! 00730050
+      *      !   ! inst., uses F7918040 to find the correct no.  !    ! 00740049
+      *030200!LG ! Endret til bruk av to-den. i D300             !LG10! 00750049
+      *130100!HLR! Deviation check of input parameter rate is    !LG10! 00760043
+      *      !   ! moved till after the Euro Rate preperation.   !    ! 00770043
+      *      !   ! This because the NOK rate is irrelevant for   !    ! 00780043
+      *      !   ! Euro currencies.                              !    ! 00790043
+      *031299!HLR! One may now specify which rate is to be used  !LG10! 00800043
+      *      !   ! - parameter, buy or sell rate - if no input   !    ! 00810043
+      *      !   ! rate is given.                                !    ! 00820043
+      *230999!HLR! When local / basic currency is involved,      !LG10! 00830040
+      *      !   ! we always use the standard rate for the       !    ! 00840040
+      *      !   ! other currency, regardless of which way       !    ! 00850040
+      *      !   ! the calculation goes.                         !    ! 00860040
+      *020699!HLR! New module                                    !LG10! 00870014
+      *################################################################*00880000
+       Environment Division.                                            00890000
+       Configuration Section.                                           00900000
+       Special-Names.                                                   00910000
+           Decimal-Point Is Comma.                                      00920000
+      *                                                                 00930000
+      *################################################################*00940000
+       Data Division.                                                   00950000
+       Working-Storage Section.                                         00960000
+      *                                                                 00970000
+       01  Filler.                                                      00980000
+      *                                                                 00990000
+           05  W-IO-Length               Pic S9(04)              Comp.  01000000
+      *                                                                 01010000
+           05  WD-Length                 Pic  Z.ZZ9.                    01020000
+           05  WD-Denomination           Pic  ZZ.ZZ9.                   01030000
+      *                                                                 01040000
+           05  WS-Org-No                 Pic  9(04).                    01050048
+           05  WS-Org-ID                 Pic S9(18)              Comp-3.01060048
+      *                                                                 01070046
+           05  W-Currency-Info.                                         01080001
+             10  W-From-Currency         Pic  X(03).                    01090001
+             10  W-From-Rate             Pic S9(08)V9(06)        Comp-3.01100001
+             10  W-From-Denomination     Pic S9(05)              Comp-3.01110001
+             10  W-To-Currency           Pic  X(03).                    01120001
+             10  W-To-Rate               Pic S9(08)V9(06)        Comp-3.01130001
+             10  W-To-Denomination       Pic S9(05)              Comp-3.01140001
+             10  W-To-Decimals           Pic S9(01)              Comp-3.01150001
+      *                                                                 01160000
+           05  W-Local-Info.                                            01170043
+             10  W-Local-Currency        Pic  X(03).                    01180043
+             10  W-Local-From-Rate       Pic S9(08)V9(06)        Comp-3.01190043
+             10  W-Local-From-Denomination                              01200043
+                                         Pic S9(05)              Comp-3.01210040
+             10  W-Local-To-Rate         Pic S9(08)V9(06)        Comp-3.01220043
+             10  W-Local-To-Denomination Pic S9(05)              Comp-3.01230043
+      *                                                                 01240043
+           05  W-Euro-Info.                                             01250043
+             10  SW-Euro-From            Pic  X(01).                    01260043
+               88  SW-Euro-From-No            Value 'N', ' '.           01270043
+               88  SW-Euro-From-Yes           Value 'Y'.                01280043
+             10  W-Euro-From-Rate        Pic S9(08)V9(06)        Comp-3.01290043
+             10  W-Euro-From-Denomination                               01300043
+                                         Pic S9(05)              Comp-3.01310043
+             10  SW-Euro-To              Pic  X(01).                    01320043
+               88  SW-Euro-To-No              Value 'N', ' '.           01330043
+               88  SW-Euro-To-Yes             Value 'Y'.                01340043
+             10  W-Euro-To-Rate          Pic S9(08)V9(06)        Comp-3.01350043
+             10  W-Euro-To-Denomination  Pic S9(05)              Comp-3.01360043
+                                                                        01370043
+             10  SW-Euro                 Pic  X(01).                    01380040
+               88  SW-Euro-No                 Value 'N', ' '.           01390040
+               88  SW-Euro-Yes                Value 'Y'.                01400040
+             10  W-Euro-Rate             Pic S9(08)V9(06)        Comp-3.01410040
+             10  W-Euro-Denomination     Pic S9(05)              Comp-3.01420040
+      *                                                                 01430040
+           05  W-Work-Info.                                             01440045
+             10  W-Currency              Pic  X(03).                    01450045
+             10  W-Rate                  Pic S9(08)V9(06)        Comp-3.01460045
+             10  W-Denomination          Pic S9(05)              Comp-3.01470045
+      *                                                                 01480000
+             10  W-Rate-Divisor                                  Comp-2.01490045
+      *                                                                 01500000
+      *----------------------------------------------------------------*01510012
+      * These fields are used for checking rate deviation.              01520012
+      *                                                                 01530012
+           05  Filler.                                                  01540012
+      *                                                                 01550012
+             10  W-Min-Rate              Pic S9(08)V9(06)        Comp-3.01560012
+             10  W-Max-Rate              Pic S9(08)V9(06)        Comp-3.01570012
+      *                                                                 01580010
+             10  Ind-From                Pic S9(04)              Comp.  01590012
+             10  Ind-To                  Pic S9(04)              Comp.  01600012
+      *                                                                 01610012
+             10  WD-Min-Rate             Pic  ZZZZZZZ9,99999.           01620012
+             10  WD-Max-Rate             Pic  ZZZZZZZ9,99999.           01630012
+             10  WD-String               Pic  X(80).                    01640012
+      *                                                                 01650010
+             10  W-POAT-Value            Pic  X(10).                    01660012
+             10  Filler                  Redefines W-POAT-Value.        01670012
+               15  W-POAT-1st-Sign       Pic  X(01).                    01680012
+               15  W-POAT-1st-Pct        Pic  9(03).                    01690012
+               15  Filler                Pic  X(01).                    01700012
+               15  W-POAT-2nd-Sign       Pic  X(01).                    01710012
+               15  W-POAT-2nd-Pct        Pic  9(03).                    01720012
+      *                                                                 01730010
+      *----------------------------------------------------------------*01740000
+      * Internal area:                                                  01750000
+      *                                                                 01760000
+       01  W-Int-IO-Area.                                               01770000
+           Copy R116L030.                                               01780000
+      *                                                                 01790000
+      *----------------------------------------------------------------*01800000
+      * Assorted copy-areas:                                            01810000
+      *                                                                 01820000
+       01  Filler.                                                      01830000
+           Copy R116I020.                                               01840000
+      *                                                                 01850000
+       01  Filler.                                                      01860000
+           Copy R203L130.                                               01870046
+      *                                                                 01880046
+       01  Filler.                                                      01890046
+           Copy R5879010.                                               01900046
+      *                                                                 01910001
+       01  Filler.                                                      01920001
+           Copy R7918040.                                               01930048
+           Copy R7918110.                                               01940040
+      *                                                                 01950040
+       01  Filler.                                                      01960040
+           Copy R791I020.                                               01970010
+           Copy R791I080.                                               01980001
+           Copy R791IET0.                                               01990040
+      *                                                                 02000000
+      *################################################################.02010000
+       Linkage Section.                                                 02020000
+      *                                                                 02030000
+       01  L-Ext-IO-Area                 Pic  X(560).                   02040000
+       Copy R7919999.                                                   02050000
+      *                                                                 02060000
+      *################################################################.02070000
+       Procedure Division                Using L-Ext-IO-Area            02080000
+                                               R7919999-Error-Area.     02090000
+      *                                                                 02100000
+       A000-Main                         Section.                       02110000
+      *                                                                 02120000
+           Perform B000-Initialize                                      02130000
+           Perform B100-System-Dates                                    02140040
+      *                                                                 02150000
+           Perform ZI00-Conv-Input-Version                              02160000
+           Perform C000-Processing                                      02170000
+           Perform ZO00-Conv-Output-Version                             02180000
+      *                                                                 02190000
+           Goback.                                                      02200000
+      *################################################################*02210000
+       B000-Initialize                   Section.                       02220000
+      *                                                                 02230000
+           Set   R7919999-Return-OK      To    True                     02240000
+      *                                                                 02250000
+           .                                                            02260000
+      *################################################################.02270000
+       B100-System-Dates                 Section.                       02280040
+      *                                                                 02290000
+           If  Not R7918110-Versjon                                     02300040
+      *                                                                 02310040
+               Initialize                      R7918110-System-Datoer   02320040
+               Set   R7918110-Versjon    To    True                     02330040
+               Call  'F7918110'          Using R7918110-System-Datoer   02340040
+                                               R7919999-Error           02350040
+               End-Call                                                 02360040
+               If  Not R7919999-Return-OK                               02370040
+                   Move  'B101'          To    R7919999-Paragraph       02380040
+                   Perform Z900-Abend                                   02390040
+               End-If                                                   02400040
+      *                                                                 02410040
+           End-If                                                       02420040
+      *                                                                 02430040
+           .                                                            02440040
+      *################################################################.02450040
+       C000-Processing                   Section.                       02460040
+      *                                                                 02470040
+           Perform C100-Initialize                                      02480001
+           Perform C200-Verification                                    02490001
+           Perform C300-Local-Currency                                  02500040
+           Perform C400-Currencies                                      02510007
+           Perform C500-Decimals                                        02520043
+           Perform C600-Exchange-Rate                                   02530043
+           Perform C700-Euro-Rates                                      02540040
+           Perform C800-Overriding                                      02550042
+           Perform C900-Calculation                                     02560042
+      *                                                                 02570001
+           .                                                            02580000
+      *################################################################.02590000
+       C100-Initialize                   Section.                       02600001
+      *                                                                 02610000
+           Initialize                          R116L030-Data            02620000
+           Initialize                          W-Currency-Info          02630001
+           Initialize                          W-Local-Info             02640043
+           Initialize                          W-Euro-Info              02650043
+           Initialize                          W-Work-Info              02660045
+      *                                                                 02670000
+           .                                                            02680000
+      *################################################################.02690000
+       C200-Verification                 Section.                       02700001
+      *                                                                 02710000
+      * Bank no. must be specified when using local currency            02720040
+      * or when not specifying rate and denomination.                   02730001
+      *                                                                 02740001
+           Evaluate True                                                02750001
+             When R116L030-In-Fin-Inst-No  >   0                        02760004
+               Continue                                                 02770001
+      *                                                                 02780001
+             When R116L030-In-Rate         =   +0                       02790001
+             or   R116L030-In-Denomination =   +0                       02800001
+               Move  Space               To    R7919999-Message         02810001
+               String 'Bank no. must be specified '                     02820001
+                      'when rate and denomination is not specified.'    02830001
+                                               Delimited by size        02840001
+                                         Into  R7919999-Message         02850001
+               End-String                                               02860001
+               Move  'C201'              To    R7919999-Paragraph       02870001
+               Perform Z900-Abend                                       02880001
+      *                                                                 02890001
+             When R116L030-In-From-Basic-Cur                            02900001
+             or   R116L030-In-To-Basic-Cur                              02910001
+               Move  Space               To    R7919999-Message         02920001
+               String 'Bank no. must be specified '                     02930001
+                      'when referencing Basic Currency.'                02940001
+                                               Delimited by size        02950001
+                                         Into  R7919999-Message         02960001
+               End-String                                               02970001
+               Move  'C202'              To    R7919999-Paragraph       02980001
+               Perform Z900-Abend                                       02990001
+      *                                                                 03000001
+      *      This test is new, we do need to know the local currency.   03010048
+      *                                               HLR 11.04.2000    03020048
+             When other                                                 03030048
+               Move  Space               To    R7919999-Message         03040048
+               String 'Bank no. must be specified.'                     03050048
+                                               Delimited by size        03060048
+                                         Into  R7919999-Message         03070048
+               End-String                                               03080048
+               Move  'C203'              To    R7919999-Paragraph       03090048
+               Perform Z900-Abend                                       03100048
+      *                                                                 03110048
+           End-Evaluate                                                 03120001
+      *                                                                 03130001
+      * Denomination must be valid                                      03140001
+      *                                                                 03150001
+           Evaluate True                                                03160001
+             When R116L030-In-Rate         =   +0                       03170001
+             and  R116L030-In-Denomination =   +0                       03180001
+               Continue                                                 03190001
+      *                                                                 03200001
+             When R116L030-In-Rate       =     +0                       03210001
+               Move  Space               To    R7919999-Message         03220001
+               String 'When denomination is specified, '                03230001
+                      'rate must also be specified.'                    03240001
+                                               Delimited by size        03250001
+                                         Into  R7919999-Message         03260001
+               End-String                                               03270001
+               Move  'C204'              To    R7919999-Paragraph       03280048
+               Perform Z900-Abend                                       03290001
+      *                                                                 03300001
+      *      When R116L030-In-Denomination =   +0                       03310007
+      *        Move  Space               To    R7919999-Message         03320007
+      *        String 'When rate is specified, '                        03330007
+      *               'denomination must also be specified.'            03340007
+      *                                        Delimited by size        03350007
+      *                                  Into  R7919999-Message         03360007
+      *        End-String                                               03370007
+      *        Move  'C205'              To    R7919999-Paragraph       03380048
+      *        Perform Z900-Abend                                       03390007
+      *                                                                 03400001
+             When R116L030-In-Denomination =   +0                       03410007
+             or   R116L030-In-Denomination =   +1                       03420007
+             or   R116L030-In-Denomination =   +10                      03430001
+             or   R116L030-In-Denomination =   +100                     03440001
+             or   R116L030-In-Denomination =   +1000                    03450001
+               Continue                                                 03460001
+      *                                                                 03470001
+             When other                                                 03480001
+               Move  Space               To    R7919999-Message         03490001
+               Move  R116L030-In-Denomination                           03500001
+                                         To    WD-Denomination          03510001
+               String 'Denomination '                                   03520001
+                      WD-Denomination                                   03530001
+                      ' is not valid.'         Delimited by size        03540001
+                                         Into  R7919999-Message         03550001
+               End-String                                               03560001
+               Move  'C206'              To    R7919999-Paragraph       03570048
+               Perform Z900-Abend                                       03580001
+      *                                                                 03590001
+           End-Evaluate                                                 03600001
+      *                                                                 03610001
+      * The switch for which rate to be used should be valid,           03620037
+      * if input rate and denomination is not specified.                03630037
+      *                                                                 03640037
+           Evaluate True                                                03650037
+             When R116L030-In-Use-Parameter-Rate                        03660037
+             or   R116L030-In-Use-Buy-Rate                              03670037
+             or   R116L030-In-Use-Sell-Rate                             03680037
+               Continue                                                 03690037
+      *                                                                 03700037
+             When R116L030-In-Rate         =   +0                       03710037
+             and  R116L030-In-Denomination =   +0                       03720037
+               Move  Space               To    R7919999-Message         03730037
+               String 'Invalid switch for "which rate": '               03740037
+                      R116L030-In-Which-Rate                            03750037
+                      '.'                      Delimited by size        03760037
+                                         Into  R7919999-Message         03770037
+               End-String                                               03780037
+               Move  'C207'              To    R7919999-Paragraph       03790048
+               Perform Z900-Abend                                       03800037
+      *                                                                 03810037
+           End-Evaluate                                                 03820037
+      *                                                                 03830037
+      * Currencies must be filled in.                                   03840048
+      *                                                                 03850048
+           Evaluate True                                                03860048
+             When R116L030-In-From-Currency                             03870048
+                                         =     Space                    03880048
+             or   R116L030-In-To-Currency                               03890048
+                                         =     Space                    03900048
+               Move  Space               To    R7919999-Message         03910048
+               String 'From and to currencies must be filled in.'       03920048
+                                               Delimited by size        03930048
+                                         Into  R7919999-Message         03940048
+               End-String                                               03950048
+               Move  'C208'              To    R7919999-Paragraph       03960048
+               Perform Z900-Abend                                       03970048
+      *                                                                 03980048
+           End-Evaluate                                                 03990048
+      *                                                                 04000048
+      *lg start                                                         04001056
+           If R116L030-In-From-Currency = R116L030-In-To-Currency       04002056
+           And R116L030-In-Rate Not = 0                                 04003056
+               Move  Space               To    R7919999-Message         04004056
+               String 'If currencies are equal, exchange is not allowed'04005056
+                                               Delimited by size        04006056
+                                         Into  R7919999-Message         04007056
+               End-String                                               04008056
+               Move  'C209'              To    R7919999-Paragraph       04009056
+      *        Perform Z900-Abend                                       04009159
+               Perform Z700-Error                                       04009259
+           End-If                                                       04009359
+      *lg start                                                         04009459
+           .                                                            04010048
+      *################################################################.04020007
+       C300-Local-Currency               Section.                       04030040
+      *                                                                 04040007
+           Perform C310-Find-Org-ID                                     04050046
+           Perform C320-Find-Local-Currency                             04060046
+      *                                                                 04070046
+           .                                                            04080046
+      *################################################################.04090001
+       C310-Find-Org-ID                  Section.                       04100046
+      *                                                                 04110001
+      * First we find the correct fin.inst. number:                     04120048
+      *                                                                 04130048
+           If  Not R7918040-Versjon                                     04140048
+           or  R7918040-In-Bank-Nr       Not = R116L030-In-Fin-Inst-No  04150048
+      *                                                                 04160048
+               Initialize                      R7918040-Konsern-Nr      04170048
+               Set   R7918040-Versjon    To    True                     04180048
+               Move  R116L030-In-Fin-Inst-No                            04190048
+                                         To    R7918040-In-Bank-Nr      04200048
+      *                                                                 04210048
+               Call  'F7918040'          Using R7918040-Konsern-Nr      04220048
+                                               R7919999-Error           04230048
+               End-Call                                                 04240048
+               If  Not R7919999-Retur-OK                                04250048
+                   Move  'C311'          To    R7919999-Paragraf        04260048
+                   Perform Z900-Abend                                   04270048
+               End-If                                                   04280048
+      *                                                                 04290048
+           End-If                                                       04300048
+      *                                                                 04310048
+           Move  R7918040-Ut-Konsern-Nr  To    WS-Org-No                04320048
+      *                                                                 04330048
+      * Then we find the fin.inst. ID:                                  04340049
+      *                                                                 04350048
+           If  Not R5879010-Versjon                                     04360046
+           or  Not R5879010-In-Select                                   04370046
+           or  R5879010-In-Konsernnr     Not = WS-Org-No                04380048
+      *                                                                 04390046
+               Initialize                      R5879010-Konsern         04400046
+               Set   R5879010-Versjon    To    True                     04410046
+               Set   R5879010-In-Select  To    True                     04420046
+               Move  WS-Org-No           To    R5879010-In-Konsernnr    04430048
+      *                                                                 04440046
+               Call  'F5879010'          Using R5879010-Konsern         04450046
+                                               R7919999-Error           04460046
+               End-Call                                                 04470046
+      *                                                                 04480046
+               If  Not R7919999-Return-OK                               04490046
+                   Move  'C312'              To    R7919999-Paragraf    04500048
+                   Perform Z900-Abend                                   04510046
+               End-If                                                   04520046
+      *                                                                 04530046
+           End-If                                                       04540046
+      *                                                                 04550046
+           Move  R5879010-Ut-KO-Konsern-Id                              04560046
+                                         To    WS-Org-ID                04570046
+      *                                                                 04580046
+           .                                                            04590046
+      *################################################################.04600046
+       C320-Find-Local-Currency          Section.                       04610046
+      *                                                                 04620046
+           If  Not R203L130-Version                                     04630046
+           or  R203L130-In-Org-ID        Not = WS-Org-ID                04640046
+      *                                                                 04650046
+               Initialize                      R203L130-BaseCurrency    04660046
+               Set   R203L130-Version    To    True                     04670046
+               Move  WS-Org-ID           To    R203L130-In-Org-Id       04680046
+               Call  'F203L130'          Using R203L130-BaseCurrency    04690046
+                                               R7919999-Error           04700046
+               End-Call                                                 04710046
+               If  Not R7919999-Retur-OK                                04720046
+                   Move  'C321'          To    R7919999-Paragraph       04730046
+                   Perform Z900-Abend                                   04740046
+               End-If                                                   04750046
+      *                                                                 04760046
+           End-If                                                       04770046
+      *                                                                 04780046
+           Move  R203L130-Base-Currency  To    W-Local-Currency         04790046
+      *                                                                 04800046
+           .                                                            04810046
+      *################################################################.04820046
+       C400-Currencies                   Section.                       04830046
+      *                                                                 04840046
+           Move  R116L030-In-From-Currency                              04850000
+                                         To    W-From-Currency          04860000
+           If  R116L030-In-From-Basic-Cur                               04870001
+               Move  W-Local-Currency    To    W-From-Currency          04880040
+           End-If                                                       04890001
+      *                                                                 04900001
+           Move  R116L030-In-To-Currency                                04910001
+                                         To    W-To-Currency            04920001
+           If  R116L030-In-To-Basic-Cur                                 04930001
+               Move  W-Local-Currency    To    W-To-Currency            04940040
+           End-If                                                       04950001
+           .                                                            04970000
+      *################################################################.04980001
+       C500-Decimals                     Section.                       04990043
+      *                                                                 05000001
+           If  Not R791I080-Versjon                                     05010001
+           or  R791I080-In-ISO-Kode-X3   Not = W-To-Currency            05020001
+      *                                                                 05030001
+               Initialize                      R791I080-Valuta-Sort     05040001
+               Set   R791I080-Versjon    To    True                     05050001
+               Set   R791I080-In-Select  To    True                     05060001
+               Move  W-To-Currency       To    R791I080-In-ISO-Kode-X3  05070001
+               Call  'F791I080'          Using R791I080-Valuta-Sort     05080001
+                                               R7919999-Error           05090001
+               End-Call                                                 05100001
+      *                                                                 05110001
+               Evaluate True                                            05120001
+                 When R7919999-Return-Abend                             05130001
+                   Move  'C501'          To    R7919999-Paragraph       05140043
+                   Perform Z900-Abend                                   05150001
+                 When R7919999-Return-Error                             05160001
+                   Move  'C502'          To    R7919999-Paragraph       05170043
+                   Perform Z700-Error                                   05180001
+               End-Evaluate                                             05190001
+      *                                                                 05200001
+           End-If                                                       05210001
+      *                                                                 05220001
+           Move  R791I080-VS-Dec-Valuta  To    W-To-Decimals            05230001
+      *                                                                 05240001
+           .                                                            05250001
+      *################################################################.05260043
+       C600-Exchange-Rate                Section.                       05270043
+      *                                                                 05280043
+      * We start with the parameter rates.                              05290043
+      *                                                                 05300043
+           Move  W-From-Currency         To    W-Currency               05310043
+           If  W-Currency                =     W-Local-Currency         05320043
+             Then                                                       05330043
+               Move  100                 To    W-Local-From-Rate        05340043
+               Move  100                 To    W-Local-From-Denomination05350043
+             Else                                                       05360043
+               Perform C610-Rate                                        05370043
+               Move  W-Rate              To    W-Local-From-Rate        05380043
+               Move  W-Denomination      To    W-Local-From-Denomination05390043
+           End-If                                                       05400043
+      *                                                                 05410043
+           Move  W-To-Currency           To    W-Currency               05420043
+           If  W-Currency                =     W-Local-Currency         05430043
+             Then                                                       05440043
+               Move  100                 To    W-Local-To-Rate          05450043
+               Move  100                 To    W-Local-To-Denomination  05460043
+             Else                                                       05470043
+               Perform C610-Rate                                        05480043
+               Move  W-Rate              To    W-Local-To-Rate          05490043
+               Move  W-Denomination      To    W-Local-To-Denomination  05500043
+           End-If                                                       05510043
+      *                                                                 05520043
+           Move  W-Local-From-Rate       To    W-From-Rate              05530043
+           Move  W-Local-From-Denomination                              05540043
+                                         To    W-From-Denomination      05550043
+           Move  W-Local-To-Rate         To    W-To-Rate                05560043
+           Move  W-Local-To-Denomination To    W-To-Denomination        05570043
+      *                                                                 05580043
+           .                                                            05590043
+      *################################################################.05600043
+       C610-Rate                         Section.                       05610043
+      *                                                                 05620043
+           If  Not R116I020-Versjon                                     05630043
+           or  R116I020-In-Konsern-Nr    Not = R116L030-In-Fin-Inst-No  05640043
+           or  R116I020-In-Valuta-Sort   Not = W-Currency               05650043
+      *                                                                 05660043
+               Initialize                      R116I020-Valuta-Kurser   05670043
+               Set   R116I020-Versjon    To    True                     05680043
+               Set   R116I020-In-Select  To    True                     05690043
+               Move  R116L030-In-Fin-Inst-No                            05700043
+                                         To    R116I020-In-Konsern-Nr   05710043
+               Move  W-Currency          To    R116I020-In-Valuta-Sort  05720043
+               Call  'F116I020'          Using R116I020-Valuta-Kurser   05730043
+                                               R7919999-Error           05740043
+               End-Call                                                 05750043
+      *                                                                 05760043
+               Evaluate True                                            05770043
+                 When R7919999-Return-Abend                             05780043
+                   Move  'C611'          To    R7919999-Paragraph       05790043
+                   Perform Z900-Abend                                   05800043
+                 When R7919999-Return-Error                             05810043
+                   Move  Space           To    R7919999-Message         05820043
+                   String 'Exchange rate for '                          05830043
+                          W-Currency                                    05840043
+                          ' not found.'        Delimited by size        05850043
+                                         Into  R7919999-Message         05860043
+                   End-String                                           05870043
+                   Move  'C612'          To    R7919999-Paragraph       05880043
+                   Perform Z700-Error                                   05890043
+                 When R116I020-Ut-Midtkurs                              05900043
+                                         =     +0                       05910043
+                 or   R116I020-Ut-Enhet  =     +0                       05920043
+                   Move  Space           To    R7919999-Message         05930043
+                   String 'Exchange rate for '                          05940043
+                          W-Currency                                    05950043
+                          ' not found.'        Delimited by size        05960043
+                                         Into  R7919999-Message         05970043
+                   End-String                                           05980043
+                   Move  'C613'          To    R7919999-Paragraph       05990043
+                   Perform Z700-Error                                   06000043
+               End-Evaluate                                             06010043
+      *                                                                 06020043
+           End-If                                                       06030043
+      *                                                                 06040043
+           Move  R116I020-Ut-Enhet       To    W-Denomination           06050043
+      *                                                                 06060043
+      * When selecting buy- or sell-rate, we can't use this on both     06070043
+      * sides.                                                          06080043
+      * Normally, we use this only on the "from currency".              06090043
+      * However, if "from currency" is equal to the local currency,     06100043
+      * we use the selction on the "to currency" instead.               06110043
+      *                                                                 06120043
+           If  W-Currency                =     W-From-Currency          06130043
+           or  W-From-Currency           =     W-Local-Currency         06140043
+             Then                                                       06150043
+      *                                                                 06160043
+               Evaluate True                                            06170043
+                 When R116L030-In-Use-Buy-Rate                          06180043
+                 and  R116I020-Ut-Kurs-Kjp-Vsjk                         06190043
+                                         Not = +0                       06200043
+                   Move  R116I020-Ut-Kurs-Kjp-Vsjk                      06210043
+                                         To    W-Rate                   06220043
+      *                                                                 06230043
+                 When R116L030-In-Use-Sell-Rate                         06240043
+                 and  R116I020-Ut-Kurs-Slg-Vsjk                         06250043
+                                         Not = +0                       06260043
+                   Move  R116I020-Ut-Kurs-Slg-Vsjk                      06270043
+                                         To    W-Rate                   06280043
+      *                                                                 06290043
+                 When other                                             06300043
+                   Move  R116I020-Ut-Midtkurs                           06310043
+                                         To    W-Rate                   06320043
+      *                                                                 06330043
+               End-Evaluate                                             06340043
+      *                                                                 06350043
+             Else                                                       06360043
+               Move  R116I020-Ut-Midtkurs                               06370043
+                                         To    W-Rate                   06380043
+      *                                                                 06390043
+           End-If                                                       06400043
+      *                                                                 06410043
+           .                                                            06420043
+      *################################################################.06430001
+       C700-Euro-Rates                   Section.                       06440040
+      *                                                                 06450001
+           Set   SW-Euro-From-No         To    True                     06460043
+           Set   SW-Euro-To-No           To    True                     06470043
+      *                                                                 06480043
+           Move  W-From-Currency         To    W-Currency               06490040
+           Perform C710-Euro-Rate                                       06500040
+           Move  SW-Euro                 To    SW-Euro-From             06510040
+           Move  W-Rate                  To    W-Euro-From-Rate         06520043
+           Move  W-Denomination          To    W-Euro-From-Denomination 06530043
+      *                                                                 06540040
+           If  SW-Euro-From-Yes                                         06550040
+               Move  W-To-Currency       To    W-Currency               06560040
+               Perform C710-Euro-Rate                                   06570040
+               Move  SW-Euro             To    SW-Euro-To               06580040
+               Move  W-Rate              To    W-Euro-To-Rate           06590043
+               Move  W-Denomination      To    W-Euro-To-Denomination   06600043
+           End-If                                                       06610040
+      *                                                                 06620040
+      * The NOK rates shows "how many NOK's" one need to pay to get     06630040
+      * a number of the other currency.                                 06640040
+      * Euro rates shows "how many of the other currency" one need      06650040
+      * to pay to get 1 Euro.                                           06660040
+      * Therefore we need to "swap places" compared to ordinary         06670040
+      * NOK rates.                                                      06680040
+      *                                                                 06690040
+           If  SW-Euro-From-Yes                                         06700040
+           and SW-Euro-To-Yes                                           06710040
+               Move  W-Euro-From-Rate    To    W-To-Rate                06720040
+               Move  W-Euro-From-Denomination                           06730040
+                                         To    W-To-Denomination        06740040
+               Move  W-Euro-To-Rate      To    W-From-Rate              06750040
+               Move  W-Euro-To-Denomination                             06760040
+                                         To    W-From-Denomination      06770040
+           End-If                                                       06780040
+      *                                                                 06790040
+           .                                                            06800040
+      *################################################################.06810040
+       C710-Euro-Rate                    Section.                       06820040
+      *                                                                 06830040
+           If  W-Currency                =     'EUR'                    06840040
+             Then                                                       06850040
+               Set   SW-Euro-Yes         To    True                     06860040
+               Move  1                   To    W-Rate                   06870043
+               Move  1                   To    W-Denomination           06880043
+      *                                                                 06890040
+             Else                                                       06900040
+      *                                                                 06910040
+               Initialize                      R791IET0-EURO-Transition 06920040
+               Set   R791IET0-Versjon    To    True                     06930040
+               Set   R791IET0-In-Select  To    True                     06940040
+      *                                                                 06950040
+               Move  W-Currency          To    R791IET0-In-Currency     06960040
+               Move  R7918110-Ut-Kjore-Dato                             06970040
+                                         To    R791IET0-In-Date         06980040
+      *                                                                 06990040
+               Call  'F791IET0'          Using R791IET0-EURO-Transition 07000040
+                                               R7919999-Error           07010040
+               End-Call                                                 07020040
+      *                                                                 07030040
+               Evaluate True                                            07040040
+                 When R7919999-Return-Abend                             07050040
+                   Move  'C711'          To    R7919999-Paragraf        07060040
+                   Perform Z900-Abend                                   07070040
+      *                                                                 07080040
+                 When R7919999-Return-Error                             07090040
+                   Set   R7919999-Return-OK                             07100040
+                                         To    True                     07110040
+                   Set   SW-Euro-No      To    True                     07120040
+                   Move  1               To    W-Rate                   07130045
+                   Move  1               To    W-Denomination           07140045
+      *                                                                 07150040
+                 When other                                             07160040
+                   Set   SW-Euro-Yes     To    True                     07170040
+                   Move  R791IET0-ET-Rate                               07180040
+                                         To    W-Rate                   07190043
+                   Move  1               To    W-Denomination           07200043
+      *                                                                 07210040
+               End-Evaluate                                             07220040
+      *                                                                 07230040
+           End-If                                                       07240040
+      *                                                                 07250040
+           .                                                            07260040
+      *################################################################.07270040
+       C800-Overriding                   Section.                       07280042
+      *                                                                 07290040
+      * We overrides with input values.                                 07300042
+      * When rate is given as input, we need to "shortcircuit" the      07310042
+      * other rate, by setting this to the same as the denomination.    07320042
+      *                                                                 07330042
+      * If the exchange is between two Euro-currencies, the             07340042
+      * exchange rate is not subject to manipulation.                   07350042
+      *                                                                 07360042
+           If  R116L030-In-Rate          Not = +0                       07370043
+               Perform D000-Check-Rate-Deviation                        07380043
+           End-If                                                       07390043
+      *                                                                 07400043
+           Evaluate True                                                07410042
+             When SW-Euro-From-Yes                                      07420042
+             and  SW-Euro-To-Yes                                        07430042
+               Continue                                                 07440043
+      *                                                                 07450042
+             When other                                                 07460042
+               If  R116L030-In-Rate      Not = +0                       07470042
+                   If  W-To-Currency     =     W-Local-Currency         07480042
+                     Then                                               07490042
+                       Move  R116L030-In-Rate                           07500042
+                                         To    W-From-Rate              07510042
+                       Move  W-To-Denomination                          07520042
+                                         To    W-To-Rate                07530042
+                     Else                                               07540042
+                       Move  W-From-Denomination                        07550042
+                                         To    W-From-Rate              07560042
+                       Move  R116L030-In-Rate                           07570042
+                                         To    W-To-Rate                07580042
+                   End-if                                               07590042
+               End-If                                                   07600042
+      *                                                                 07610042
+               If  R116L030-In-Denomination                             07620042
+                                         Not = +0                       07630042
+                   If  W-To-Currency     =     W-Local-Currency         07640042
+                     Then                                               07650042
+                       Move  R116L030-In-Denomination                   07660042
+                                         To    W-From-Denomination      07670042
+                     Else                                               07680042
+                       Move  R116L030-In-Denomination                   07690042
+                                         To    W-To-Denomination        07700042
+                   End-If                                               07710042
+               End-If                                                   07720042
+      *                                                                 07730042
+           End-Evaluate                                                 07740042
+      *                                                                 07750042
+           .                                                            07760042
+      *################################################################.07770042
+       C900-Calculation                  Section.                       07780042
+      *                                                                 07790042
+           Move  W-From-Currency         To    R116L030-From-Currency   07800002
+           Move  W-To-Currency           To    R116L030-To-Currency     07810002
+      *                                                                 07820002
+      * If to-currency is equal to local currency, the standard rate    07830040
+      * between local currency and the other currency is used.          07840040
+      * If so, we use this rate "as is".                                07850014
+      *                                                                 07860014
+           If  W-To-Currency             =     W-Local-Currency         07870040
+             Then                                                       07880014
+               Perform C910-Calculate-To-Local                          07890042
+             Else                                                       07900014
+               Perform C920-Calculate-Standard                          07910042
+           End-If                                                       07920014
+      *                                                                 07930014
+           Evaluate True                                                07940014
+             When R116L030-To-Amount     =     +0                       07950014
+               Continue                                                 07960014
+      *                                                                 07970014
+             When W-To-Decimals          =     +0                       07980014
+               Compute  R116L030-To-Amount                              07990014
+                   =    R116L030-To-Amount / 1000                       08000014
+               Compute  R116L030-To-Amount                              08010014
+                   =    R116L030-To-Amount * 1000                       08020014
+      *                                                                 08030014
+             When W-To-Decimals          =     +1                       08040014
+               Compute  R116L030-To-Amount                              08050014
+                   =    R116L030-To-Amount / 100                        08060014
+               Compute  R116L030-To-Amount                              08070014
+                   =    R116L030-To-Amount * 100                        08080014
+      *                                                                 08090014
+             When W-To-Decimals          =     +2                       08100014
+               Compute  R116L030-To-Amount                              08110014
+                   =    R116L030-To-Amount / 10                         08120014
+               Compute  R116L030-To-Amount                              08130014
+                   =    R116L030-To-Amount * 10                         08140014
+      *                                                                 08150014
+           End-Evaluate                                                 08160014
+      *                                                                 08170014
+           .                                                            08180014
+      *################################################################.08190014
+       C910-Calculate-To-Local           Section.                       08200042
+      *                                                                 08210014
+      * If to-currency is equal to local currency, the standard rate    08220040
+      * between local currency and the other currency is used.          08230040
+      * If so, we use this rate "as is".                                08240014
+      *                                                                 08250014
+           Move  W-From-Denomination     To   R116L030-Used-Denomination08260014
+           Move  W-From-Rate             To   R116L030-Used-Rate        08270014
+      *                                                                 08280014
+           Compute  R116L030-To-Amount                                  08290014
+               =    R116L030-In-From-Amount                             08300014
+               *    W-From-Rate                                         08310014
+               /    W-From-Denomination                                 08320014
+      *                                                                 08330014
+           .                                                            08340014
+      *################################################################.08350014
+       C920-Calculate-Standard           Section.                       08360042
+      *                                                                 08370014
+           Compute  W-Rate-Divisor                                      08380007
+               =    W-To-Rate / W-To-Denomination                       08390007
+               *    W-From-Denomination / W-From-Rate                   08400007
+      *                                                                 08410001
+           Compute  R116L030-To-Amount                                  08420043
+               =    R116L030-In-From-Amount                             08430043
+               /    W-Rate-Divisor                                      08440043
+      *                                                                 08450043
+           If  SW-Euro-From-Yes                                         08460043
+           and SW-Euro-To-Yes                                           08470043
+             Then                                                       08480043
+               Move  W-Local-To-Denomination                            08490043
+                                         To   R116L030-Used-Denomination08500043
+               Compute  R116L030-Used-Rate                              08510043
+                   =    W-Rate-Divisor                                  08520043
+                   *    W-Local-To-Denomination / W-To-Denomination     08530043
+      *                                                                 08540043
+             Else                                                       08550043
+               Move  W-To-Denomination   To   R116L030-Used-Denomination08560043
+               Compute  R116L030-Used-Rate                              08570043
+                   =    W-Rate-Divisor                                  08580043
+                   *    W-To-Denomination                               08590043
+      *                                                                 08600043
+           End-If                                                       08610043
+      *                                                                 08620043
+           .                                                            08630001
+      *################################################################*08640000
+       D000-Check-Rate-Deviation         Section.                       08650008
+      *                                                                 08660000
+           If  SW-Euro-From-Yes                                         08670043
+           and SW-Euro-To-Yes                                           08680043
+             Then                                                       08690043
+               Perform D100-Accepted-Euro-Deviation                     08700043
+             Else                                                       08710043
+               Perform D200-Accepted-Local-Deviation                    08720043
+           End-If                                                       08730043
+      *                                                                 08740043
+           Perform D300-Calculate-Deviation                             08750043
+      *                                                                 08760010
+           .                                                            08770010
+      *################################################################*08780010
+       D100-Accepted-Euro-Deviation      Section.                       08790043
+      *                                                                 08800010
+           Move  '-'                     To    W-POAT-1st-Sign          08810043
+           Move  0                       To    W-POAT-1st-Pct           08820043
+           Move  '+'                     To    W-POAT-2nd-Sign          08830043
+           Move  0                       To    W-POAT-2nd-Pct           08840043
+      *                                                                 08850043
+           .                                                            08860010
+      *################################################################*08870043
+       D200-Accepted-Local-Deviation     Section.                       08880043
+      *                                                                 08890043
+      * Reads the accepted deviation.                                   08900043
+      *                                                                 08910043
+           If  Not R791I020-Versjon                                     08920043
+           or  R791I020-In-SysID         Not = 'VA'                     08930043
+           or  R791I020-In-Konsern-Nr    Not = WS-Org-No                08940048
+           or  R791I020-In-Key           Not = 'RATE-DEVIAT.'           08950043
+      *                                                                 08960043
+               Initialize                      R791I020-Applikasjons-Tab08970043
+               Set   R791I020-Versjon    To    True                     08980043
+               Set   R791I020-In-Select  To    True                     08990043
+               Move  'VA'                To    R791I020-In-SysID        09000043
+               Move  WS-Org-No           To    R791I020-In-Konsern-Nr   09010048
+               Move  'RATE-DEVIAT.'      To    R791I020-In-Key          09020043
+      *                                                                 09030043
+               Call  'F791I020'          Using R791I020-Applikasjons-Tab09040043
+                                               R7919999-Error           09050043
+               End-Call                                                 09060043
+      *                                                                 09070043
+               If  R7919999-Return-Error                                09080043
+                   Move  0000            To    R791I020-In-Konsern-Nr   09090043
+                   Call  'F791I020'      Using R791I020-Applikasjons-Tab09100043
+                                               R7919999-Error           09110043
+                   End-Call                                             09120043
+               End-If                                                   09130043
+      *                                                                 09140043
+               Evaluate True                                            09150043
+                 When R7919999-Return-Abend                             09160043
+                   Move  'D201'          To    R7919999-Paragraph       09170043
+                   Perform Z900-Abend                                   09180043
+                 When R7919999-Return-Error                             09190043
+                   Move  'D202'          To    R7919999-Paragraph       09200043
+                   Perform Z700-Error                                   09210043
+               End-Evaluate                                             09220043
+      *                                                                 09230043
+           End-If                                                       09240043
+      *                                                                 09250043
+      * Exctracts and verifies the information.                         09260043
+      *                                                                 09270043
+           Move  R791I020-AT-Verdi       To    W-POAT-Value             09280043
+      *                                                                 09290043
+           Evaluate True                                                09300043
+             When W-POAT-1st-Pct         Not   Numeric                  09310043
+             or   W-POAT-2nd-Pct         Not   Numeric                  09320043
+               Move  Space               To    R7919999-Message         09330043
+               String 'Rate deviation "'                                09340043
+                      W-POAT-Value                                      09350043
+                      ' not valid.'            Delimited by size        09360043
+                                         Into  R7919999-Message         09370043
+               End-String                                               09380043
+               Move  'D203'              To    R7919999-Paragraph       09390043
+               Perform Z700-Error                                       09400043
+      *                                                                 09410043
+             When W-POAT-1st-Sign        =     '+'                      09420043
+             and  W-POAT-2nd-Sign        =     '-'                      09430043
+               Continue                                                 09440043
+      *                                                                 09450043
+             When W-POAT-1st-Sign        =     '-'                      09460043
+             and  W-POAT-2nd-Sign        =     '+'                      09470043
+               Continue                                                 09480043
+      *                                                                 09490043
+             When other                                                 09500043
+               Move  Space               To    R7919999-Message         09510043
+               String 'Rate deviation "'                                09520043
+                      W-POAT-Value                                      09530043
+                      ' not valid.'            Delimited by size        09540043
+                                         Into  R7919999-Message         09550043
+               End-String                                               09560043
+               Move  'D204'              To    R7919999-Paragraph       09570043
+               Perform Z700-Error                                       09580043
+      *                                                                 09590043
+           End-Evaluate                                                 09600043
+      *                                                                 09610043
+           .                                                            09620043
+      *################################################################*09630043
+       D300-Calculate-Deviation          Section.                       09640043
+      *                                                                 09650010
+      * We first calculate the standard exchange rate between the two   09660010
+      * currencies.                                                     09670010
+      *                                                                 09680010
+      * If to-currency is equal to local currency, the standard rate    09690040
+      * between local currency and the other currency is used.          09700040
+      * If so, we use this rate "as is".                                09710014
+      *                                                                 09720014
+      * If both currencies are Euro-currencies, the denomination for    09730043
+      * the local currency is used.                                     09740043
+      *                                                                 09750043
+           Evaluate True                                                09760043
+             When W-To-Currency          =     W-Local-Currency         09770043
+               Compute  W-Rate                                          09780014
+                   =    W-From-Rate                                     09790014
+      *                                                                 09800043
+             When SW-Euro-From-Yes                                      09810043
+             and  SW-Euro-To-Yes                                        09820043
+               Compute  W-Rate                                          09830043
+                   =    W-Local-To-Denomination / W-To-Denomination     09840047
+                   *    W-To-Rate / W-From-Rate                         09850044
+      *                                                                 09860043
+             When other                                                 09870043
+               Compute  W-Rate                                          09880014
+                   =    W-From-Denomination                             09890044
+                   *    W-To-Rate / W-From-Rate                         09900051
+      *                                                                 09910043
+           End-Evaluate                                                 09920043
+      *                                                                 09930010
+      * Then we find the minimum and maximum rates accepted.            09940010
+      *                                                                 09950010
+           If  W-POAT-1st-Sign           =     '-'                      09960010
+             Then                                                       09970010
+               Compute  W-Min-Rate                                      09980010
+                   =    W-Rate - ( W-Rate * W-POAT-1st-Pct / 100 )      09990011
+               Compute  W-Max-Rate                                      10000010
+                   =    W-Rate + ( W-Rate * W-POAT-2nd-Pct / 100 )      10010011
+             Else                                                       10020010
+               Compute  W-Min-Rate                                      10030010
+                   =    W-Rate - ( W-Rate * W-POAT-2nd-Pct / 100 )      10040011
+               Compute  W-Max-Rate                                      10050010
+                   =    W-Rate + ( W-Rate * W-POAT-1st-Pct / 100 )      10060011
+           End-If                                                       10070010
+      *                                                                 10080010
+      * Finally, we check the input rate.                               10090010
+      *                                                                 10100010
+           If  Not R116L030-In-Use-Hist-Rate                            10101058
+           And (R116L030-In-Rate          <     W-Min-Rate              10110057
+           or  R116L030-In-Rate          >     W-Max-Rate)              10120057
+      *                                                                 10130010
+               Move  W-Min-Rate          To    WD-Min-Rate              10140010
+               Move  W-Max-Rate          To    WD-Max-Rate              10150010
+               Move  Space               To    WD-String                10160010
+      *                                                                 10170010
+               Move  +1                  To    Ind-To                   10180010
+                                                                        10190010
+               Move  +1                  To    Ind-From                 10200010
+               Perform Until Ind-From    >   ( Length of WD-Min-Rate )  10210010
+                   If  WD-Min-Rate (Ind-From:1)                         10220010
+                                         Not = Space                    10230010
+                       Move  WD-Min-rate (Ind-From:1)                   10240010
+                                         To    WD-String (Ind-To:1)     10250010
+                       Add   +1          To    Ind-To                   10260010
+                   End-If                                               10270010
+                   Add   +1              To    Ind-From                 10280010
+               End-Perform                                              10290010
+                                                                        10300010
+               Move  ' - '               To    WD-String (Ind-To:3)     10310010
+               Add   +3                  To    Ind-To                   10320010
+                                                                        10330010
+               Move  +1                  To    Ind-From                 10340010
+               Perform Until Ind-From    >   ( Length of WD-Max-Rate )  10350010
+                   If  WD-Max-Rate (Ind-From:1)                         10360010
+                                         Not = Space                    10370010
+                       Move  WD-Max-rate (Ind-From:1)                   10380010
+                                         To    WD-String (Ind-To:1)     10390010
+                       Add   +1          To    Ind-To                   10400010
+                   End-If                                               10410010
+                   Add   +1              To    Ind-From                 10420010
+               End-Perform                                              10430010
+      *                                                                 10440010
+               Move  Space               To    R7919999-Message         10450010
+               String 'Input rate is outside valid range ( '            10460010
+                      WD-String (1:Ind-To)                              10470010
+                      ' ) not valid.'          Delimited by size        10480010
+                                         Into  R7919999-Message         10490010
+               End-String                                               10500010
+               Move  'D301'              To    R7919999-Paragraph       10510043
+               Perform Z700-Error                                       10520010
+      *                                                                 10530010
+           End-If                                                       10540010
+      *                                                                 10550010
+           .                                                            10560010
+      *################################################################*10570007
+       ZI00-Conv-Input-Version           Section.                       10580007
+      *                                                                 10590007
+      * Version control.                                                10600000
+      * If conversion is needed, we call the conversion module.         10610000
+      *                                                                 10620000
+           Set   R116L030-Version        To    True                     10630000
+           Move  Length                  Of    R116L030-Currency-Xchange10640001
+                                         To    W-IO-Length              10650000
+      *                                                                 10660000
+           Evaluate True                                                10670000
+             When L-Ext-IO-Area (1:8)    =     R116L030-Version-No      10680000
+             and  Length                 Of    L-Ext-IO-Area            10690000
+                                         Not < W-IO-Length              10700000
+               Move  L-Ext-IO-Area (1:W-IO-Length)                      10710000
+                                         To    W-Int-IO-Area            10720000
+      *                                                                 10730000
+             When Other                                                 10740000
+               Call  'F116L999'                                         10750053
+                   Using By Content      'F116L030 '                    10760000
+                                         'INPUT '                       10770000
+                         By Reference    L-Ext-IO-Area                  10780000
+                                         W-Int-IO-Area                  10790000
+                                         R7919999-Error-Area            10800000
+               End-Call                                                 10810000
+      *                                                                 10820000
+               If  R7919999-Return-Abend                                10830000
+                   Move  'ZI01'          To    R7919999-Paragraph       10840001
+                   Perform Z900-Abend                                   10850000
+               End-If                                                   10860000
+      *                                                                 10870000
+           End-Evaluate                                                 10880000
+      *                                                                 10890000
+           .                                                            10900000
+      *################################################################*10910000
+       ZO00-Conv-Output-Version          Section.                       10920000
+      *                                                                 10930000
+      * Version control.                                                10940000
+      * If conversion is needed, we call the conversion module.         10950000
+      *                                                                 10960000
+           Evaluate True                                                10970000
+             When L-Ext-IO-Area (1:8)    =     R116L030-Version-No      10980000
+             and  Length                 Of    L-Ext-IO-Area            10990000
+                                         Not < W-IO-Length              11000000
+               Move  W-Int-IO-Area       To    L-Ext-IO-Area            11010000
+                                                         (1:W-IO-Length)11020000
+      *                                                                 11030000
+             When Other                                                 11040000
+               Call  'F116L999'                                         11050053
+                   Using By Content      'F116L030 '                    11060000
+                                         'OUTPUT '                      11070000
+                         By Reference    L-Ext-IO-Area                  11080000
+                                         W-Int-IO-Area                  11090000
+                                         R7919999-Error-Area            11100000
+               End-Call                                                 11110000
+      *                                                                 11120000
+               If  R7919999-Return-Abend                                11130000
+                   Move  'ZO01'          To    R7919999-Paragraph       11140000
+                   Perform Z900-Abend                                   11150000
+               End-If                                                   11160000
+      *                                                                 11170000
+           End-Evaluate                                                 11180000
+      *                                                                 11190000
+           .                                                            11200000
+      *################################################################*11210000
+       Z700-Error                        Section.                       11220001
+      *                                                                 11230000
+           If  R7919999-Return-Code      Not   Numeric                  11240000
+           or  R7919999-Return-OK                                       11250001
+               Move  +0                  To    R7919999-Module-Ind      11260000
+           End-If                                                       11270000
+      *                                                                 11280000
+           Add   +1                      To    R7919999-Module-Ind      11290000
+      *                                                                 11300000
+           If  R7919999-Module-Ind       Not >                          11310000
+                             ( Length    Of    R7919999-Module-Tab      11320000
+                             / Length    Of    R7919999-Module-Element )11330000
+               Move  'F116L030'          To    R7919999-Module-Name     11340000
+                                                   (R7919999-Module-Ind)11350000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     11360000
+                                                   (R7919999-Module-Ind)11370000
+           End-If                                                       11380000
+      *                                                                 11390000
+           Perform ZO00-Conv-Output-Version                             11400001
+           Set   R7919999-Return-Error   To    True                     11410001
+           Call  'F7919990'              Using R7919999-Error           11420006
+           End-Call                                                     11430006
+      *                                                                 11440000
+           Goback.                                                      11450000
+      *################################################################*11460001
+       Z900-Abend                        Section.                       11470001
+      *                                                                 11480001
+           If  R7919999-Return-Code      Not   Numeric                  11490001
+           or  Not R7919999-Return-Abend                                11500001
+               Move  +0                  To    R7919999-Module-Ind      11510001
+           End-If                                                       11520001
+      *                                                                 11530001
+           Add   +1                      To    R7919999-Module-Ind      11540001
+      *                                                                 11550001
+           If  R7919999-Module-Ind       Not >                          11560001
+                             ( Length    Of    R7919999-Module-Tab      11570001
+                             / Length    Of    R7919999-Module-Element )11580001
+               Move  'F116L030'          To    R7919999-Module-Name     11590001
+                                                   (R7919999-Module-Ind)11600001
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     11610001
+                                                   (R7919999-Module-Ind)11620001
+           End-If                                                       11630001
+      *                                                                 11640001
+           Set   R7919999-Return-Abend   To    True                     11650001
+           Call  'F7919990'              Using R7919999-Error           11660006
+           End-Call                                                     11670006
+      *                                                                 11680001
+           Goback.                                                      11690001

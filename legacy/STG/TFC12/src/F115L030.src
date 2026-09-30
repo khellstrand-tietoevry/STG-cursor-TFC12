@@ -1,0 +1,576 @@
+       Identification Division.                                         00010001
+       Program-ID. F115L030.                                            00020001
+       Author.  Rune Mesel.                                             00030001
+      *################################################################*00040001
+      *                                                                 00050001
+      * FD Trade Finance                                                00060001
+      *                                                                 00070001
+      * Module will set a new timestamp on MC  when called              00080005
+      *                                                                 00090001
+      *                                                                 00100001
+      *################################################################*00110001
+      * Date ! Si! Change description                            ! 3A ! 00120001
+      *------+---+-----------------------------------------------+----+ 00121036
+      *031000!NDL! Update statuslist when status change from VER-!LR02! 00122044
+      *      !   ! to TO-                                        !    ! 00122144
+      *------+---+-----------------------------------------------+----+ 00122244
+      *180800!LG ! Delete EventInfo when status is set to        !LG10! 00122344
+      *      !   ! "TERMINATED"   (DELETED 03.10.2000)           !    ! 00123044
+      *------+---+-----------------------------------------------+----+ 00130001
+      *010399!RM ! New module                                    !LG10! 00140001
+      *################################################################*00150001
+       Environment Division.                                            00160001
+       Configuration Section.                                           00170001
+       Special-Names.                                                   00180001
+           Decimal-Point Is Comma.                                      00190001
+      *                                                                 00200001
+      *################################################################*00210001
+       Data Division.                                                   00220001
+       Working-Storage Section.                                         00230001
+      *                                                                 00240001
+       01  Filler.                                                      00250001
+      *                                                                 00260001
+           05  W-IO-Length               Pic S9(04)              Comp.  00270001
+      *                                                                 00280001
+           05  WD-Length                 Pic  Z.ZZ9.                    00290001
+           05  WD-Total-Rows             Pic  Z.ZZ9.                    00300004
+      *                                                                 00300138
+           05  Ws-Table-Version          Pic  X(16).                    00301038
+           05  Ws-From-Status            Pic  X(20).                    00302042
+      *                                                                 00310001
+      *----------------------------------------------------------------*00320001
+      * Internal area:                                                  00330001
+      *                                                                 00340001
+       01  W-Int-IO-Area.                                               00350001
+           Copy R115L030.                                               00360001
+      *                                                                 00370001
+      *----------------------------------------------------------------*00380001
+      * Assorted copy-areas:                                            00390001
+      *                                                                 00400001
+       01  Filler.                                                      00410001
+           Copy R115IMC0.                                               00420005
+       01  Filler.                                                      00430035
+           COPY R115IPA0.                                               00440035
+           COPY R115IEI0.                                               00441036
+      *                                                                 00450001
+           COPY R115L040.                                               00451042
+      *                                                                 00452042
+           COPY R7919270.                                               00460019
+           COPY R7919070.                                               00470027
+      *                                                                 00480019
+           Copy R115X000.                                               00490004
+      *                                                                 00500004
+      *################################################################.00510001
+       Linkage Section.                                                 00520001
+      *                                                                 00530001
+       01  L-Ext-IO-Area                 Pic  X(560).                   00540001
+       Copy R7919999.                                                   00550001
+      *                                                                 00560001
+       Copy R7918030.                                                   00570007
+      *                                                                 00580007
+      *################################################################.00590001
+       Procedure Division                Using L-Ext-IO-Area            00600001
+                                               R7919999-Error-Area.     00610001
+      *                                                                 00620001
+       A000-Main                         Section.                       00630001
+      *                                                                 00640001
+           Perform B000-Initialize                                      00650001
+      *                                                                 00660001
+           Perform ZI00-Konv-Input-Version                              00670001
+           Perform C000-Timestamp                                       00680005
+           If R115L030-Set-Status                                       00680142
+      *       Perform C200-Event-Info                                   00681042
+      *       We update no-in-progress and no-to-auth  from VER- to TO- 00681142
+      *                                                                 00682345
+              If Ws-From-Status(1:4) = 'VER-'                           00682446
+              and R115L030-Status(1:3)   = 'TO-'                        00682542
+                  Perform C300-Statuslist                               00682643
+              End-If                                                    00683042
+      *                                                                 00683148
+           End-If                                                       00686042
+      *                                                                 00687049
+           Perform ZO00-Konv-Output-Version                             00690001
+      *                                                                 00700001
+           Goback.                                                      00710001
+      *################################################################*00720001
+       B000-Initialize                   Section.                       00730001
+      *                                                                 00740001
+           Set   R7919999-Return-OK      To    True                     00750001
+      *                                                                 00760001
+           Perform B100-Read-Time                                       00770027
+      *                                                                 00780027
+           .                                                            00790001
+      *################################################################*00800027
+       B100-Read-Time                    Section.                       00810027
+      *                                                                 00820027
+           Initialize                          R7919070-Timestamp       00830027
+           Set   R7919070-Versjon        To    True                     00840027
+           Call  'F7919070'              Using R7919070-Timestamp       00850027
+                                               R7919999-Error           00860027
+           End-Call                                                     00870027
+           If  Not R7919999-Retur-OK                                    00880027
+               Move  'B101'              To    R7919999-Paragraf        00890027
+               Perform Z900-Abend                                       00900027
+           End-If                                                       00910027
+      *                                                                 00920027
+           .                                                            00930027
+      *################################################################.00940001
+       C000-Timestamp                    Section.                       00950005
+      *                                                                 00960001
+           Perform C100-Initialize                                      00970005
+      *                                                                 00980004
+           Initialize                          R115IMC0-Main-Contract   00990026
+           Set   R115IMC0-In-Actual      To    True                     01000020
+           Perform E100-Read-MC                                         01010005
+      *                                                                 01020025
+           Perform E150-Set-Timestamp-Actual                            01030024
+      *                                                                 01040025
+           Set   R115IMC0-In-Actual      To    True                     01050025
+           Perform E200-Update-MC                                       01060005
+      *                                                                 01070017
+           If  R115IMC0-In-Progress = 'Y'                               01080032
+      *                                                                 01090033
+      * If PA is specified we will update status on PA instead of MC    01100033
+      *                                                                 01110033
+               Initialize                      R115IMC0-Main-Contract   01120033
+               Set   R115IMC0-In-Work    To    True                     01130033
+               Perform E100-Read-MC                                     01140033
+               Move  R115IMC0-Status     To    Ws-From-Status           01141042
+      *                                                                 01150018
+               Perform E160-Set-Timestamp-Work-MC                       01160033
+      *                                                                 01170025
+               Set   R115IMC0-In-Work    To    True                     01180033
+               Perform E200-Update-MC                                   01190033
+      *                                                                 01200033
+               If R115L030-CA-Currency Not =   Spaces                   01210033
+                  Initialize                   R115IPA0-Part-Amount     01220033
+                  Set   R115IPA0-In-Work To    True                     01230033
+                  Perform E110-Read-PA                                  01240033
+                  Move  R115IPA0-Status  To    Ws-From-Status           01241042
+      *                                                                 01250033
+                  Perform E170-Set-Timestamp-Work-PA                    01260033
+      *                                                                 01270033
+                  Set   R115IPA0-In-Work To    True                     01280033
+                  Perform E210-Update-PA                                01290033
+      *                                                                 01300033
+               End-If                                                   01310033
+           End-If                                                       01320032
+      *                                                                 01330025
+           Set   R115IMC0-In-Actual      To    True                     01340032
+           Perform E100-Read-MC                                         01350029
+      *                                                                 01360030
+           Move  R115IMC0-Upd-Timestamp  To    R115L030-Timestamp       01370025
+           Perform E300-Convert-Timstamp                                01380018
+           Move  R7919270-Ut-Dato        To    R115L030-Date            01390018
+           Move  R7919270-Ut-Tid-TMS     To    R115L030-Time            01400018
+      *                                                                 01410004
+           .                                                            01420001
+      *################################################################.01430001
+       C100-Initialize                   Section.                       01440005
+      *                                                                 01450001
+           Continue                                                     01460005
+      *                                                                 01470001
+           .                                                            01480001
+      *################################################################.01481036
+       C200-Event-Info                   Section.                       01482036
+      *                                                                 01483036
+           If R115L030-Set-Status And                                   01484036
+              R115L030-Status = 'TERMINATED'                            01485040
+              Move 'WORK'                To    Ws-Table-Version         01485138
+              Perform I200-Read-1st-EI                                  01485238
+              Perform Until R7919999-Return-Error                       01485338
+                 Perform I210-Delete-EI                                 01485438
+                 Perform I200-Read-1st-EI                               01485538
+              End-Perform                                               01485638
+              Initialize                    R7919999-Error              01485738
+      *                                                                 01485838
+              Move 'ACTUAL'              To    Ws-Table-Version         01485938
+              Perform I200-Read-1st-EI                                  01486038
+              Perform Until R7919999-Return-Error                       01486138
+                 Perform I210-Delete-EI                                 01486238
+                 Perform I200-Read-1st-EI                               01486338
+              End-Perform                                               01486438
+              Initialize                    R7919999-Error              01486539
+      *                                                                 01487036
+           End-If                                                       01488038
+           .                                                            01489038
+      *                                                                 01493136
+      *################################################################*01493242
+       C300-Statuslist                   Section.                       01493342
+      *                                                                 01493442
+           Initialize                          R115L040-Count-Statuslist01493542
+           Set   R115L040-Version        To    True                     01493642
+      *                                                                 01493742
+           Move  R115L030-Fin-Inst-No    To    R115L040-In-Fin-Inst-No  01493842
+           Move  R115L030-Contract-Type  To    R115L040-In-Contract-Type01493942
+           Move  R115L030-Status         To    R115L040-In-Operationtype01494642
+      *                                                                 01494742
+           Call  'F115L040'              Using R115L040-Count-Statuslist01494842
+                                               R7919999-Error-Area      01494942
+           End-Call                                                     01495042
+      *                                                                 01495142
+           Evaluate True                                                01495243
+             When R7919999-Return-Abend                                 01495343
+               Move  'C301'              To    R7919999-Paragraph       01495443
+               Perform Z900-Abend                                       01495543
+      *                                                                 01495643
+             When R7919999-Return-Error                                 01495743
+               Move  'C302'              To    R7919999-Paragraph       01495843
+               Perform Z900-Abend                                       01495943
+      *                                                                 01496043
+           End-Evaluate                                                 01497242
+      *                                                                 01497342
+           .                                                            01497442
+      *                                                                 01497542
+      *################################################################.01498001
+       E100-Read-MC                         Section.                    01500006
+      *                                                                 01510001
+           Set   R115IMC0-Version        To    True                     01520005
+           Set   R115IMC0-In-Select      To    True                     01530005
+      *                                                                 01540005
+           Move  R115L030-Fin-Inst-No    To    R115IMC0-In-Fin-Inst-No  01550006
+           Move  R115L030-Contract-Type  To    R115IMC0-In-Contract-Type01560006
+           Move  R115L030-Contract-No    To    R115IMC0-In-Contract-No  01570006
+      *                                                                 01580005
+           Call  'F115IMC0'              Using R115IMC0-Main-Contract   01590005
+                                               R7919999-Error-Area      01600005
+           End-Call                                                     01610005
+      *                                                                 01620005
+           Evaluate True                                                01630005
+             When R7919999-Return-Abend                                 01640005
+               Move  'E101'              To    R7919999-Paragraph       01650006
+               Perform Z900-Abend                                       01660005
+      *                                                                 01670005
+             When R7919999-Return-Error                                 01680005
+               Move  'E102'              To    R7919999-Paragraph       01690006
+               Perform Z900-Abend                                       01700006
+      *                                                                 01710005
+           End-Evaluate                                                 01720005
+      *                                                                 01730001
+           .                                                            01740001
+      *################################################################.01750001
+       E110-Read-PA                      Section.                       01760033
+      *                                                                 01770006
+           Set   R115IPA0-Version        To    True                     01780033
+           Set   R115IPA0-In-Select      To    True                     01790033
+      *                                                                 01800033
+           Move  R115L030-Fin-Inst-No    To    R115IPA0-In-Fin-Inst-No  01810033
+           Move  R115L030-Contract-Type  To    R115IPA0-In-Contract-Type01820033
+           Move  R115L030-Contract-No    To    R115IPA0-In-Contract-No  01830033
+           Move  R115L030-CA-Currency    To    R115IPA0-In-CA-Currency  01840033
+           Move  R115L030-PA-Seq-No      To    R115IPA0-In-PA-Seq-No    01850033
+      *                                                                 01860033
+           Call  'F115IPA0'              Using R115IPA0-Part-Amount     01870033
+                                               R7919999-Error-Area      01880033
+           End-Call                                                     01890033
+      *                                                                 01900033
+           Evaluate True                                                01910033
+             When R7919999-Return-Abend                                 01920033
+               Move  'E111'              To    R7919999-Paragraph       01930033
+               Perform Z900-Abend                                       01940033
+      *                                                                 01950033
+             When R7919999-Return-Error                                 01960033
+               Move  'E112'              To    R7919999-Paragraph       01970033
+               Perform Z900-Abend                                       01980033
+      *                                                                 01990033
+           End-Evaluate                                                 02000033
+      *                                                                 02010033
+           .                                                            02020033
+      *################################################################.02030033
+       E150-Set-Timestamp-Actual         Section.                       02040033
+      *                                                                 02050033
+           Move R115L030-Userid          To    R115IMC0-Upd-User-ID     02060007
+      *                                                                 02070006
+           If   R115L030-System-Date    >     +00010101                 02080028
+              Move R115L030-System-Date  To    R115IMC0-Upd-Date        02090027
+           Else                                                         02100027
+              Move R7919070-Ut-Dato      To    R115IMC0-Upd-Date        02110027
+           End-If                                                       02120027
+      *                                                                 02130027
+           If   R115L030-System-Time    >     +00000001                 02140028
+              Move R115L030-System-Time  To    R115IMC0-Upd-Time        02150027
+           Else                                                         02160027
+              Move R7919070-Ut-Tid       To    R115IMC0-Upd-Time        02170027
+           End-If                                                       02180027
+      *                                                                 02190006
+           Move Spaces                   To    R115IMC0-Upd-Timestamp   02200009
+      *                                                                 02210014
+           .                                                            02220006
+      *################################################################.02230022
+       E160-Set-Timestamp-Work-MC        Section.                       02240033
+      *                                                                 02250022
+           Move R115L030-Userid          To    R115IMC0-Upd-User-ID     02260022
+      *                                                                 02270027
+           If   R115L030-System-Date    >     +0                        02280027
+              Move R115L030-System-Date  To    R115IMC0-Upd-Date        02290027
+           Else                                                         02300027
+              Move R7919070-Ut-Dato      To    R115IMC0-Upd-Date        02310027
+           End-If                                                       02320027
+      *                                                                 02330027
+           If   R115L030-System-Time    >     +0                        02340027
+              Move R115L030-System-Time  To    R115IMC0-Upd-Time        02350027
+           Else                                                         02360027
+              Move R7919070-Ut-Tid       To    R115IMC0-Upd-Time        02370027
+           End-If                                                       02380027
+      *                                                                 02390022
+           Move Spaces                   To    R115IMC0-Upd-Timestamp   02400022
+      *                                                                 02410022
+           If   R115L030-Set-Status                                     02420022
+            and R115L030-CA-Currency     =   Spaces                     02430033
+                Move R115L030-Status     To    R115IMC0-Status          02440022
+           End-If                                                       02450022
+      *                                                                 02460022
+           .                                                            02470022
+      *################################################################.02480033
+       E170-Set-Timestamp-Work-PA        Section.                       02490033
+      *                                                                 02500033
+           If   R115L030-Set-Status                                     02510033
+                Move R115L030-Status     To    R115IPA0-Status          02520033
+           End-If                                                       02530033
+      *                                                                 02540033
+           .                                                            02550033
+      *################################################################.02560033
+       E200-Update-MC                    Section.                       02570006
+      *                                                                 02580006
+           Set   R115IMC0-Version        To    True                     02590006
+           Set   R115IMC0-In-Update      To    True                     02600006
+      *                                                                 02610006
+           Call  'F115IMC0'              Using R115IMC0-Main-Contract   02620006
+                                               R7919999-Error-Area      02630006
+           End-Call                                                     02640006
+      *                                                                 02650006
+           Evaluate True                                                02660006
+             When R7919999-Return-Abend                                 02670006
+               Move  'E201'              To    R7919999-Paragraph       02680006
+               Perform Z900-Abend                                       02690006
+      *                                                                 02700006
+             When R7919999-Return-Error                                 02710006
+               Move  'E202'              To    R7919999-Paragraph       02720006
+               Perform Z900-Abend                                       02730006
+      *                                                                 02740006
+           End-Evaluate                                                 02750006
+      *                                                                 02760001
+           .                                                            02770001
+      *                                                                 02780003
+      *################################################################.02790033
+       E210-Update-PA                    Section.                       02800033
+      *                                                                 02810033
+           Set   R115IPA0-Version        To    True                     02820033
+           Set   R115IPA0-In-Update      To    True                     02830051
+      *                                                                 02840033
+           Call  'F115IPA0'              Using R115IPA0-Part-Amount     02850033
+                                               R7919999-Error-Area      02860033
+           End-Call                                                     02870033
+      *                                                                 02880033
+           Evaluate True                                                02890033
+             When R7919999-Return-Abend                                 02900033
+               Move  'E211'              To    R7919999-Paragraph       02910033
+               Perform Z900-Abend                                       02920033
+      *                                                                 02930033
+             When R7919999-Return-Error                                 02940033
+               Move  'E212'              To    R7919999-Paragraph       02950033
+               Perform Z900-Abend                                       02960033
+      *                                                                 02970033
+           End-Evaluate                                                 02980033
+      *                                                                 02990033
+           .                                                            03000033
+      *                                                                 03010033
+      *################################################################*03020033
+       E300-Convert-Timstamp             Section.                       03030018
+      *                                                                 03040001
+      *                                                                 03050018
+           Initialize                          R7919270-Konv-Timestamp  03060018
+           Set   R7919270-Versjon        To    True                     03070018
+      *                                                                 03080018
+           Move  R115IMC0-Upd-Timestamp                                 03090018
+                                         To    R7919270-In-Timestamp-DB203100018
+      *                                                                 03110018
+           Call  'F7919270'              Using R7919270-Konv-Timestamp  03120018
+                                               R7919999-Error           03130018
+           End-Call                                                     03140018
+           If  Not R7919999-Retur-OK                                    03150018
+               Move  'E301'              To    R7919999-Paragraf        03160018
+               Perform Z900-Abend                                       03170018
+           End-If                                                       03180018
+      *                                                                 03190018
+      *                                                                 03200018
+           .                                                            03210018
+      *                                                                 03211037
+      *################################################################*03211138
+       I200-Read-1st-EI                  Section.                       03213037
+           Initialize                          R115IEI0-Event-Info      03214037
+           Move  Ws-Table-Version        To    R115IEI0-In-Table-Version03215037
+           Set   R115IEI0-Version        To    True                     03216037
+           Set   R115IEI0-In-Get-1st     To    True                     03217037
+           If Ws-Table-Version = 'ACTUAL'                               03217138
+              Set   R115IEI0-In-Actual   To    True                     03218038
+           Else                                                         03218138
+              Set   R115IEI0-In-Work     To    True                     03218238
+           End-If                                                       03218338
+      *                                                                 03219037
+           Set   R115IEI0-In-Rel-Any     To    True                     03219139
+      *                                                                 03219238
+           Move  R115L030-Fin-Inst-No                                   03219339
+                                         To    R115IEI0-In-Fin-Inst-No  03219437
+           Move  R115L030-Contract-Type                                 03219537
+                                         To    R115IEI0-In-Contract-Type03219637
+           Move  R115L030-Contract-No                                   03219737
+                                         To    R115IEI0-In-Contract-No  03219837
+      *                                                                 03219937
+           Call  'F115IEI0'              Using R115IEI0-Event-Info      03220037
+                                               R7919999-Error-Area      03220137
+           End-Call                                                     03220237
+      *                                                                 03220337
+           Evaluate True                                                03220437
+             When R7919999-Return-Abend                                 03220537
+               Move  'I201'              To    R7919999-Paragraph       03220637
+               Perform Z900-Abend                                       03220837
+      *                                                                 03220937
+           End-Evaluate                                                 03221037
+      *                                                                 03221137
+           .                                                            03221237
+      *################################################################*03221339
+       I210-Delete-EI                    Section.                       03221439
+           Set   R115IEI0-In-Delete      To    True                     03221839
+      *                                                                 03223339
+           Call  'F115IEI0'              Using R115IEI0-Event-Info      03223439
+                                               R7919999-Error-Area      03223539
+           End-Call                                                     03223639
+      *                                                                 03223739
+           Evaluate True                                                03223839
+             When R7919999-Return-Abend                                 03223939
+               Move  'I211'              To    R7919999-Paragraph       03224039
+               Perform Z900-Abend                                       03224239
+      *                                                                 03224339
+           End-Evaluate                                                 03224439
+      *                                                                 03224539
+           .                                                            03224639
+      *################################################################*03225018
+       ZI00-Konv-Input-Version           Section.                       03230018
+      *                                                                 03240018
+      * Version control.                                                03250001
+      * If conversion is needed, we call the conversion module.         03260001
+      *                                                                 03270001
+           Set   R115L030-Version        To    True                     03280001
+           Move  Length                  Of    R115L030-Set-Timestamp   03290007
+                                         To    W-IO-Length              03300001
+      *                                                                 03310001
+           Evaluate True                                                03320001
+             When L-Ext-IO-Area (1:8)    =     R115L030-Version-No      03330001
+             and  Length                 Of    L-Ext-IO-Area            03340001
+                                         Not < W-IO-Length              03350001
+               Move  L-Ext-IO-Area (1:W-IO-Length)                      03360001
+                                         To    W-Int-IO-Area            03370001
+      *                                                                 03380001
+             When Other                                                 03390001
+               Call  'F115L999'                                         03400001
+                   Using By Content      'F115L030 '                    03410001
+                                         'INPUT '                       03420001
+                         By Reference    L-Ext-IO-Area                  03430001
+                                         W-Int-IO-Area                  03440001
+                                         R7919999-Error-Area            03450001
+               End-Call                                                 03460001
+      *                                                                 03470001
+               If  R7919999-Return-Abend                                03480001
+                   Move  'ZI03'          To    R7919999-Paragraph       03490001
+                   Perform Z900-Abend                                   03500001
+               End-If                                                   03510001
+      *                                                                 03520001
+           End-Evaluate                                                 03530001
+      *                                                                 03540001
+           .                                                            03550001
+      *################################################################*03560001
+       ZO00-Konv-Output-Version          Section.                       03570001
+      *                                                                 03580001
+      * Version control.                                                03590001
+      * If conversion is needed, we call the conversion module.         03600001
+      *                                                                 03610001
+           Evaluate True                                                03620001
+             When L-Ext-IO-Area (1:8)    =     R115L030-Version-No      03630001
+             and  Length                 Of    L-Ext-IO-Area            03640001
+                                         Not < W-IO-Length              03650001
+               Move  W-Int-IO-Area       To    L-Ext-IO-Area            03660001
+                                                         (1:W-IO-Length)03670001
+      *                                                                 03680001
+             When Other                                                 03690001
+               Call  'F115L999'                                         03700001
+                   Using By Content      'F115L030 '                    03710001
+                                         'OUTPUT '                      03720001
+                         By Reference    L-Ext-IO-Area                  03730001
+                                         W-Int-IO-Area                  03740001
+                                         R7919999-Error-Area            03750001
+               End-Call                                                 03760001
+      *                                                                 03770001
+               If  R7919999-Return-Abend                                03780001
+                   Move  'ZO01'          To    R7919999-Paragraph       03790001
+                   Perform Z900-Abend                                   03800001
+               End-If                                                   03810001
+      *                                                                 03820001
+           End-Evaluate                                                 03830001
+      *                                                                 03840001
+           .                                                            03850001
+      *################################################################*03860001
+       Z000-Error-Message                Section.                       03870001
+      *                                                                 03880001
+           Set   R7918030-Version        To    True                     03890001
+      *                                                                 03900001
+           Move  'TF'                    To    R7918030-In-System-ID    03910001
+           Move  R115X000-Fin-Inst-No    To    R7918030-In-Fin-Inst-No  03920004
+           Move  R115X000-FI-Language-639-1                             03930004
+                                         To    R7918030-In-Language     03940004
+      *                                                                 03950001
+           If  R115X000-Trace-On                                        03960004
+               Set  R7918030-In-Log-Yes  To    True                     03970004
+           End-If                                                       03980004
+      *                                                                 03990001
+           Call  'F7918030'              Using R7918030-ErrorMessage    04000001
+           End-Call                                                     04010001
+      *                                                                 04020001
+           Move  R7918030-Out-MessageText                               04030001
+                                         To    R7919999-Message         04040001
+      *                                                                 04050001
+           .                                                            04060001
+      *################################################################*04070001
+       Z700-Error-AE                     Section.                       04080001
+      *                                                                 04090001
+           If  R7919999-Return-Code      Not   Numeric                  04100001
+           or  Not R7919999-Return-Abend                                04110001
+               Move  +0                  To    R7919999-Module-Ind      04120001
+           End-If                                                       04130001
+      *                                                                 04140001
+           Add   +1                      To    R7919999-Module-Ind      04150001
+      *                                                                 04160001
+           If  R7919999-Module-Ind       Not >                          04170001
+                             ( Length    Of    R7919999-Module-Tab      04180001
+                             / Length    Of    R7919999-Module-Element )04190001
+               Move  'F115L030'          To    R7919999-Module-Name     04200001
+                                                   (R7919999-Module-Ind)04210001
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     04220001
+                                                   (R7919999-Module-Ind)04230001
+           End-If                                                       04240001
+      *                                                                 04250001
+           Set   R7919999-Return-Error   To    TRUE                     04260001
+      *                                                                 04270001
+           Goback.                                                      04280001
+      *################################################################*04290001
+       Z900-Abend                        Section.                       04300001
+      *                                                                 04310001
+           If  R7919999-Return-Code      Not   Numeric                  04320001
+           or  Not R7919999-Return-Abend                                04330001
+               Move  +0                  To    R7919999-Module-Ind      04340001
+           End-If                                                       04350001
+      *                                                                 04360001
+           Add   +1                      To    R7919999-Module-Ind      04370001
+      *                                                                 04380001
+           If  R7919999-Module-Ind       Not >                          04390001
+                             ( Length    Of    R7919999-Module-Tab      04400001
+                             / Length    Of    R7919999-Module-Element )04410001
+               Move  'F115L030'          To    R7919999-Module-Name     04420001
+                                                   (R7919999-Module-Ind)04430001
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     04440001
+                                                   (R7919999-Module-Ind)04450001
+           End-If                                                       04460001
+      *                                                                 04470001
+           Set   R7919999-Return-Abend   To    TRUE                     04480001
+      *                                                                 04490001
+           Goback.                                                      04500001

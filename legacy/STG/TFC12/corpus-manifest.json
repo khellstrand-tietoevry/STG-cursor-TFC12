@@ -1,0 +1,5637 @@
+{
+  "schema_version": "1.0",
+  "corpus": "STG/TFC12",
+  "scope": {
+    "source_members": [
+      "F115ICA0",
+      "F115ICH0",
+      "F115IMC0",
+      "F115IPA0",
+      "F115IPC0",
+      "F115ISC0",
+      "F115ISR0",
+      "F115L030",
+      "F115L050",
+      "F115L060",
+      "F115L070",
+      "F115L080",
+      "F115L140",
+      "F116L030",
+      "FTFCH120",
+      "FTFCK120",
+      "FTFCL120"
+    ],
+    "source_directory": "src",
+    "copybook_directory": "copybooks",
+    "external_calls_are_boundaries": true,
+    "canonical_corpus": "min+onehop",
+    "min_is_tutorial_only": false,
+    "note": "H/K/L entry programs (FTFCH120, FTFCK120, FTFCL120) merged with one-hop helper closure for Charges and Pricing"
+  },
+  "provenance": {
+    "importer": "STG-cursor-TFC12.initial-import",
+    "source_repository": "tfi-java-cobol-parity-testing",
+    "source_paths": [
+      "reference/original-cobol-code/STG_TRADEFINANCE/TFC12_CHARGES_PRICING/min/{src,copybook}",
+      "reference/original-cobol-code/STG_TRADEFINANCE/TFC12_CHARGES_PRICING/onehop/{src,copybook}"
+    ],
+    "source_commit": "feb8fbb049f3a44a4a7a7b58a4004f4b83b2b509",
+    "import_lock": "reference/original-cobol-code/STG_TRADEFINANCE/TFC12_CHARGES_PRICING/provenance.json",
+    "source_bytes": "byte-preserving cp -p; no text transcoding",
+    "copy_resolution": "COPY resolved from imported copybooks; external CALLs recorded only"
+  },
+  "counts": {
+    "sources": 17,
+    "copybooks": 19,
+    "copy_edges": 77,
+    "calls": 241,
+    "external_calls": 178,
+    "unresolved_copybooks": 83
+  },
+  "members": [
+    {
+      "kind": "source",
+      "member": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 103812,
+      "sha256": "4a2557911acc0aba527bd3c366bf7b3f7abedf4aca4b04305f08c656a7195ec5",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 114390,
+      "sha256": "a9668650a51ee2c0da8133734f7d7f95ffbfbea85a38f76a03484881a5d683df",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 119556,
+      "sha256": "03ac31063c546785c984104f6b3e0010c82f7431dc05a774f3f0e46e44d64add",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 119802,
+      "sha256": "8d42a0052c3b8a6c48d1a02422e02e3af7f6f4b24e404660fe9d4aec625c26c2",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 121032,
+      "sha256": "ca7a600466e3a730168302780c83317f6d40d084324fbcd50082df40c9cee1c2",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 96760,
+      "sha256": "55ffd43d678a931bb963cf0efa433f9cc0e93ab936fc8819d2f763fe8848ad5e",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 129560,
+      "sha256": "baa13988b9d41ec395d8bb40a997aafc4fad55bf862cce8177a29f5400b973f6",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115L030",
+      "source_path": "src/F115L030.src",
+      "depth": 0,
+      "encoding": "utf-8",
+      "size": 47232,
+      "sha256": "f967d2982cfd92e557ce743076cd0477b8369c322be1272462b7f6c29a4ab496",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115L050",
+      "source_path": "src/F115L050.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 46166,
+      "sha256": "5d046bb5cf7f3f846aa3ac8c0c085f06df9da2c857fc911389ad45bd11ba37cb",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115L060",
+      "source_path": "src/F115L060.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 129970,
+      "sha256": "f57f1ce7951d892fd44538a06ed2488cd6735c61cd029c78aca7a0c536ffebea",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115L070",
+      "source_path": "src/F115L070.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 83476,
+      "sha256": "489d5468a7e7dd0e0fce45981c092601903eed706e6bc79a24dbe3d261bdec81",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115L080",
+      "source_path": "src/F115L080.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 60106,
+      "sha256": "85ba682b0dae637a30c40777fc6919b499668d1ed3b84ee18a6212f54f96ab8c",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F115L140",
+      "source_path": "src/F115L140.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 237144,
+      "sha256": "2db1578fb1683770b98ebc890abf8167031a033ba9d2be8b7065ed7f78b53445",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "F116L030",
+      "source_path": "src/F116L030.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 97006,
+      "sha256": "a67705d9bb74b42efc058956d487b439e5ae8296c184f840cbdf8be76bd9a229",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "depth": 0,
+      "encoding": "utf-8",
+      "size": 15654,
+      "sha256": "e8c9283e88e5f3d6dae84eb9680147b68e1eb35609a8d60b51160e70be9948da",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "FTFCK120",
+      "source_path": "src/FTFCK120.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 80674,
+      "sha256": "398a94de05c31097216258831dcd9ab947a5e291259d9a6062c5c8a7240cb410",
+      "parent_copy": null
+    },
+    {
+      "kind": "source",
+      "member": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "size": 158260,
+      "sha256": "2486155cbda7ac309152dbeac66a2ef7def5eff67242a5937ccf3b9fa77d774f",
+      "parent_copy": null
+    },
+    {
+      "kind": "copybook",
+      "member": "R115ICA0",
+      "source_path": "copybooks/R115ICA0.copy",
+      "copied_to": "copybooks/R115ICA0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 13858,
+      "sha256": "1bbd9dbbb592d5b1dc68d0ade7cb454d16c190257f91efce94dcaae7c8fb0246",
+      "parent_copy": {
+        "parent": "F115ICA0",
+        "parent_path": "src/F115ICA0.src",
+        "member": "R115ICA0",
+        "inventory_path": "copybooks/R115ICA0.copy",
+        "line": 204,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115ICH0",
+      "source_path": "copybooks/R115ICH0.copy",
+      "copied_to": "copybooks/R115ICH0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 16154,
+      "sha256": "c1d5da6267438c7be37e53d1fb016daef0a61d899a027f3b68d4b044e2a23a19",
+      "parent_copy": {
+        "parent": "F115ICH0",
+        "parent_path": "src/F115ICH0.src",
+        "member": "R115ICH0",
+        "inventory_path": "copybooks/R115ICH0.copy",
+        "line": 235,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115ICT0",
+      "source_path": "copybooks/R115ICT0.copy",
+      "copied_to": "copybooks/R115ICT0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 11972,
+      "sha256": "d3e36bb880c5d5bf71bc5010d97be3f7ecedf5f4aa0bbdb8753f70c4826f260e",
+      "parent_copy": {
+        "parent": "F115L060",
+        "parent_path": "src/F115L060.src",
+        "member": "R115ICT0",
+        "inventory_path": "copybooks/R115ICT0.copy",
+        "line": 122,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115IMC0",
+      "source_path": "copybooks/R115IMC0.copy",
+      "copied_to": "copybooks/R115IMC0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 17056,
+      "sha256": "f0728f10e7773ff3b53d3e4a9d41eb0da15515303b2ff87207653ef8b35316ea",
+      "parent_copy": {
+        "parent": "F115IMC0",
+        "parent_path": "src/F115IMC0.src",
+        "member": "R115IMC0",
+        "inventory_path": "copybooks/R115IMC0.copy",
+        "line": 225,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115IPA0",
+      "source_path": "copybooks/R115IPA0.copy",
+      "copied_to": "copybooks/R115IPA0.copy",
+      "depth": 1,
+      "encoding": "iso-8859-1",
+      "size": 16728,
+      "sha256": "834eef58b0729ba002181fceb1cc020d2bb8ce24c15fe9d72bd1386f43e2239b",
+      "parent_copy": {
+        "parent": "F115IPA0",
+        "parent_path": "src/F115IPA0.src",
+        "member": "R115IPA0",
+        "inventory_path": "copybooks/R115IPA0.copy",
+        "line": 223,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115IPC0",
+      "source_path": "copybooks/R115IPC0.copy",
+      "copied_to": "copybooks/R115IPC0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 15990,
+      "sha256": "cf1b54cdcc25a194fdb8c7ffbbbe9f9a2d2fe54e29ca3c9c9131e9a307e64bd0",
+      "parent_copy": {
+        "parent": "F115IPC0",
+        "parent_path": "src/F115IPC0.src",
+        "member": "R115IPC0",
+        "inventory_path": "copybooks/R115IPC0.copy",
+        "line": 238,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115ISC0",
+      "source_path": "copybooks/R115ISC0.copy",
+      "copied_to": "copybooks/R115ISC0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 13284,
+      "sha256": "949f369775ec4e74c863e8df1eff0f954c3b283accee792305f2347f988f83f7",
+      "parent_copy": {
+        "parent": "F115ISC0",
+        "parent_path": "src/F115ISC0.src",
+        "member": "R115ISC0",
+        "inventory_path": "copybooks/R115ISC0.copy",
+        "line": 187,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115ISR0",
+      "source_path": "copybooks/R115ISR0.copy",
+      "copied_to": "copybooks/R115ISR0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 10742,
+      "sha256": "2739972969696c7c5be454b14d53555f20081f44ed881f0805f84e1041c54f2f",
+      "parent_copy": {
+        "parent": "F115ISR0",
+        "parent_path": "src/F115ISR0.src",
+        "member": "R115ISR0",
+        "inventory_path": "copybooks/R115ISR0.copy",
+        "line": 237,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L030",
+      "source_path": "copybooks/R115L030.copy",
+      "copied_to": "copybooks/R115L030.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 4347,
+      "sha256": "a8f51d45b2abf33a9497f82ffb3890bbb8ee40a7a5cfc8ddffb0b0f5dd5d3ff0",
+      "parent_copy": {
+        "parent": "F115L030",
+        "parent_path": "src/F115L030.src",
+        "member": "R115L030",
+        "inventory_path": "copybooks/R115L030.copy",
+        "line": 45,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L050",
+      "source_path": "copybooks/R115L050.copy",
+      "copied_to": "copybooks/R115L050.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 3648,
+      "sha256": "c53714cfc078e63217d626f173283528452dffbfa8ff2b02c4a29c9d44f429e9",
+      "parent_copy": {
+        "parent": "F115L050",
+        "parent_path": "src/F115L050.src",
+        "member": "R115L050",
+        "inventory_path": "copybooks/R115L050.copy",
+        "line": 39,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L060",
+      "source_path": "copybooks/R115L060.copy",
+      "copied_to": "copybooks/R115L060.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 10660,
+      "sha256": "55e9f1801d40c3c41cf66599f5b7478697b91ac53f71c6dc71b195579fa84774",
+      "parent_copy": {
+        "parent": "F115L060",
+        "parent_path": "src/F115L060.src",
+        "member": "R115L060",
+        "inventory_path": "copybooks/R115L060.copy",
+        "line": 105,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L070",
+      "source_path": "copybooks/R115L070.copy",
+      "copied_to": "copybooks/R115L070.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 8470,
+      "sha256": "20abed8abf12bae67dd67274a05a24782c94e1758dbaaedccac4f806cc7a1554",
+      "parent_copy": {
+        "parent": "F115L070",
+        "parent_path": "src/F115L070.src",
+        "member": "R115L070",
+        "inventory_path": "copybooks/R115L070.copy",
+        "line": 68,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L080",
+      "source_path": "copybooks/R115L080.copy",
+      "copied_to": "copybooks/R115L080.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 2736,
+      "sha256": "b70f474863086200c7b8d166c818f9ad36ad1155c1095960375ab3e927192b31",
+      "parent_copy": {
+        "parent": "F115L080",
+        "parent_path": "src/F115L080.src",
+        "member": "R115L080",
+        "inventory_path": "copybooks/R115L080.copy",
+        "line": 58,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L140",
+      "source_path": "copybooks/R115L140.copy",
+      "copied_to": "copybooks/R115L140.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 3713,
+      "sha256": "8e3140a64935e0fa271386fa44d0c345a2380435096e777c403f4269271af715",
+      "parent_copy": {
+        "parent": "F115L140",
+        "parent_path": "src/F115L140.src",
+        "member": "R115L140",
+        "inventory_path": "copybooks/R115L140.copy",
+        "line": 45,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L150",
+      "source_path": "copybooks/R115L150.copy",
+      "copied_to": "copybooks/R115L150.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 4428,
+      "sha256": "1e38542e58093b2f8fadbd11fb0c02d80e74bdd4305fff5c948c2d34fb3d5207",
+      "parent_copy": {
+        "parent": "F115L060",
+        "parent_path": "src/F115L060.src",
+        "member": "R115L150",
+        "inventory_path": "copybooks/R115L150.copy",
+        "line": 134,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115L990",
+      "source_path": "copybooks/R115L990.copy",
+      "copied_to": "copybooks/R115L990.copy",
+      "depth": 1,
+      "encoding": "iso-8859-1",
+      "size": 1312,
+      "sha256": "3f4fa6298248c0a19b90548c1280723a3d7d3fc2c1f95960ac81e0500bfd9047",
+      "parent_copy": {
+        "parent": "F115L080",
+        "parent_path": "src/F115L080.src",
+        "member": "R115L990",
+        "inventory_path": "copybooks/R115L990.copy",
+        "line": 85,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R115X000",
+      "source_path": "copybooks/R115X000.copy",
+      "copied_to": "copybooks/R115X000.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 5986,
+      "sha256": "ca75e920c782624431b32c73f082bc279d36dfd83967737cb93483c5d46b3930",
+      "parent_copy": {
+        "parent": "F115ICA0",
+        "parent_path": "src/F115ICA0.src",
+        "member": "R115X000",
+        "inventory_path": "copybooks/R115X000.copy",
+        "line": 218,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "R116L030",
+      "source_path": "copybooks/R116L030.copy",
+      "copied_to": "copybooks/R116L030.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "size": 10168,
+      "sha256": "cc00ea212682a2bc3a1799508eafa26fe6ef6672df70b22b6a85d61c2d461847",
+      "parent_copy": {
+        "parent": "F115L060",
+        "parent_path": "src/F115L060.src",
+        "member": "R116L030",
+        "inventory_path": "copybooks/R116L030.copy",
+        "line": 137,
+        "replacing": false,
+        "depth": 1
+      }
+    },
+    {
+      "kind": "copybook",
+      "member": "RTFCE120",
+      "source_path": "copybooks/RTFCE120.copy",
+      "copied_to": "copybooks/RTFCE120.copy",
+      "depth": 1,
+      "encoding": "iso-8859-1",
+      "size": 8317,
+      "sha256": "3b612d81ac85abf6c60065820135edea849a564eeb0648e394180fb29269cc92",
+      "parent_copy": {
+        "parent": "FTFCH120",
+        "parent_path": "src/FTFCH120.src",
+        "member": "RTFCE120",
+        "inventory_path": "copybooks/RTFCE120.copy",
+        "line": 79,
+        "replacing": false,
+        "depth": 1
+      }
+    }
+  ],
+  "copy_edges": [
+    {
+      "parent": "F115ICA0",
+      "parent_path": "src/F115ICA0.src",
+      "member": "R115ICA0",
+      "inventory_path": "copybooks/R115ICA0.copy",
+      "line": 204,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ICA0",
+      "parent_path": "src/F115ICA0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 218,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R115ICH0",
+      "inventory_path": "copybooks/R115ICH0.copy",
+      "line": 235,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 251,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R115IMC0",
+      "inventory_path": "copybooks/R115IMC0.copy",
+      "line": 225,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 245,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 223,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 241,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115IPC0",
+      "parent_path": "src/F115IPC0.src",
+      "member": "R115IPC0",
+      "inventory_path": "copybooks/R115IPC0.copy",
+      "line": 238,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115IPC0",
+      "parent_path": "src/F115IPC0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 252,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R115ISC0",
+      "inventory_path": "copybooks/R115ISC0.copy",
+      "line": 187,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 203,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R115ISR0",
+      "inventory_path": "copybooks/R115ISR0.copy",
+      "line": 237,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 253,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R115L030",
+      "inventory_path": "copybooks/R115L030.copy",
+      "line": 45,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R115IMC0",
+      "inventory_path": "copybooks/R115IMC0.copy",
+      "line": 51,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 53,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 61,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115L050",
+      "inventory_path": "copybooks/R115L050.copy",
+      "line": 39,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115ISC0",
+      "inventory_path": "copybooks/R115ISC0.copy",
+      "line": 49,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115IMC0",
+      "inventory_path": "copybooks/R115IMC0.copy",
+      "line": 51,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115ICA0",
+      "inventory_path": "copybooks/R115ICA0.copy",
+      "line": 53,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115ISR0",
+      "inventory_path": "copybooks/R115ISR0.copy",
+      "line": 55,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 57,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 61,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115L060",
+      "inventory_path": "copybooks/R115L060.copy",
+      "line": 105,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115ICA0",
+      "inventory_path": "copybooks/R115ICA0.copy",
+      "line": 113,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115ICH0",
+      "inventory_path": "copybooks/R115ICH0.copy",
+      "line": 116,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115ICT0",
+      "inventory_path": "copybooks/R115ICT0.copy",
+      "line": 122,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 125,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115IPC0",
+      "inventory_path": "copybooks/R115IPC0.copy",
+      "line": 128,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115ISR0",
+      "inventory_path": "copybooks/R115ISR0.copy",
+      "line": 131,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115L150",
+      "inventory_path": "copybooks/R115L150.copy",
+      "line": 134,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R116L030",
+      "inventory_path": "copybooks/R116L030.copy",
+      "line": 137,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 147,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115L070",
+      "inventory_path": "copybooks/R115L070.copy",
+      "line": 68,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115L060",
+      "inventory_path": "copybooks/R115L060.copy",
+      "line": 75,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115L060",
+      "inventory_path": "copybooks/R115L060.copy",
+      "line": 77,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115L060",
+      "inventory_path": "copybooks/R115L060.copy",
+      "line": 79,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 81,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115ICA0",
+      "inventory_path": "copybooks/R115ICA0.copy",
+      "line": 82,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 89,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115L080",
+      "inventory_path": "copybooks/R115L080.copy",
+      "line": 58,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115ICH0",
+      "inventory_path": "copybooks/R115ICH0.copy",
+      "line": 65,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 69,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115IPC0",
+      "inventory_path": "copybooks/R115IPC0.copy",
+      "line": 73,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115L070",
+      "inventory_path": "copybooks/R115L070.copy",
+      "line": 77,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 84,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R115L990",
+      "inventory_path": "copybooks/R115L990.copy",
+      "line": 85,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115L140",
+      "inventory_path": "copybooks/R115L140.copy",
+      "line": 45,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IMC0",
+      "inventory_path": "copybooks/R115IMC0.copy",
+      "line": 51,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ICA0",
+      "inventory_path": "copybooks/R115ICA0.copy",
+      "line": 61,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 63,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IPC0",
+      "inventory_path": "copybooks/R115IPC0.copy",
+      "line": 65,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ICH0",
+      "inventory_path": "copybooks/R115ICH0.copy",
+      "line": 69,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ICT0",
+      "inventory_path": "copybooks/R115ICT0.copy",
+      "line": 79,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115X000",
+      "inventory_path": "copybooks/R115X000.copy",
+      "line": 83,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R116L030",
+      "inventory_path": "copybooks/R116L030.copy",
+      "line": 179,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCH120",
+      "parent_path": "src/FTFCH120.src",
+      "member": "RTFCE120",
+      "inventory_path": "copybooks/RTFCE120.copy",
+      "line": 79,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCK120",
+      "parent_path": "src/FTFCK120.src",
+      "member": "R115ISC0",
+      "inventory_path": "copybooks/R115ISC0.copy",
+      "line": 63,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCK120",
+      "parent_path": "src/FTFCK120.src",
+      "member": "R115L050",
+      "inventory_path": "copybooks/R115L050.copy",
+      "line": 66,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCK120",
+      "parent_path": "src/FTFCK120.src",
+      "member": "RTFCE120",
+      "inventory_path": "copybooks/RTFCE120.copy",
+      "line": 79,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115ICA0",
+      "inventory_path": "copybooks/R115ICA0.copy",
+      "line": 92,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115ICH0",
+      "inventory_path": "copybooks/R115ICH0.copy",
+      "line": 95,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115IMC0",
+      "inventory_path": "copybooks/R115IMC0.copy",
+      "line": 98,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115IPA0",
+      "inventory_path": "copybooks/R115IPA0.copy",
+      "line": 101,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115IPC0",
+      "inventory_path": "copybooks/R115IPC0.copy",
+      "line": 104,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115ISC0",
+      "inventory_path": "copybooks/R115ISC0.copy",
+      "line": 107,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115ISR0",
+      "inventory_path": "copybooks/R115ISR0.copy",
+      "line": 110,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115L030",
+      "inventory_path": "copybooks/R115L030.copy",
+      "line": 113,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115L060",
+      "inventory_path": "copybooks/R115L060.copy",
+      "line": 116,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115L070",
+      "inventory_path": "copybooks/R115L070.copy",
+      "line": 119,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115L080",
+      "inventory_path": "copybooks/R115L080.copy",
+      "line": 122,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115L140",
+      "inventory_path": "copybooks/R115L140.copy",
+      "line": 125,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R116L030",
+      "inventory_path": "copybooks/R116L030.copy",
+      "line": 128,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R115L990",
+      "inventory_path": "copybooks/R115L990.copy",
+      "line": 130,
+      "replacing": false,
+      "depth": 1
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "RTFCE120",
+      "inventory_path": "copybooks/RTFCE120.copy",
+      "line": 142,
+      "replacing": false,
+      "depth": 1
+    }
+  ],
+  "call_edges": [
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 487,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 515,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 590,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 703,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 774,
+      "target": "F115ICAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 904,
+      "target": "F115ICAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 941,
+      "target": "F115ICAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1122,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1146,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1179,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1209,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1238,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 532,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 560,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 635,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 763,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 836,
+      "target": "F115ICHU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1006,
+      "target": "F115ICHU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1043,
+      "target": "F115ICHU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1251,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1275,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1308,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1338,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1367,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 531,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 559,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 634,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 744,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 817,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 834,
+      "target": "F7919270",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 860,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 883,
+      "target": "F115IMCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 997,
+      "target": "F115IMCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1034,
+      "target": "F115IMCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1091,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1107,
+      "target": "F7919270",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1122,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1257,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1281,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1315,
+      "target": "F1781910",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1339,
+      "target": "F1781910",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1371,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1401,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1430,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 548,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 576,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 651,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 768,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 831,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 855,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 874,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1036,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1064,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1101,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1145,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1169,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1317,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1341,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1374,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1404,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1433,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 612,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 640,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 715,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 840,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 914,
+      "target": "F115IPCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1097,
+      "target": "F115IPCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1134,
+      "target": "F115IPCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1332,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1356,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1389,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1419,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1448,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 439,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 465,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 538,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 648,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 707,
+      "target": "F115ISCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 823,
+      "target": "F115ISCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 858,
+      "target": "F115ISCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1024,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1053,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1093,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1123,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1152,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 607,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 633,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 706,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 845,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 913,
+      "target": "F115ISRU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1154,
+      "target": "F115ISRU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1189,
+      "target": "F115ISRU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1436,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1460,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1493,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1523,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1552,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 108,
+      "target": "F7919070",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 208,
+      "target": "F115L040",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 235,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 263,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 338,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 361,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 388,
+      "target": "F7919270",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 420,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 436,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 466,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 496,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 526,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 190,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 203,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 232,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 262,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 326,
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 370,
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 394,
+      "target": "F115IST0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 449,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 474,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 504,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 182,
+      "target": "F7919070",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 322,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 390,
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 722,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 799,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1116,
+      "target": "F115ICT0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1138,
+      "target": "F115ICT0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1177,
+      "target": "F116L030",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1280,
+      "target": "F115L150",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1408,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1445,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1476,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1505,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1534,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 254,
+      "target": "F115L060",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 276,
+      "target": "F115L060",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 753,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 793,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 909,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 938,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 967,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 199,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 284,
+      "target": "F115L070",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 507,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 589,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 624,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 653,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 682,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 215,
+      "target": "F115L040",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 262,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 315,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 336,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 357,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 448,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 466,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 495,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 524,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 616,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 634,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 661,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 688,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 779,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 803,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 830,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 857,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 946,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 964,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 988,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1012,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1101,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1119,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1144,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1169,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1258,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1276,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1301,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1326,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1416,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1434,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1462,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1490,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1593,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1611,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1640,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1668,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1709,
+      "target": "F115ICT0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1801,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1819,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1846,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1873,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1963,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1981,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2010,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2039,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2132,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2150,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2177,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2204,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2297,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2315,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2344,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2373,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2465,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2483,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2510,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2537,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2749,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2774,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2804,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 235,
+      "target": "F7918110",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 436,
+      "target": "F7918040",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 459,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 483,
+      "target": "F203L130",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 521,
+      "target": "F791I080",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 586,
+      "target": "F116I020",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 713,
+      "target": "F791IET0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 917,
+      "target": "F791I020",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 923,
+      "target": "F791I020",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1089,
+      "target": "F116L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1119,
+      "target": "F116L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1156,
+      "target": "F7919990",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1180,
+      "target": "F7919990",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "line": 139,
+      "target": "FTFCK120",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "line": 172,
+      "target": "FTFCL120",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "line": 319,
+      "target": "F791TRAC",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "line": 346,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "FTFCK120",
+      "source_path": "src/FTFCK120.src",
+      "line": 805,
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCK120",
+      "source_path": "src/FTFCK120.src",
+      "line": 975,
+      "target": "F115L050",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 220,
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 277,
+      "target": "F115L080",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 389,
+      "target": "F115L070",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 460,
+      "target": "F116L030",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 506,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 585,
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 627,
+      "target": "F115L140",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 830,
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 1020,
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 1123,
+      "target": "F115L060",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 1270,
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 1610,
+      "target": "F115L030",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 1746,
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    },
+    {
+      "caller": "FTFCL120",
+      "source_path": "src/FTFCL120.src",
+      "line": 1792,
+      "target": "F115IPA0",
+      "target_kind": "literal",
+      "boundary": "internal",
+      "using": null
+    }
+  ],
+  "external_calls": [
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 487,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 515,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 590,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 703,
+      "target": "F115ICAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 774,
+      "target": "F115ICAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 904,
+      "target": "F115ICAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 941,
+      "target": "F115ICAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1122,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1146,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1179,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1209,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICA0",
+      "source_path": "src/F115ICA0.src",
+      "line": 1238,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 532,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 560,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 635,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 763,
+      "target": "F115ICHR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 836,
+      "target": "F115ICHU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1006,
+      "target": "F115ICHU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1043,
+      "target": "F115ICHU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1251,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1275,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1308,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1338,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ICH0",
+      "source_path": "src/F115ICH0.src",
+      "line": 1367,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 531,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 559,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 634,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 744,
+      "target": "F115IMCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 817,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 834,
+      "target": "F7919270",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 860,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 883,
+      "target": "F115IMCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 997,
+      "target": "F115IMCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1034,
+      "target": "F115IMCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1091,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1107,
+      "target": "F7919270",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1122,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1257,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1281,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1315,
+      "target": "F1781910",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1339,
+      "target": "F1781910",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1371,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1401,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IMC0",
+      "source_path": "src/F115IMC0.src",
+      "line": 1430,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 548,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 576,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 651,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 768,
+      "target": "F115IPAR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 831,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 855,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 874,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1036,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1064,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1101,
+      "target": "F115IPAU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1145,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1169,
+      "target": "F7919100",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1317,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1341,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1374,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1404,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPA0",
+      "source_path": "src/F115IPA0.src",
+      "line": 1433,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 612,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 640,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 715,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 840,
+      "target": "F115IPCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 914,
+      "target": "F115IPCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1097,
+      "target": "F115IPCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1134,
+      "target": "F115IPCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1332,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1356,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1389,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1419,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115IPC0",
+      "source_path": "src/F115IPC0.src",
+      "line": 1448,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 439,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 465,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 538,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 648,
+      "target": "F115ISCR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 707,
+      "target": "F115ISCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 823,
+      "target": "F115ISCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 858,
+      "target": "F115ISCU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1024,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1053,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1093,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1123,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISC0",
+      "source_path": "src/F115ISC0.src",
+      "line": 1152,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 607,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 633,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 706,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 845,
+      "target": "F115ISRR",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 913,
+      "target": "F115ISRU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1154,
+      "target": "F115ISRU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1189,
+      "target": "F115ISRU",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1436,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1460,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1493,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1523,
+      "target": "F115I999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115ISR0",
+      "source_path": "src/F115ISR0.src",
+      "line": 1552,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 108,
+      "target": "F7919070",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 208,
+      "target": "F115L040",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 388,
+      "target": "F7919270",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 420,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 436,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 466,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 496,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L030",
+      "source_path": "src/F115L030.src",
+      "line": 526,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 394,
+      "target": "F115IST0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 449,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 474,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L050",
+      "source_path": "src/F115L050.src",
+      "line": 504,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 182,
+      "target": "F7919070",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1116,
+      "target": "F115ICT0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1138,
+      "target": "F115ICT0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1280,
+      "target": "F115L150",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1476,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1505,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L060",
+      "source_path": "src/F115L060.src",
+      "line": 1534,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 909,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 938,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L070",
+      "source_path": "src/F115L070.src",
+      "line": 967,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 624,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 653,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L080",
+      "source_path": "src/F115L080.src",
+      "line": 682,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 215,
+      "target": "F115L040",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 448,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 466,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 495,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 524,
+      "target": "F115ICC0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 616,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 634,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 661,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 688,
+      "target": "F115IRP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 779,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 803,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 830,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 857,
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1258,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1276,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1301,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1326,
+      "target": "F115ISE0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1709,
+      "target": "F115ICT0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1801,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1819,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1846,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1873,
+      "target": "F115ILM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1963,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 1981,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2010,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2039,
+      "target": "F115ILL0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2132,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2150,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2177,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2204,
+      "target": "F115IWM0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2297,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2315,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2344,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2373,
+      "target": "F115IWF0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2465,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2483,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2510,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2537,
+      "target": "F115ITP0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2749,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2774,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F115L140",
+      "source_path": "src/F115L140.src",
+      "line": 2804,
+      "target": "F115L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 235,
+      "target": "F7918110",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 436,
+      "target": "F7918040",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 459,
+      "target": "F5879010",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 483,
+      "target": "F203L130",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 521,
+      "target": "F791I080",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 586,
+      "target": "F116I020",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 713,
+      "target": "F791IET0",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 917,
+      "target": "F791I020",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 923,
+      "target": "F791I020",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1089,
+      "target": "F116L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1119,
+      "target": "F116L999",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1156,
+      "target": "F7919990",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "F116L030",
+      "source_path": "src/F116L030.src",
+      "line": 1180,
+      "target": "F7919990",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "line": 319,
+      "target": "F791TRAC",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    },
+    {
+      "caller": "FTFCH120",
+      "source_path": "src/FTFCH120.src",
+      "line": 346,
+      "target": "F7918030",
+      "target_kind": "literal",
+      "boundary": "external",
+      "using": null
+    }
+  ],
+  "unresolved_copybooks": [
+    {
+      "parent": "F115ICA0",
+      "parent_path": "src/F115ICA0.src",
+      "member": "R115ICAS",
+      "line": 210,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICA0",
+      "parent_path": "src/F115ICA0.src",
+      "member": "R5879010",
+      "line": 213,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICA0",
+      "parent_path": "src/F115ICA0.src",
+      "member": "R7918030",
+      "line": 216,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICA0",
+      "parent_path": "src/F115ICA0.src",
+      "member": "R7919999",
+      "line": 224,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R115ICHS",
+      "line": 241,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R5879010",
+      "line": 244,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R7918030",
+      "line": 247,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R7919100",
+      "line": 249,
+      "replacing": false
+    },
+    {
+      "parent": "F115ICH0",
+      "parent_path": "src/F115ICH0.src",
+      "member": "R7919999",
+      "line": 257,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R115IMCS",
+      "line": 231,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R1781910",
+      "line": 234,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R5879010",
+      "line": 237,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R7918030",
+      "line": 240,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R7919100",
+      "line": 242,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R7919270",
+      "line": 243,
+      "replacing": false
+    },
+    {
+      "parent": "F115IMC0",
+      "parent_path": "src/F115IMC0.src",
+      "member": "R7919999",
+      "line": 251,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R115IPAS",
+      "line": 229,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R1781910",
+      "line": 232,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R5879010",
+      "line": 235,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R7918030",
+      "line": 238,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R7919100",
+      "line": 240,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPA0",
+      "parent_path": "src/F115IPA0.src",
+      "member": "R7919999",
+      "line": 247,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPC0",
+      "parent_path": "src/F115IPC0.src",
+      "member": "R115IPCS",
+      "line": 244,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPC0",
+      "parent_path": "src/F115IPC0.src",
+      "member": "R5879010",
+      "line": 247,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPC0",
+      "parent_path": "src/F115IPC0.src",
+      "member": "R7918030",
+      "line": 250,
+      "replacing": false
+    },
+    {
+      "parent": "F115IPC0",
+      "parent_path": "src/F115IPC0.src",
+      "member": "R7919999",
+      "line": 258,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R115ISCS",
+      "line": 193,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R5879010",
+      "line": 196,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R7918030",
+      "line": 199,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R7919100",
+      "line": 201,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISC0",
+      "parent_path": "src/F115ISC0.src",
+      "member": "R7919999",
+      "line": 209,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R115ISRS",
+      "line": 243,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R5879010",
+      "line": 246,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R7918030",
+      "line": 249,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R7919100",
+      "line": 251,
+      "replacing": false
+    },
+    {
+      "parent": "F115ISR0",
+      "parent_path": "src/F115ISR0.src",
+      "member": "R7919999",
+      "line": 259,
+      "replacing": false
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R115IEI0",
+      "line": 54,
+      "replacing": false
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R115L040",
+      "line": 56,
+      "replacing": false
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R7919270",
+      "line": 58,
+      "replacing": false
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R7919070",
+      "line": 59,
+      "replacing": false
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R7919999",
+      "line": 67,
+      "replacing": false
+    },
+    {
+      "parent": "F115L030",
+      "parent_path": "src/F115L030.src",
+      "member": "R7918030",
+      "line": 69,
+      "replacing": false
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R7918030",
+      "line": 45,
+      "replacing": false
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R791I020",
+      "line": 47,
+      "replacing": false
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R115IST0",
+      "line": 59,
+      "replacing": false
+    },
+    {
+      "parent": "F115L050",
+      "parent_path": "src/F115L050.src",
+      "member": "R7919999",
+      "line": 66,
+      "replacing": false
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R7918030",
+      "line": 141,
+      "replacing": false
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R7919070",
+      "line": 144,
+      "replacing": false
+    },
+    {
+      "parent": "F115L060",
+      "parent_path": "src/F115L060.src",
+      "member": "R7919999",
+      "line": 155,
+      "replacing": false
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R7918030",
+      "line": 86,
+      "replacing": false
+    },
+    {
+      "parent": "F115L070",
+      "parent_path": "src/F115L070.src",
+      "member": "R7919999",
+      "line": 97,
+      "replacing": false
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R7918030",
+      "line": 81,
+      "replacing": false
+    },
+    {
+      "parent": "F115L080",
+      "parent_path": "src/F115L080.src",
+      "member": "R7919999",
+      "line": 93,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ICC0",
+      "line": 53,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IRP0",
+      "line": 55,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ITP0",
+      "line": 57,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IEI0",
+      "line": 59,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ISE0",
+      "line": 67,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ILM0",
+      "line": 71,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115ILL0",
+      "line": 73,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IWM0",
+      "line": 75,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115IWF0",
+      "line": 77,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R7918030",
+      "line": 81,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R115L040",
+      "line": 82,
+      "replacing": false
+    },
+    {
+      "parent": "F115L140",
+      "parent_path": "src/F115L140.src",
+      "member": "R7919999",
+      "line": 88,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R116I020",
+      "line": 185,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R203L130",
+      "line": 188,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R5879010",
+      "line": 191,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R7918040",
+      "line": 194,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R7918110",
+      "line": 195,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R791I020",
+      "line": 198,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R791I080",
+      "line": 199,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R791IET0",
+      "line": 200,
+      "replacing": false
+    },
+    {
+      "parent": "F116L030",
+      "parent_path": "src/F116L030.src",
+      "member": "R7919999",
+      "line": 206,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCH120",
+      "parent_path": "src/FTFCH120.src",
+      "member": "R7918030",
+      "line": 64,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCH120",
+      "parent_path": "src/FTFCH120.src",
+      "member": "R791TRAC",
+      "line": 66,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCH120",
+      "parent_path": "src/FTFCH120.src",
+      "member": "R400CH02",
+      "line": 74,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCH120",
+      "parent_path": "src/FTFCH120.src",
+      "member": "R7919999",
+      "line": 83,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCK120",
+      "parent_path": "src/FTFCK120.src",
+      "member": "R7919040",
+      "line": 52,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCK120",
+      "parent_path": "src/FTFCK120.src",
+      "member": "R400CH02",
+      "line": 74,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCK120",
+      "parent_path": "src/FTFCK120.src",
+      "member": "R7919999",
+      "line": 83,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R400CH02",
+      "line": 137,
+      "replacing": false
+    },
+    {
+      "parent": "FTFCL120",
+      "parent_path": "src/FTFCL120.src",
+      "member": "R7919999",
+      "line": 146,
+      "replacing": false
+    }
+  ]
+}

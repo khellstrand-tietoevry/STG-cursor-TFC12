@@ -1,0 +1,15 @@
+---
+description: Keep TFC12 modernization work inside this repo only
+alwaysApply: true
+---
+
+# Repository boundary
+
+Work in **STG-cursor-TFC12** must treat this git root as the only source of truth.
+
+- Read and reason from files under this workspace: `legacy/`, `analysis/`, `modernized/`, and root docs.
+- Do **not** use other repositories, monorepo siblings, or paths outside this workspace for inspiration, fixtures, parity notes, or “reference implementations.”
+- Do **not** edit anything under `legacy/`; write discovery and outputs to `analysis/` and `modernized/`.
+- If something needed for preflight, assess, map, rules, or transform is absent here, report the gap and propose adding it **into this repo** — never fetch ad hoc from outside.
+
+Plugin system name: `STG/TFC12` → `legacy/STG/TFC12/`.

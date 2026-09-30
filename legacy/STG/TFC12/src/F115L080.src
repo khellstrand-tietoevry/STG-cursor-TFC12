@@ -1,0 +1,733 @@
+       Identification Division.                                         00010000
+       Program-ID. F115L080.                                            00020000
+       Author.  Hallvard Barman.                                        00030000
+      *################################################################*00040000
+      *                                                                 00050000
+      * FD Trade Finance                                                00060000
+      *                                                                 00070000
+      *                                                                 00080000
+      *################################################################*00090000
+      * Date ! Si! Change description                            ! 3A ! 00100000
+      *------+---+-----------------------------------------------+----+ 00110000
+      *090701!NDL! Feilretting, % pct on Main_Charge             !LO18! 00120051
+      *------+---+-----------------------------------------------+----+ 00120151
+      *070400!NDL! Feilretting, Approve-Dispose                  !LM04! 00120251
+      *------+---+-----------------------------------------------+----+ 00121048
+      *080999!HB ! New module                                    !LG10! 00122048
+      *################################################################*00130000
+       Environment Division.                                            00140000
+       Configuration Section.                                           00150000
+       Special-Names.                                                   00160000
+           Decimal-Point Is Comma.                                      00170000
+      *                                                                 00180000
+      *################################################################*00190000
+       Data Division.                                                   00200000
+       Working-Storage Section.                                         00210000
+      *                                                                 00220000
+       01  W-IO-Length                   Pic S9(04)              Comp.  00230000
+      *                                                                 00240000
+       01  W-Fields.                                                    00250000
+      *                                                                 00260000
+         05  W-Ind                       Pic S9(04)              Comp.  00270007
+      *                                                                 00280007
+         05  WS-Charge-Amount            Pic S9(14)V9(03)        Comp-3.00290007
+         05  WS-Charge-Percent           Pic S9(03)V9(03).              00300007
+      *                                                                 00310033
+         05  WS-Operation-Type           Pic  X(20).                    00320034
+           88  WS-Accept-ILC                Value 'ACCEPT-ILC',         00330040
+                                                  'APPROVE-ACCEPT-ILC'. 00340040
+           88  WS-Accept-Coll-ELC           Value 'ACCEPT-COLL',        00350040
+                                                  'ACCEPT-ELC',         00360040
+                                                  'APPROVE-ACCEPT-COLL',00370040
+                                                  'APPROVE-ACCEPT-ELC'. 00380040
+           88  WS-Dispose                   Value 'DISPOSE',            00390037
+                                                  'APPROVE-DISPOSE'.    00400037
+           88  WS-Return                    Value 'RETURN'.             00410035
+           88  WS-Expire                    Value 'EXPIRE-ILC',         00420045
+                                                  'EXPIRE-ELC',         00430057
+                                                  'EXPIRE-GAR'.         00431056
+           88  WS-Settle-Coll               Value 'SETTLE-COLL'.        00440035
+           88  WS-Settle-ILC                Value 'SETTLE-ILC'.         00450035
+           88  WS-Settle-ELC                Value 'SETTLE-ELC'.         00460035
+           88  WS-Settle-Agent              Value 'SETTLE-AGENT'.       00470035
+      *                                                                 00480000
+      *----------------------------------------------------------------*00490000
+      * Internal area:                                                  00500000
+      *                                                                 00510000
+       01  W-Int-IO-Area.                                               00520000
+           Copy R115L080.                                               00530000
+      *                                                                 00540000
+      *----------------------------------------------------------------*00550000
+      * Assorted copy-areas:                                            00560000
+      *                                                                 00570000
+      * DBI TF_Main_Charge.                                             00580005
+       01  Filler.                                                      00590005
+           Copy R115ICH0.                                               00600005
+      *                                                                 00610008
+      * DBI TF_Part_Amount.                                             00620008
+       01  Filler.                                                      00630008
+           Copy R115IPA0.                                               00640008
+      *                                                                 00650005
+      * DBI TF_Part_Charge.                                             00660005
+       01  Filler.                                                      00670005
+           Copy R115IPC0.                                               00680005
+      *                                                                 00690007
+      * LMOD TF Comp/list charges.                                      00700007
+       01  Filler.                                                      00710007
+           Copy R115L070.                                               00720007
+      *                                                                 00730005
+      * Get error message.                                              00740000
+       01  Filler.                                                      00750000
+           Copy R7918030.                                               00760000
+      *                                                                 00770000
+      * External data.                                                  00780000
+       Copy R115X000.                                                   00790000
+       Copy R115L990.                                                   00791046
+      *                                                                 00800000
+      *################################################################.00810000
+       Linkage Section.                                                 00820000
+      *                                                                 00830000
+       01  L-Ext-IO-Area                 Pic  X(11328).                 00840000
+      *                                                                 00850000
+      * Error handling.                                                 00860000
+       Copy R7919999.                                                   00870000
+      *                                                                 00880000
+      *################################################################.00890000
+       Procedure Division                Using L-Ext-IO-Area            00900000
+                                               R7919999-Error-Area.     00910000
+      *                                                                 00920000
+       A000-Main.                                                       00930000
+      *                                                                 00940000
+           Perform B000-Initialize                                      00950000
+      *                                                                 00960000
+           Perform ZI00-Konv-Input-Version                              00970000
+           Perform C000-Interface                                       00980000
+           Perform ZO00-Konv-Output-Version                             00990000
+      *                                                                 01000000
+           Goback                                                       01010000
+           .                                                            01020000
+      *################################################################*01030000
+       B000-Initialize.                                                 01040000
+      *                                                                 01050000
+           Set   R7919999-Return-OK      To    True                     01060000
+           Initialize                          W-Fields                 01070000
+           .                                                            01080000
+      *################################################################.01090000
+       C000-Interface.                                                  01100000
+      *                                                                 01110003
+      * -------------------------------------------------------------- *01120004
+      * Evaluating input table version.                                 01130004
+      *                                                                 01140004
+           Evaluate True                                                01150003
+             When R115L080-In-Work                                      01160009
+               Continue                                                 01170003
+      *                                                                 01180003
+             When other                                                 01190003
+               Initialize                   R7918030-ErrorMessage       01200030
+               Move  'TF-SY-VALID-TAB-WORK'                             01210010
+                                         To R7918030-In-MessageCode     01220003
+               Perform Z000-Error-Message                               01230003
+               Move  'C001'              To R7919999-Paragraph          01240003
+               Perform Z900-Abend                                       01250003
+      *                                                                 01260003
+           End-Evaluate                                                 01270003
+      *                                                                 01280000
+      * -------------------------------------------------------------- *01290004
+      * Checking Part Amount Sequence Number.                           01300008
+      *                                                                 01310008
+           If not R115L080-In-PA-Seq-No  >     +0                       01320008
+               Initialize                   R7918030-ErrorMessage       01330030
+               Move 'TF-SY-FUNK-NVALID-ON-MC-VAR1'                      01340030
+                                         To R7918030-In-MessageCode     01350008
+               Move  'VAR1'              To R7918030-In-Variable-Key(1) 01360008
+               Move  'F115L080'          To R7918030-In-Variable-Data(1)01370008
+               Perform Z000-Error-Message                               01380008
+               Move  'C002'              To R7919999-Paragraph          01390008
+               Perform Z900-Abend                                       01400008
+           End-If                                                       01410008
+      *                                                                 01420008
+      * -------------------------------------------------------------- *01430008
+      * Evaluating input operation type.                                01440004
+      *                                                                 01450036
+           Move  R115L080-In-Operation-Type                             01460036
+                                         To    WS-Operation-Type        01470036
+           Evaluate True                                                01480000
+             When WS-Accept-ILC                                         01490035
+             When WS-Accept-Coll-ELC                                    01500040
+               Perform D000-Process-Charge-List                         01510032
+      *                                                                 01520016
+             When WS-Settle-ILC                                         01530035
+               Perform C200-Read-Part-Amount                            01540008
+               Perform D000-Process-Charge-List                         01550008
+      *                                                                 01560003
+             When WS-Dispose                                            01570036
+             When WS-Return                                             01580035
+             When WS-Expire                                             01590045
+             When WS-Settle-Coll                                        01600035
+             When WS-Settle-ELC                                         01610035
+             When WS-Settle-Agent                                       01620035
+               Perform D000-Process-Charge-List                         01630008
+      *                                                                 01640000
+             When other                                                 01650000
+               Continue                                                 01660014
+      *                                                                 01670000
+           End-Evaluate                                                 01680000
+           .                                                            01690000
+      *################################################################*01700000
+       C100-Initialize-Output.                                          01710000
+      *                                                                 01720000
+           Initialize                          R115L080-Data            01730000
+           .                                                            01740000
+      *################################################################*01750000
+       C200-Read-Part-Amount.                                           01760008
+      *                                                                 01770008
+           Initialize                          R115IPA0-Part-Amount     01780008
+           Set   R115IPA0-Version        To    True                     01790008
+           Set   R115IPA0-In-Get-1st     To    True                     01800019
+           Set   R115IPA0-In-Work        To    True                     01810008
+      *                                                                 01820008
+           Move  R115L080-In-Fin-Inst-ID To    R115IPA0-In-Fin-Inst-ID  01830008
+           Move  R115L080-In-Fin-Inst-No To    R115IPA0-In-Fin-Inst-No  01840008
+      *                                                                 01850008
+           Move  R115L080-In-Contract-Type                              01860008
+                                         To    R115IPA0-In-Contract-Type01870008
+           Move  R115L080-In-Contract-No To    R115IPA0-In-Contract-No  01880049
+      *                                                                 01890021
+           Move  '*'                     To    R115IPA0-In-CA-Currency  01900021
+           Move  R115L080-In-PA-Seq-No   To    R115IPA0-In-PA-Seq-No    01910008
+      *                                                                 01920008
+           Call  'F115IPA0'              Using R115IPA0-Part-Amount     01930008
+                                               R7919999-Error-Area      01940008
+           End-Call                                                     01950008
+      *                                                                 01960008
+           Evaluate True                                                01970008
+             When R7919999-Return-Abend                                 01980008
+               Move  'C201'              To    R7919999-Paragraph       01990008
+               Perform Z900-Abend                                       02000008
+      *                                                                 02010008
+             When R7919999-Return-Error                                 02020008
+               Move  'C202'              To    R7919999-Paragraph       02030008
+               Perform Z900-Abend                                       02040008
+      *                                                                 02050008
+             When R7919999-Return-OK                                    02060008
+               Continue                                                 02070008
+      *                                                                 02080008
+           End-Evaluate                                                 02090008
+           .                                                            02100008
+      *################################################################*02110008
+       D000-Process-Charge-List.                                        02120008
+      *                                                                 02130007
+           Perform D100-List-Charge-Sums                                02140008
+      *                                                                 02150008
+           Perform D200-Process-Charge-List                             02160008
+      *                                                                 02170008
+           Perform until                                                02180008
+           not   R115L070-Read-To         <     R115L070-No-Read        02190008
+                                                                        02200008
+             Compute                            R115L070-In-Read-From   02210008
+                 =                              R115L070-Read-From      02220008
+                 +                              1                       02230008
+             End-Compute                                                02240008
+      *                                                                 02250008
+             Perform D130-Call-LMOD-Comp-Charge                         02260008
+             Perform D200-Process-Charge-List                           02270008
+      *                                                                 02280008
+           End-Perform                                                  02290008
+           .                                                            02300008
+      *################################################################*02310008
+       D100-List-Charge-Sums.                                           02320008
+      *                                                                 02330008
+      * Listing charges based on both Main_ and Part_Charge values.     02340031
+      *                                                                 02350031
+           Initialize                          R115L070-Comp-Charge     02360008
+           Set   R115L070-Version        To    True                     02370008
+           Set   R115L070-In-Work        To    True                     02380008
+           Set   R115L070-In-Add         To    True                     02390008
+      *                                                                 02400008
+           Move  R115L080-In-Fin-Inst-ID To    R115L070-In-Fin-Inst-ID  02410008
+           Move  R115L080-In-Fin-Inst-No To    R115L070-In-Fin-Inst-No  02420008
+           Move  R115L080-In-Reg-No      To    R115L070-In-Reg-No       02421055
+      *                                                                 02430008
+           Move  R115L080-In-Contract-Type                              02440008
+                                         To    R115L070-In-Contract-Type02450008
+           Move  R115L080-In-Contract-No To    R115L070-In-Contract-No  02460008
+      *                                                                 02470008
+           Move  R115L080-In-PA-Seq-No   To    R115L070-In-PA-Seq-No    02480008
+      *                                                                 02490008
+      * Special treatment:                                              02500022
+      * For operation type 'Approve-Accept-*', we need to list the      02510022
+      * valid charge type for 'Accept-*'.                               02520022
+   ndl* Feilretting april 2000                                          02521048
+      * For operation type 'Approve-Dispose', we need to list the       02521148
+      * valid charge type for 'Dispose'.                                02522048
+      *                                                                 02530022
+           If  R115L080-In-Operation-Type(1:15)                         02540042
+                                         =     'APPROVE-ACCEPT-'        02550042
+             Move  R115L080-In-Operation-Type(9:11)                     02560022
+                                         To   R115L070-In-Operation-Type02570008
+           Else                                                         02580022
+              If  R115L080-In-Operation-Type(1:15)                      02581047
+                                         =     'APPROVE-DISPOSE'        02582047
+                  Move  R115L080-In-Operation-Type(9:7)                 02583047
+                                         To   R115L070-In-Operation-Type02584047
+              Else                                                      02585047
+                  Move  R115L080-In-Operation-Type                      02590047
+                                         To   R115L070-In-Operation-Type02600022
+              End-If                                                    02610047
+           End-If                                                       02611047
+      *                                                                 02620008
+           Perform D130-Call-LMOD-Comp-Charge                           02630008
+           .                                                            02640008
+      *################################################################*02650008
+       D130-Call-LMOD-Comp-Charge.                                      02660008
+      *                                                                 02670008
+           Call  'F115L070'              Using R115L070-Comp-Charge     02680008
+                                               R7919999-Error-Area      02690008
+           End-Call                                                     02700008
+      *                                                                 02710008
+           Evaluate True                                                02720008
+             When R7919999-Return-Abend                                 02730008
+               Move  'D131'              To    R7919999-Paragraph       02740008
+               Perform Z900-Abend                                       02750008
+      *                                                                 02760008
+             When R7919999-Return-Error                                 02770008
+               Move  'D132'              To    R7919999-Paragraph       02780008
+               Perform Z700-Error-AE                                    02790008
+      *                                                                 02800008
+             When R7919999-Return-OK                                    02810008
+               Continue                                                 02820008
+      *                                                                 02830008
+           End-Evaluate                                                 02840008
+           .                                                            02850008
+      *################################################################*02860008
+       D200-Process-Charge-List.                                        02870008
+      *                                                                 02880008
+           Perform varying W-Ind                                        02890006
+           from  +1  by  +1                                             02900006
+           until W-Ind                   >     R115L070-No-Tab-Occ      02910006
+      *                                                                 02920006
+             Evaluate True                                              02930008
+               When WS-Accept-ILC                                       02940035
+                 Perform E000-Update-Tables                             02950040
+      *                                                                 02960040
+               When WS-Accept-Coll-ELC                                  02970040
+                 Perform E500-Update-Tables                             02980040
+      *                                                                 02990016
+               When WS-Settle-ILC                                       03000035
+                 Perform F000-Update-Tables                             03010008
+      *                                                                 03020008
+               When WS-Dispose                                          03030036
+               When WS-Return                                           03040036
+               When WS-Expire                                           03050045
+               When WS-Settle-Coll                                      03060035
+               When WS-Settle-ELC                                       03070035
+               When WS-Settle-Agent                                     03080035
+                 Perform G000-Update-Tables                             03090008
+      *                                                                 03100008
+             End-Evaluate                                               03110008
+      *                                                                 03120007
+           End-Perform                                                  03130007
+           .                                                            03140006
+      *################################################################*03150005
+       E000-Update-Tables.                                              03160007
+      *                                                                 03170007
+      * Operation Type = 'ACCEPT-ILC', 'APPROVE-ACCEPT-ILC'.            03180040
+      *                                                                 03190008
+           Evaluate True                                                03200008
+             When R115L070-Charge-ROle-Type(W-Ind)                      03210042
+                                         =     'CUSTM'                  03220040
+             and  R115L070-Credit-Own-Bank(W-Ind)                       03230042
+               Perform H000-Move-Charge                                 03240008
+      *                                                                 03250008
+             When other                                                 03260008
+               Continue                                                 03270008
+      *                                                                 03280008
+           End-Evaluate                                                 03290008
+           .                                                            03300007
+      *################################################################*03310016
+       E500-Update-Tables.                                              03320016
+      *                                                                 03330016
+      * Operation Type = 'ACCEPT-COLL', 'ACCEPT-ELC',                   03340040
+      * 'APPROVE-ACCEPT-COLL', 'APPROVE-ACCEPT-ELC'.                    03350040
+      *                                                                 03360016
+           Evaluate True                                                03370016
+             When R115L070-MethCalc-Part-Amount(W-Ind)                  03380016
+             When R115L070-MethCalc-Pct-Of-PA(W-Ind)                    03390016
+               Perform H000-Move-Charge                                 03400016
+      *                                                                 03410016
+             When other                                                 03420016
+                Continue                                                03430040
+      *                                                                 03440016
+           End-Evaluate                                                 03450016
+           .                                                            03460016
+      *################################################################*03470008
+       F000-Update-Tables.                                              03480008
+      *                                                                 03490008
+      * Operation Type = 'SETTLE-ILC'.                                  03500008
+      *                                                                 03510008
+           Evaluate True                                                03520043
+             When R115L070-Charge-ROle-Type(W-Ind)                      03530043
+                                         =     'CUSTM'                  03540043
+             and  R115L070-Credit-Own-Bank(W-Ind)                       03550043
+      * These charges would normally have been moved at                 03560044
+      * 'ACCEPT-ILC' or 'APPROVE-ACCEPT-ILC',                           03570044
+      * but in case of an amendment having occured in the               03580044
+      * mean time, the process is repeated.                             03590044
+               Perform H000-Move-Charge                                 03600044
+      *                                                                 03610043
+             When other                                                 03620043
+               Perform H000-Move-Charge                                 03630043
+      *                                                                 03640043
+           End-Evaluate                                                 03650043
+           .                                                            03660008
+      *################################################################*03670027
+       G000-Update-Tables.                                              03680008
+      *                                                                 03690008
+      * Operation Type = 'RETURN', 'EXPIRE-*'                           03700045
+      * 'SETTLE-COLL', 'SETTLE-ELC',                                    03710045
+      * 'SETTLE-AGENT'.                                                 03720027
+      *                                                                 03730027
+           Perform H000-Move-Charge                                     03740008
+           .                                                            03750008
+      *################################################################*03760008
+       H000-Move-Charge.                                                03770008
+      *                                                                 03780008
+           If R115L070-Charge-Amount(W-Ind)                             03790008
+                                         >     Zero                     03800012
+           or R115L070-Charge-Percentage(W-Ind)                         03810012
+                                         >     Zero                     03820008
+      *                                                                 03830008
+             Move R115L070-Charge-Amount(W-Ind)                         03840008
+                                         To    WS-Charge-Amount         03850008
+             Move R115L070-Charge-Percentage(W-Ind)                     03851050
+                                         To    WS-Charge-Percent        03852050
+      *      Move Zero                   To    WS-Charge-Percent        03860050
+      *                                                                 03870008
+             Perform H100-Update-Part-Charge                            03880008
+   ndl* Feilretting 09.07.01                                            03880151
+   ndl* Flytter ikke omk av type pct-of-pa, unntatt ved accept ILC      03880251
+   ndl* Feilretting 29.08.01                                            03880353
+   ndl* Må flytte dem allikevel                                         03880453
+      *      If   R115L070-MethCalc-Pct-Of-PA(W-Ind)                    03881054
+      *      And  NOT WS-Accept-ILC                                     03882054
+      *      And  WS-Charge-Percent > 0                                 03882154
+      *           Continue                                              03883054
+      *      Else                                                       03884054
+                  Perform H200-Update-Main-Charge                       03890051
+      *      End-If                                                     03891054
+      *                                                                 03900008
+           End-If                                                       03910008
+           .                                                            03920008
+      *################################################################*03930008
+       H100-Update-Part-Charge.                                         03940008
+      *                                                                 03950007
+           Initialize                          R115IPC0-Part-Charge     03960007
+           Set   R115IPC0-Version        To    True                     03970007
+           Set   R115IPC0-In-Work        To    True                     03980007
+      *                                                                 03990007
+           Perform H110-Read-TF-PC                                      04000008
+      *                                                                 04010012
+           If R7919999-Return-OK                                        04020012
+             Perform H120-Update-TF-PC                                  04030012
+      *                                                                 04040012
+           Else                                                         04050012
+             Initialize                        R7919999-Error           04060012
+             Perform H130-Create-TF-PC                                  04070012
+      *                                                                 04080007
+           End-If                                                       04090012
+           .                                                            04100007
+      *################################################################.04110007
+       H110-Read-TF-PC.                                                 04120008
+      *                                                                 04130007
+           Set   R115IPC0-In-Select      To    True                     04140007
+      *                                                                 04150007
+           Move  R115L080-In-Fin-Inst-ID To    R115IPC0-In-Fin-Inst-ID  04160007
+           Move  R115L080-In-Fin-Inst-No To    R115IPC0-In-Fin-Inst-No  04170007
+      *                                                                 04180007
+           Move  R115L080-In-Contract-Type                              04190007
+                                         To    R115IPC0-In-Contract-Type04200007
+           Move  R115L080-In-Contract-No To    R115IPC0-In-Contract-No  04210007
+      *                                                                 04220007
+           Move  R115L070-CA-Currency    To    R115IPC0-In-CA-Currency  04230007
+           Move  R115L080-In-PA-Seq-No   To    R115IPC0-In-PA-Seq-No    04240007
+      *                                                                 04250007
+           Move  R115L070-Charge-Role-Type(W-Ind)                       04260007
+                                         To    R115IPC0-In-Role-Type    04270007
+      *                                                                 04280007
+           Move  R115L070-Charge-Type(W-Ind)                            04290007
+                                         To    R115IPC0-In-CT-Type      04300007
+      *                                                                 04310007
+           Perform H150-Call-DBI-TF-PC                                  04320012
+           .                                                            04330007
+      *################################################################.04340007
+       H120-Update-TF-PC.                                               04350008
+      *                                                                 04360007
+           Set   R115IPC0-In-Update      To    True                     04370007
+      *                                                                 04380007
+           Move  WS-Charge-Amount        To    R115IPC0-Amount          04390007
+           Move  WS-Charge-Percent       To    R115IPC0-Charge-Pct      04400007
+      *                                                                 04410007
+           Perform H150-Call-DBI-TF-PC                                  04420012
+           .                                                            04430007
+      *################################################################.04440007
+       H130-Create-TF-PC.                                               04450012
+      *                                                                 04460012
+           Initialize                          R115IPC0-Part-Charge     04470012
+           Set   R115IPC0-Version        To    True                     04480012
+           Set   R115IPC0-In-Insert      To    True                     04490013
+           Set   R115IPC0-In-Work        To    True                     04500012
+      *                                                                 04510012
+           Move  R115L080-In-Fin-Inst-ID To    R115IPC0-Fin-Inst-ID     04520012
+           Move  R115L080-In-Fin-Inst-No To    R115IPC0-Fin-Inst-No     04530012
+      *                                                                 04540012
+           Move  R115L080-In-Contract-Type                              04550012
+                                         To    R115IPC0-Contract-Type   04560012
+           Move  R115L080-In-Contract-No To    R115IPC0-Contract-No     04570012
+      *                                                                 04580012
+           Move  R115L070-CA-Currency    To    R115IPC0-CA-Currency     04590012
+           Move  R115L080-In-PA-Seq-No   To    R115IPC0-PA-Seq-No       04600012
+      *                                                                 04610012
+           Move  R115L070-Charge-Role-Type(W-Ind)                       04620012
+                                         To    R115IPC0-Role-Type       04630012
+      *                                                                 04640012
+           Move  R115L070-Charge-Type(W-Ind)                            04650012
+                                         To    R115IPC0-CT-Type         04660012
+      *                                                                 04670012
+           Move  R115L070-CA-Currency    To    R115IPC0-Currency        04680012
+           Move  WS-Charge-Amount        To    R115IPC0-Amount          04690012
+           Move  R115L070-Charge-Role-Type(W-Ind)                       04700012
+                                         To    R115IPC0-Role-Paying-Pty 04710012
+           Move  WS-Charge-Percent       To    R115IPC0-Charge-Pct      04720012
+      *                                                                 04730012
+           Perform H150-Call-DBI-TF-PC                                  04740012
+           .                                                            04750012
+      *################################################################.04760012
+       H150-Call-DBI-TF-PC.                                             04770012
+      *                                                                 04780007
+           Call  'F115IPC0'              Using R115IPC0-Part-Charge     04790007
+                                               R7919999-Error-Area      04800007
+           End-Call                                                     04810007
+      *                                                                 04820007
+           Evaluate True                                                04830007
+             When R7919999-Return-Abend                                 04840007
+               Move  'H151'              To    R7919999-Paragraph       04850012
+               Perform Z900-Abend                                       04860007
+      *                                                                 04870007
+             When R7919999-Return-Error                                 04880007
+               Continue                                                 04890012
+      *                                                                 04900007
+             When R7919999-Return-OK                                    04910007
+               Continue                                                 04920007
+      *                                                                 04930007
+           End-Evaluate                                                 04940007
+           .                                                            04950007
+      *################################################################*04960005
+       H200-Update-Main-Charge.                                         04970008
+      *                                                                 04980007
+           Perform H210-Read-1st-TF-CH                                  04990012
+      *                                                                 05000012
+           Perform until R7919999-Return-Error                          05010012
+             Perform H230-Delete-TF-CH                                  05020023
+             Perform H220-Read-Next-TF-CH                               05030012
+           End-Perform                                                  05040012
+      *                                                                 05050012
+           Initialize                          R7919999-Error           05060012
+           .                                                            05070007
+      *################################################################*05080007
+       H210-Read-1st-TF-CH.                                             05090012
+      *                                                                 05100026
+           Initialize                          R115ICH0-Main-Charge     05110026
+           Set   R115ICH0-Version        To    True                     05120026
+           Set   R115ICH0-In-Work        To    True                     05130026
+           Set   R115ICH0-In-Get-1st     To    True                     05140026
+      *                                                                 05150007
+           Move  R115L080-In-Fin-Inst-No To    R115ICH0-In-Fin-Inst-No  05160007
+           Move  R115L080-In-Contract-Type                              05170007
+                                         To    R115ICH0-In-Contract-Type05180007
+           Move  R115L080-In-Contract-No To    R115ICH0-In-Contract-No  05190049
+           Move  R115L070-Charge-Type(W-Ind)                            05200007
+                                         To    R115ICH0-In-Charge-Type  05210007
+      *                                                                 05220007
+           Perform H250-Call-DBI-TF-CH                                  05230012
+           .                                                            05240007
+      *################################################################*05250007
+       H220-Read-Next-TF-CH.                                            05260012
+      *                                                                 05270012
+           Initialize                          R115ICH0-Main-Charge     05280026
+           Set   R115ICH0-Version        To    True                     05290026
+           Set   R115ICH0-In-Work        To    True                     05300026
+           Set   R115ICH0-In-Get-Next    To    True                     05310012
+      *                                                                 05320026
+           Move  R115L080-In-Fin-Inst-No To    R115ICH0-In-Fin-Inst-No  05330026
+           Move  R115L080-In-Contract-Type                              05340026
+                                         To    R115ICH0-In-Contract-Type05350026
+           Move  R115L080-In-Contract-No To    R115ICH0-In-Contract-No  05360049
+           Move  R115L070-Charge-Type(W-Ind)                            05370026
+                                         To    R115ICH0-In-Charge-Type  05380026
+      *                                                                 05390026
+           Perform H250-Call-DBI-TF-CH                                  05400012
+           .                                                            05410012
+      *################################################################*05420012
+       H230-Delete-TF-CH.                                               05430023
+      *                                                                 05440026
+           Set   R115ICH0-In-Work        To    True                     05450026
+           Set   R115ICH0-In-Delete      To    True                     05460026
+      *                                                                 05470007
+           Move  R115L080-In-Contract-No To    R115ICH0-In-Contract-No  05490026
+      *                                                                 05500025
+           Move  R115ICH0-CA-Currency    To    R115ICH0-In-CA-Currency  05510025
+           Move  R115ICH0-PA-Seq-No      To    R115ICH0-In-PA-Seq-No    05520025
+           Move  R115ICH0-RP-Role-Type   To    R115ICH0-In-RP-Role-Type 05530025
+           Move  R115ICH0-Charge-Type    To    R115ICH0-In-Charge-Type  05540025
+           Move  R115ICH0-CH-Seq-No      To    R115ICH0-In-CH-Seq-No    05550025
+      *                                                                 05560007
+           Perform H250-Call-DBI-TF-CH                                  05570012
+           .                                                            05580007
+      *################################################################*05590007
+       H250-Call-DBI-TF-CH.                                             05600012
+      *                                                                 05610007
+           Call  'F115ICH0'              Using R115ICH0-Main-Charge     05620007
+                                               R7919999-Error-Area      05630007
+           End-Call                                                     05640007
+      *                                                                 05650007
+           Evaluate True                                                05660007
+             When R7919999-Return-Abend                                 05670007
+               Move  'H231'              To    R7919999-Paragraph       05680008
+               Perform Z900-Abend                                       05690007
+      *                                                                 05700007
+             When R7919999-Return-Error                                 05710007
+               Continue                                                 05720012
+      *                                                                 05730007
+             When R7919999-Return-OK                                    05740007
+               Continue                                                 05750007
+      *                                                                 05760007
+           End-Evaluate                                                 05770007
+           .                                                            05780007
+      *################################################################*05790007
+       ZI00-Konv-Input-Version.                                         05800000
+      *                                                                 05810000
+      * Version control.                                                05820000
+      * If conversion is needed, we call the conversion module.         05830000
+      *                                                                 05840000
+           Set   R115L080-Version        To    True                     05850000
+           Move  Length                  Of    R115L080-Comp-Charge     05860000
+                                         To    W-IO-Length              05870000
+      *                                                                 05880000
+           Evaluate True                                                05890000
+             When L-Ext-IO-Area (1:8)    =     R115L080-Version-No      05900000
+             and  Length                 Of    L-Ext-IO-Area            05910000
+                                         Not < W-IO-Length              05920000
+               Move  L-Ext-IO-Area (1:W-IO-Length)                      05930000
+                                         To    W-Int-IO-Area            05940000
+      *                                                                 05950000
+             When Other                                                 05960000
+               Call  'F115L999'                                         05970000
+                   Using By Content      'F115L080 '                    05980000
+                                         'INPUT '                       05990000
+                         By Reference    L-Ext-IO-Area                  06000000
+                                         W-Int-IO-Area                  06010000
+                                         R7919999-Error-Area            06020000
+               End-Call                                                 06030000
+      *                                                                 06040000
+               If  R7919999-Return-Abend                                06050000
+                   Move  'ZI01'          To    R7919999-Paragraph       06060000
+                   Perform Z900-Abend                                   06070000
+               End-If                                                   06080000
+      *                                                                 06090000
+           End-Evaluate                                                 06100000
+           .                                                            06110000
+      *################################################################*06120000
+       ZO00-Konv-Output-Version.                                        06130000
+      *                                                                 06140000
+      * Version control.                                                06150000
+      * If conversion is needed, we call the conversion module.         06160000
+      *                                                                 06170000
+           Evaluate True                                                06180000
+             When L-Ext-IO-Area (1:8)    =     R115L080-Version-No      06190000
+             and  Length                 Of    L-Ext-IO-Area            06200000
+                                         Not < W-IO-Length              06210000
+               Move  W-Int-IO-Area       To    L-Ext-IO-Area            06220000
+                                                         (1:W-IO-Length)06230000
+      *                                                                 06240000
+             When Other                                                 06250000
+               Call  'F115L999'                                         06260000
+                   Using By Content      'F115L080 '                    06270000
+                                         'OUTPUT '                      06280000
+                         By Reference    L-Ext-IO-Area                  06290000
+                                         W-Int-IO-Area                  06300000
+                                         R7919999-Error-Area            06310000
+               End-Call                                                 06320000
+      *                                                                 06330000
+               If  R7919999-Return-Abend                                06340000
+                   Move  'ZO01'          To    R7919999-Paragraph       06350000
+                   Perform Z900-Abend                                   06360000
+               End-If                                                   06370000
+      *                                                                 06380000
+           End-Evaluate                                                 06390000
+           .                                                            06400000
+      *################################################################*06410000
+       Z000-Error-Message.                                              06420000
+      *                                                                 06430000
+           Set   R7918030-Version        To    True                     06440000
+      *                                                                 06450000
+           Move  'TF'                    To    R7918030-In-System-ID    06460000
+           Move  R115X000-Fin-Inst-No    To    R7918030-In-Fin-Inst-No  06470000
+           Move  R115X000-FI-Language-639-1                             06480000
+                                         To    R7918030-In-Language     06490000
+      *                                                                 06500000
+           If  R115X000-Trace-On                                        06510000
+               Set  R7918030-In-Log-Yes  To    True                     06520000
+           End-If                                                       06530000
+      *                                                                 06540000
+           Call  'F7918030'              Using R7918030-ErrorMessage    06550000
+           End-Call                                                     06560000
+      *                                                                 06570000
+           Move  R7918030-Out-MessageText                               06580000
+                                         To    R7919999-Message         06590000
+           .                                                            06600000
+      *################################################################*06610000
+       Z700-Error-AE.                                                   06620000
+      *                                                                 06630000
+           If  R7919999-Return-Code      Not   Numeric                  06640000
+           or  Not R7919999-Return-Abend                                06650000
+               Move  +0                  To    R7919999-Module-Ind      06660000
+           End-If                                                       06670000
+      *                                                                 06680000
+           Add   +1                      To    R7919999-Module-Ind      06690000
+      *                                                                 06700000
+           If  R7919999-Module-Ind       Not >                          06710000
+                             ( Length    Of    R7919999-Module-Tab      06720000
+                             / Length    Of    R7919999-Module-Element )06730000
+               Move  'F115L080'          To    R7919999-Module-Name     06740000
+                                                   (R7919999-Module-Ind)06750000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     06760000
+                                                   (R7919999-Module-Ind)06770000
+           End-If                                                       06780000
+      *                                                                 06790000
+           Set   R7919999-Return-Error   To    True                     06800000
+      *                                                                 06810000
+           Goback                                                       06820000
+           .                                                            06830000
+      *################################################################*06840000
+       Z900-Abend.                                                      06850000
+      *                                                                 06860000
+           If  R7919999-Return-Code      Not   Numeric                  06870000
+           or  Not R7919999-Return-Abend                                06880000
+               Move  +0                  To    R7919999-Module-Ind      06890000
+           End-If                                                       06900000
+      *                                                                 06910000
+           Add   +1                      To    R7919999-Module-Ind      06920000
+      *                                                                 06930000
+           If  R7919999-Module-Ind       Not >                          06940000
+                             ( Length    Of    R7919999-Module-Tab      06950000
+                             / Length    Of    R7919999-Module-Element )06960000
+               Move  'F115L080'          To    R7919999-Module-Name     06970000
+                                                   (R7919999-Module-Ind)06980000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     06990000
+                                                   (R7919999-Module-Ind)07000000
+           End-If                                                       07010000
+      *                                                                 07020000
+           Set   R7919999-Return-Abend   To    TRUE                     07030000
+      *                                                                 07040000
+           Goback                                                       07050000
+           .                                                            07060000

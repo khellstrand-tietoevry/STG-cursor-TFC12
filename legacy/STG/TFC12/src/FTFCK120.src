@@ -1,0 +1,1099 @@
+      *<META FTFCK120>                                                  00010001
+       Identification Division.                                         00020001
+       Program-Id. FTFCK120.                                            00030001
+       Author. Z1132HB.                                                 00040001
+      *################################################################*00050001
+      * Servo - logic-level / K-module - Control module.               *00060001
+      * uses STG, in accordance with new Servo Standards.              *00070001
+      *                                                                *00080001
+      * TFC12 / 01 - Opplegg omkostninger                              *00090001
+      *                                                                *00100001
+      * Kode between <META> and </META> tags must not be modified. Do  *00110001
+      * your modifications in the specified user sections !            *00120001
+      *                                                                *00130001
+      *################################################################*00140001
+      * Date ! Si! Type of change                                ! 3A !*00150001
+      *------+---+-----------------------------------------------+----+*00160001
+      *020530!NDL!Paying PTY must be CUSTM when ACCEPT-ILC       !LO18!*00170010
+      *990315!&&&!New Module                                     !&&&&!*00171010
+      *################################################################*00180001
+       Environment Division.                                            00190001
+       Configuration Section.                                           00200001
+       Special-Names.                                                   00210001
+           Decimal-Point Is Comma.                                      00220001
+      *################################################################*00230001
+       Data Division.                                                   00240001
+       Working-Storage Section.                                         00250001
+      *                                                                 00260001
+       01  W-Work-Fields.                                               00270001
+      *                                                                 00280001
+      *<META WA-START>                                                  00290001
+           05  Filler                     Pic   X(08) Value 'WA-START'. 00300001
+      *</META>                                                          00310001
+      *                                                                 00320001
+           05  W-Ind                      Pic  S9(04).                  00330001
+      *                                                                 00340001
+           05  W-Paying-Party.                                          00350001
+               10 W-Paying-Party-Is-Buyer  Pic S9(02) Comp.             00360001
+               10 W-Paying-Party-Is-Seller Pic S9(02) Comp.             00370001
+               10  W-Paying-Party-Is-Other Pic S9(02) Comp.             00380001
+      *                                                                 00390001
+      *                                                                 00400001
+      *                                                                 00410001
+      *<META WA-STOP>                                                   00420001
+           05  Filler                     Pic   X(08) Value 'WA-STOP '. 00430001
+      *</META>                                                          00440001
+      *                                                                 00450001
+      *----------------------------------------------------------------*00460001
+      *                                                                 00470001
+      * Misc. copy books :                                              00480001
+      *                                                                 00490001
+      *<META MISC-COPY1>                                                00500001
+           Copy R7919040.                                               00510001
+      *</META>                                                          00520001
+      *01  Filler.                                                      00530001
+      *                                                                 00540001
+      *                                                                 00550001
+      *<META MISC-COPY2>                                                00560001
+      *</META>                                                          00570001
+      *                                                                 00580001
+       01  Filler.                                                      00590001
+      *                                                                 00600001
+      * DBI TF_Sys_Code.                                                00610001
+           Copy R115ISC0.                                               00620001
+      *                                                                 00630001
+      * LMOD Initial Checks.                                            00640001
+           Copy R115L050.                                               00650001
+      *                                                                 00660001
+      *################################################################*00670001
+       Linkage Section.                                                 00680001
+      *                                                                 00690001
+      * Fixed header from STG                                           00700001
+      *                                                                 00710001
+       01  L-STG-Header.                                                00720001
+           Copy R400CH02.                                               00730001
+      *                                                                 00740001
+      * Function data                                                   00750001
+      *                                                                 00760001
+       01  L-Data.                                                      00770001
+           Copy RTFCE120.                                               00780001
+      *                                                                 00790001
+      * Standard error area                                             00800001
+      *                                                                 00810001
+       Copy  R7919999.                                                  00820001
+      *                                                                 00830001
+      *################################################################*00840001
+       Procedure Division                Using L-Stg-Header             00850001
+                                               L-Data                   00860001
+                                               R7919999-Error.          00870001
+      *                                                                 00880001
+      *<META A000-MAIN>                                                 00890001
+       A000-Main                         Section.                       00900001
+      *                                                                 00910001
+           Perform B000-Initialize                                      00920001
+      *                                                                 00930001
+           Perform C000-Input-Control                                   00940001
+           Perform D000-Prepare-DB-Read                                 00950001
+           Perform E000-Control-Base                                    00960001
+           .                                                            00970001
+      *                                                                 00980001
+       A000-Main-Ex.                                                    00990001
+           Goback.                                                      01000001
+      *</META>                                                          01010001
+                                                                        01020001
+      *################################################################*01030001
+      * Initialize necessary work fields                               *01040001
+      *                                                                *01050001
+      *----------------------------------------------------------------*01060001
+       B000-Initialize                   Section.                       01070001
+      *                                                                 01080001
+      *<META B000-INITIAIZE>                                            01090001
+           Set  R7919999-Retur-Ok        To    True                     01100001
+           Initialize                          W-Work-Fields            01110001
+      *</META>                                                          01120001
+      *                                                                 01130001
+      *    User initialisaztion should be placed here                   01140001
+      *                                                                 01150001
+           .                                                            01160001
+      *                                                                 01170001
+      *<META B000-INITIALIZE-EX>                                        01180001
+       B000-Initialize-Ex.                                              01190001
+           Exit.                                                        01200001
+      *</META>                                                          01210001
+                                                                        01220001
+      *################################################################*01230001
+      * Perform the required input controls                            *01240001
+      *                                                                *01250001
+      *----------------------------------------------------------------*01260001
+      *<META C000-INPUT-CONTROL>                                        01270001
+       C000-Input-Control                Section.                       01280001
+      *                                                                 01290001
+           Perform C110-Mandatory-Fields-UB                             01300001
+           Perform C100-Mandatory-Fields                                01310001
+           Perform C120-Mandatory-Fields-UA                             01320001
+           Perform C210-Out-Fields-UB                                   01330001
+           Perform C200-Out-Fields                                      01340001
+           Perform C220-Out-Fields-UA                                   01350001
+           Perform C310-Permitted-Values-UB                             01360001
+           Perform C300-Permitted-Values                                01370001
+           Perform C320-Permitted-Values-UA                             01380001
+           Perform C410-Default-Values-UB                               01390001
+           Perform C400-Default-Values                                  01400001
+           Perform C420-Default-Values-UA                               01410001
+           Perform C510-Dependencies-UB                                 01420001
+           Perform C500-Dependencies                                    01430001
+           Perform C520-Dependencies-UA                                 01440001
+           .                                                            01450001
+      *                                                                 01460001
+       C000-Input-Control-Ex.                                           01470001
+           Exit.                                                        01480001
+      *</META>                                                          01490001
+                                                                        01500001
+      *################################################################*01510001
+      * We have to make sure we have all required input fields         *01520001
+      *                                                                *01530001
+      *----------------------------------------------------------------*01540001
+       C100-Mandatory-Fields             Section.                       01550001
+      *                                                                 01560001
+      *  This code is maintained by the codegenerator. Any user changes 01570001
+      *  between the META tags will be lost. Any user code should be    01580001
+      *  placed in the C110.... or C120..... sections                   01590001
+      *                                                                 01600001
+      *<META C100-MANDATORY-FIELDS>                                     01610001
+      *
+      *     Fin-Inst-No must be present
+      *
+           If  RTFCE120-I-Fin-Inst-No-I  Not = 'U'
+               Move  'F'                 To    RTFCE120-I-Fin-Inst-No-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Fin-Inst-No'       To    R400CH01-Message-Data(1)
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-If
+      *
+      *     Kontrakt-Type must be present
+      *
+           If  RTFCE120-I-Contract-Type-I
+                                         Not = 'U'
+               Move  'F'                 To
+                                         RTFCE120-I-Contract-Type-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Kontrakt-Type'     To    R400CH01-Message-Data(1)
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-If
+      *
+      *     Kontrakt-Nr must be present
+      *
+           If  RTFCE120-I-Contract-No-I  Not = 'U'
+               Move  'F'                 To    RTFCE120-I-Contract-No-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Kontrakt-Nr'       To    R400CH01-Message-Data(1)
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-If
+      *
+      *     Sist-Lagret-Dato must be present
+      *
+           If  RTFCE120-B-Last-Saved-Date-I
+                                         Not = 'U'
+               Move  'F'                 To
+                                         RTFCE120-B-Last-Saved-Date-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Sist-Lagret-Dato'  To    R400CH01-Message-Data(1)
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-If
+      *
+      *     Operasjons-Type must be present
+      *
+           If  RTFCE120-I-Operation-Type-I
+                                         Not = 'U'
+               Move  'F'                 To
+                                         RTFCE120-I-Operation-Type-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Operasjons-Type'   To    R400CH01-Message-Data(1)
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-If
+      *</META>                                                          02180001
+           .                                                            02190001
+      *                                                                 02200001
+      *<META C100-MANDATORY-FIELDS-EX>                                  02210001
+       C100-Mandatory-Fields-Ex.                                        02220001
+           Exit.                                                        02230001
+      *</META>                                                          02240001
+                                                                        02250001
+      *################################################################*02260001
+      * We have to make shure we have all required input fields        *02270001
+      * (User Code to execute before generated code)                   *02280001
+      *----------------------------------------------------------------*02290001
+      *<META C110-MANDATORY-FIELDS-UB>                                  02300001
+       C110-Mandatory-Fields-UB          Section.                       02310001
+      *                                                                 02320001
+      *</META>                                                          02330001
+      *                                                                 02340001
+           Continue                                                     02350001
+      *                                                                 02360001
+           .                                                            02370001
+      *                                                                 02380001
+      *<META C110-MANDATORY-FIELDS-UB-EX>                               02390001
+       C110-Mandatory-Fields-UB-Ex.                                     02400001
+           Exit.                                                        02410001
+      *</META>                                                          02420001
+                                                                        02430001
+      *################################################################*02440001
+      * We have to make shure we have all required input fields        *02450001
+      * (User Code to execute after generated code)                    *02460001
+      *----------------------------------------------------------------*02470001
+      *<META C120-MANDATORY-FIELDS-UA>                                  02480001
+       C120-Mandatory-Fields-UA          Section.                       02490001
+      *                                                                 02500001
+      *</META>                                                          02510001
+      *                                                                 02520001
+           Continue                                                     02530001
+      *                                                                 02540001
+           .                                                            02550001
+      *                                                                 02560001
+      *<META C120-MANDATORY-FIELDS-UA-EX>                               02570001
+       C120-Mandatory-Fields-UA-Ex.                                     02580001
+           Exit.                                                        02590001
+      *</META>                                                          02600001
+                                                                        02610001
+      *################################################################*02620001
+      * Output fields can not be part of the input data                *02630001
+      *                                                                *02640001
+      *----------------------------------------------------------------*02650001
+       C200-Out-Fields                   Section.                       02660001
+      *                                                                 02670001
+      *  This code is maintained by the codegenerator. Any user changes 02680001
+      *  between the META tags will be lost. Any user code should be    02690001
+      *  placed in the C210... or C220.... sections.                    02700001
+      *                                                                 02710001
+      *<META C200-OUT-FIELDS>                                           02720001
+      *</META>                                                          02730001
+           Continue                                                     02740001
+           .                                                            02750001
+      *                                                                 02760001
+      *<META C200-OUT-FIELDS-EX>                                        02770001
+       C200-Out-Fields-Ex.                                              02780001
+           Exit.                                                        02790001
+      *</META>                                                          02800001
+                                                                        02810001
+      *################################################################*02820001
+      * Output fields can not be part of the input data                *02830001
+      * (User Code to execute before generated code)                   *02840001
+      *----------------------------------------------------------------*02850001
+      *<META C210-OUT-FIELDS-UB>                                        02860001
+       C210-Out-Fields-UB                Section.                       02870001
+      *                                                                 02880001
+      *</META>                                                          02890001
+           Continue                                                     02900001
+           .                                                            02910001
+      *                                                                 02920001
+      *<META C210-OUT-FIELDS-UB-EX>                                     02930001
+       C210-Out-Fields-UB-Ex.                                           02940001
+           Exit.                                                        02950001
+      *</META>                                                          02960001
+                                                                        02970001
+      *################################################################*02980001
+      * Output fields can not be part of the input data                *02990001
+      * (User Code to execute after  generated code)                   *03000001
+      *----------------------------------------------------------------*03010001
+      *<META C220-OUT-FIELDS-UA>                                        03020001
+       C220-Out-Fields-UA                Section.                       03030001
+      *                                                                 03040001
+      *</META>                                                          03050001
+      *                                                                 03060001
+           Continue                                                     03070001
+      *                                                                 03080001
+           .                                                            03090001
+      *                                                                 03100001
+      *<META C220-OUT-FIELDS-UA-EX>                                     03110001
+       C220-Out-Fields-UA-Ex.                                           03120001
+           Exit.                                                        03130001
+      *</META>                                                          03140001
+                                                                        03150001
+      *################################################################*03160001
+      * Test permitted values                                          *03170001
+      *                                                                *03180001
+      *----------------------------------------------------------------*03190001
+       C300-Permitted-Values             Section.                       03200001
+      *                                                                 03210001
+      *  This code is maintained by the codegenerator. Any user changes 03220001
+      *  between the META tags will be lost. Any user code should be    03230001
+      *  placed in the C310-... or C320... sections                     03240001
+      *                                                                 03250001
+      *<META C300-PERMITTED-VALUES>                                     03260001
+      *
+      *    Kontrakt-Nr must be numeric if present.
+      *
+           Evaluate True
+             When  RTFCE120-I-Contract-No-I
+                                         Not = 'U'
+               Continue
+             When  RTFCE120-I-Contract-No-D
+                                         Not Numeric
+               Move  'F'                 To    RTFCE120-I-Contract-No-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Kontrakt-Nr'       To    R400CH01-Message-Data(1)
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-Evaluate
+      *
+      *    Rate-Nr must be numeric if present.
+      *
+           Evaluate True
+             When  RTFCE120-I-Part-Amount-No-I
+                                         Not = 'U'
+               Continue
+             When  RTFCE120-I-Part-Amount-No-D
+                                         Not Numeric
+               Move  'F'                 To
+                                         RTFCE120-I-Part-Amount-No-O
+               Move  'FELT1'             To    R400CH01-Message-Key(1)
+               Move  'Rate-Nr'           To    R400CH01-Message-Data(1)
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code
+               Perform  Z700-Error-AE
+           End-Evaluate
+      *
+      *    Beløp must be numeric if present.
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >
+                                         RTFCE120-I-Charge-Amount-A
+              Evaluate True
+                When  RTFCE120-I-Charge-Amount-I(Tally)
+                                         Not = 'U'
+                  Continue
+                When  RTFCE120-I-Charge-Amount-D(Tally)
+                                         Not Numeric
+                  Move  'F'              To
+                                         RTFCE120-I-Charge-Amount-O
+                                               (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Beløp'          To    R400CH01-Message-Data(1)
+                  Move  'GL-UGYLDIG-VERDI&'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-Evaluate
+           End-Perform
+      *
+      *    Beløp-Basisvaluta must be numeric if present.
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >
+                                         RTFCE120-I-Charge-Am-Base-A
+              Evaluate True
+                When  RTFCE120-I-Charge-Am-Base-I(Tally)
+                                         Not = 'U'
+                  Continue
+                When  RTFCE120-I-Charge-Am-Base-D(Tally)
+                                         Not Numeric
+                  Move  'F'              To
+                                         RTFCE120-I-Charge-Am-Base-O
+                                               (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Beløp-Basisvaluta'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'GL-UGYLDIG-VERDI&'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-Evaluate
+           End-Perform
+      *
+      *    Prosent-Provisjon must be numeric if present.
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >     RTFCE120-I-Percent-Comm-A
+              Evaluate True
+                When  RTFCE120-I-Percent-Comm-I(Tally)
+                                         Not = 'U'
+                  Continue
+                When  RTFCE120-I-Percent-Comm-D(Tally)
+                                         Not Numeric
+                  Move  'F'              To    RTFCE120-I-Percent-Comm-O
+                                               (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Prosent-Provisjon'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'GL-UGYLDIG-VERDI&'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-Evaluate
+           End-Perform
+      *</META>                                                          04030001
+           Continue                                                     04040001
+           .                                                            04050001
+      *                                                                 04060001
+      *<META C300-PERMITTED-VALUES-EX>                                  04070001
+       C300-Permitted-Values-Ex.                                        04080001
+           Exit.                                                        04090001
+      *</META>                                                          04100001
+                                                                        04110001
+      *################################################################*04120001
+      * Test permitted values                                          *04130001
+      * (User Code to execute before generated code)                   *04140001
+      *----------------------------------------------------------------*04150001
+      *<META C310-PERMITTED-VALUES-UB>                                  04160001
+       C310-Permitted-Values-UB          Section.                       04170001
+      *                                                                 04180001
+      *</META>                                                          04190001
+      *                                                                 04200001
+           Continue                                                     04210001
+      *                                                                 04220001
+           .                                                            04230001
+      *                                                                 04240001
+      *<META C310-PERMITTED-VALUES-UB-EX>                               04250001
+       C310-Permitted-Values-UB-Ex.                                     04260001
+           Exit.                                                        04270001
+      *</META>                                                          04280001
+                                                                        04290001
+      *################################################################*04300001
+      * Test permitted values                                          *04310001
+      * (User Code to execute after  generated code)                   *04320001
+      *----------------------------------------------------------------*04330001
+      *<META C320-PERMITTED-VALUES-UA>                                  04340001
+       C320-Permitted-Values-UA          Section.                       04350001
+      *                                                                 04360001
+      *</META>                                                          04370001
+      *                                                                 04380001
+           Continue                                                     04390003
+           .                                                            04400001
+      *                                                                 04410001
+      *<META C320-PERMITTED-VALUES-UA-EX>                               04420001
+       C320-Permitted-Values-UA-Ex.                                     04430001
+           Exit.                                                        04440001
+      *</META>                                                          04450001
+                                                                        04460001
+      *################################################################*04470001
+      * We make shure that input fields that are not mandatory, gets   *04480001
+      * valid default values if not received.                          *04490001
+      *----------------------------------------------------------------*04500001
+       C400-Default-Values               Section.                       04510001
+      *                                                                 04520001
+      *  This code is maintained by the codegenerator. Any user changes 04530001
+      *  between the META tags will be lost. Any user code should be    04540001
+      *  placed in the C410... or C420.. sections.                      04550001
+      *                                                                 04560001
+      *<META C400-DEFAULT-VALUES>                                       04570001
+      *</META>                                                          04580001
+           Continue                                                     04590001
+           .                                                            04600001
+      *                                                                 04610001
+      *<META C400-DEFAULT-VALUES-EX>                                    04620001
+       C400-Default-Values-Ex.                                          04630001
+           Exit.                                                        04640001
+      *</META>                                                          04650001
+                                                                        04660001
+      *################################################################*04670001
+      * We make shure that input fields that are not mandatory, gets   *04680001
+      * valid default values if not received.                          *04690001
+      * (User Code to execute before generated code)                   *04700001
+      *----------------------------------------------------------------*04710001
+      *<META C410-DEFAULT-VALUES-UB>                                    04720001
+       C410-Default-Values-UB            Section.                       04730001
+      *                                                                 04740001
+      *</META>                                                          04750001
+      *                                                                 04760001
+           Continue                                                     04770001
+      *                                                                 04780001
+           .                                                            04790001
+      *                                                                 04800001
+      *<META C410-DEFAULT-VALUES-UB-EX>                                 04810001
+       C410-Default-Values-UB-Ex.                                       04820001
+           Exit.                                                        04830001
+      *</META>                                                          04840001
+                                                                        04850001
+      *################################################################*04860001
+      * We make shure that input fields that are not mandatory, gets   *04870001
+      * valid default values if not received.                          *04880001
+      * (User Code to execute after  generated code)                   *04890001
+      *----------------------------------------------------------------*04900001
+      *<META C420-DEFAULT-VALUES-UA>                                    04910001
+       C420-Default-Values-UA            Section.                       04920001
+      *                                                                 04930001
+      *</META>                                                          04940001
+      *                                                                 04950001
+           Continue                                                     04960001
+      *                                                                 04970001
+      *                                                                 04980001
+           .                                                            04990001
+      *                                                                 05000001
+      *<META C420-DEFAULT-VALUES-UA-EX>                                 05010001
+       C420-Default-Values-UA-Ex.                                       05020001
+           Exit.                                                        05030001
+      *</META>                                                          05040001
+                                                                        05050001
+      *################################################################*05060001
+      * Check dependencies between input fields                        *05070001
+      *                                                                *05080001
+      *----------------------------------------------------------------*05090001
+       C500-Dependencies                 Section.                       05100001
+      *                                                                 05110001
+      *  This code is maintained by the codegenerator. Any user changes 05120001
+      *  between the META tags will be lost. Any user code should be    05130001
+      *  placed in the C510... or C520.. sections.                      05140001
+      *                                                                 05150001
+      *<META C500-DEPENDENCIES>                                         05160001
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >     RTFCE120-I-Charge-Type-A
+              If  RTFCE120-I-Charge-Type-I(Tally)
+                                         Not = 'U'
+              And RTFCE120-I-Selected-I(Tally)
+                                         =     'U'
+                  Move  'F'              To    RTFCE120-I-Charge-Type-O
+                                         (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Omkostnings-type'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'FELT2'          To    R400CH01-Message-Key(2)
+                  Move  'Valgt'          To    R400CH01-Message-Data(2)
+                  Move  'TF-SY-FIELD2-AND-FIELD1'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-If
+           End-Perform
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >     RTFCE120-I-Charge-Type-A
+              If  RTFCE120-I-Charge-Type-I(Tally)
+                                         Not = 'U'
+              And RTFCE120-I-Charge-Amount-I(Tally)
+                                         =     'U'
+                  Move  'F'              To    RTFCE120-I-Charge-Type-O
+                                         (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Omkostnings-type'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'FELT2'          To    R400CH01-Message-Key(2)
+                  Move  'Beløp'          To    R400CH01-Message-Data(2)
+                  Move  'TF-SY-FIELD2-AND-FIELD1'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-If
+           End-Perform
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >     RTFCE120-I-Charge-Type-A
+              If  RTFCE120-I-Charge-Type-I(Tally)
+                                         Not = 'U'
+              And RTFCE120-I-Paying-Party-I(Tally)
+                                         =     'U'
+                  Move  'F'              To    RTFCE120-I-Charge-Type-O
+                                         (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Omkostnings-type'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'FELT2'          To    R400CH01-Message-Key(2)
+                  Move  'Betalende-Part' To    R400CH01-Message-Data(2)
+                  Move  'TF-SY-FIELD2-AND-FIELD1'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-If
+           End-Perform
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >     RTFCE120-I-Charge-Type-A
+              If  RTFCE120-I-Charge-Type-I(Tally)
+                                         Not = 'U'
+              And RTFCE120-I-Percent-Comm-I(Tally)
+                                         =     'U'
+                  Move  'F'              To    RTFCE120-I-Charge-Type-O
+                                         (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Omkostnings-type'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'FELT2'          To    R400CH01-Message-Key(2)
+                  Move  'Prosent-Provisjon'
+                                         To    R400CH01-Message-Data(2)
+                  Move  'TF-SY-FIELD2-AND-FIELD1'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-If
+           End-Perform
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >
+                                         RTFCE120-I-Charge-Amount-A
+              If  RTFCE120-I-Charge-Amount-I(Tally)
+                                         =     'U'
+              And RTFCE120-I-Percent-Comm-I(Tally)
+                                         =     'U'
+                  Move  'F'              To
+                                         RTFCE120-I-Charge-Amount-O
+                                         (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Beløp'          To    R400CH01-Message-Data(1)
+                  Move  'FELT2'          To    R400CH01-Message-Key(2)
+                  Move  'Prosent-Provisjon'
+                                         To    R400CH01-Message-Data(2)
+                  Move  'TF-SY-FIELD1-NOT-FIELD2'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-If
+           End-Perform
+      *
+           Perform
+              Varying  Tally             From 1 By 1
+              Until    Tally             >     RTFCE120-I-Percent-Comm-A
+              If  RTFCE120-I-Percent-Comm-I(Tally)
+                                         =     'U'
+              And RTFCE120-I-Charge-Amount-I(Tally)
+                                         =     'U'
+                  Move  'F'              To    RTFCE120-I-Percent-Comm-O
+                                         (Tally)
+                  Move  'FELT1'          To    R400CH01-Message-Key(1)
+                  Move  'Prosent-Provisjon'
+                                         To    R400CH01-Message-Data(1)
+                  Move  'FELT2'          To    R400CH01-Message-Key(2)
+                  Move  'Beløp'          To    R400CH01-Message-Data(2)
+                  Move  'TF-SY-FIELD1-NOT-FIELD2'
+                                         To    R400CH01-Message-Code
+                  Perform  Z700-Error-AE
+              End-If
+           End-Perform
+      *
+      *</META>                                                          05990001
+           Continue                                                     06000001
+           .                                                            06010001
+      *                                                                 06020001
+      *<META C500-DEPENDENCIES-EX>                                      06030001
+       C500-Dependencies-Ex.                                            06040001
+           Exit.                                                        06050001
+      *</META>                                                          06060001
+                                                                        06070001
+      *################################################################*06080001
+      * Check dependencies between input fields                        *06090001
+      * (User Code to execute before generated code)                   *06100001
+      *----------------------------------------------------------------*06110001
+      *<META C510-DEPENDENCIES-UB>                                      06120001
+       C510-Dependencies-UB              Section.                       06130001
+      *                                                                 06140001
+      *</META>                                                          06150001
+      *                                                                 06160001
+           Continue                                                     06170001
+      *                                                                 06180001
+           .                                                            06190001
+      *                                                                 06200001
+      *<META C510-DEPENDENCIES-UB-EX>                                   06210001
+       C510-Dependencies-UB-Ex.                                         06220001
+           Exit.                                                        06230001
+      *</META>                                                          06240001
+                                                                        06250001
+      *################################################################*06260001
+      * Check dependencies between input fields                        *06270001
+      * (User Code to execute after  generated code)                   *06280001
+      *----------------------------------------------------------------*06290001
+      *<META C520-DEPENDENCIES-UA>                                      06300001
+       C520-Dependencies-UA              Section.                       06310001
+      *                                                                 06320001
+      *</META>                                                          06330001
+      *                                                                 06340001
+      *----------------------------------------------------------------*06350001
+      * If the operation type is Return or Expire:                      06360001
+      *                                                                 06370001
+           If    RTFCE120-I-Operation-Type-I      = 'U'                 06381012
+           and ( RTFCE120-I-Operation-Type-D      = 'RETURN'            06390009
+             or  RTFCE120-I-Operation-Type-D(1:7) = 'EXPIRE-' )         06400009
+      *                                                                 06410001
+             Perform varying W-Ind                                      06420001
+             from +1 by +1 until  W-Ind >  RTFCE120-I-Charge-Type-A     06430001
+      *                                                                 06440001
+      * - either all charges must be made to the buyer,                 06450009
+      *   or all charges must be made to the seller.                    06460001
+      *                                                                 06470001
+               If RTFCE120-I-Paying-Party-I(W-Ind) = 'U'                06480001
+                 Evaluate RTFCE120-I-Paying-Party-D(W-Ind)              06490001
+                   When 'DRWEE'                                         06500001
+                   When 'CUSTM'                                         06510001
+                     Add   +1            To    W-Paying-Party-Is-Buyer  06520001
+                   When 'DRWER'                                         06530001
+                   When 'BENEF'                                         06540001
+                     Add   +1            To    W-Paying-Party-Is-Seller 06550001
+                   When other                                           06560001
+                     Add   +1            To    W-Paying-Party-Is-Other  06570001
+                 End-Evaluate                                           06580001
+               End-If                                                   06590001
+      *                                                                 06600001
+             End-Perform                                                06610001
+      *                                                                 06620001
+             If (W-Paying-Party-Is-Buyer  >  +0                         06630001
+             and W-Paying-Party-Is-Seller >  +0)                        06640001
+              or W-Paying-Party-Is-Other  >  +0                         06650001
+               Move  'TF-SY-OP-RETURN-PAY-PTY'                          06660001
+                                         To    R400CH01-Message-Code    06670001
+               Perform Z700-Error-AE                                    06680001
+             End-If                                                     06690001
+      *                                                                 06700001
+           End-If                                                       06710001
+      *                                                                 06720001
+      *----------------------------------------------------------------*06730001
+      * When settling Import Letters of Credit, paying party for        06740003
+      * Pres-Bank-Charges must be the Customer.                         06750003
+      *                                                                 06760003
+           If  RTFCE120-I-Operation-Type-D = 'SETTLE-ILC'               06770008
+      *                                                                 06780003
+             Perform varying W-Ind                                      06790003
+             from +1 by +1 until  W-Ind >  RTFCE120-I-Charge-Type-A     06800003
+      *                                                                 06810003
+               If  RTFCE120-I-Charge-Type-D(W-Ind)                      06820004
+                                         =     'PRES-BANK-CHARGES'      06830003
+               and RTFCE120-I-Paying-Party-D(W-Ind)                     06840004
+                                         not = 'CUSTM'                  06850003
+               Then                                                     06860015
+      *            Move  'TF-SY-PAY-PTY-VAR1'                           06870015
+                   Move  'TF-SY-ROLE-VAR1-CH-VAR2-INV'                  06871015
+                                         To    R400CH01-Message-Code    06880004
+                   Move  'VAR1'          To    R400CH01-Message-Key(1)  06890005
+                   Move  'Benefisiant'   To    R400CH01-Message-Data(1) 06900016
+                   Move  'VAR2'          To    R400CH01-Message-Key(2)  06901015
+                   Move  'Pres bank charges'                            06902015
+                                         To    R400CH01-Message-Data(2) 06903015
+                   Perform Z700-Error-AE                                06910004
+               End-If                                                   06920004
+      *                                                                 06930004
+              End-Perform                                               06940013
+           End-If                                                       06941013
+      *                                                                 06950004
+      *----------------------------------------------------------------*06951010
+      * Feilretting 30.05.02 (NDL)                                      06951110
+      * When accept Import Letters of Credit, paying party              06952010
+      * must be the Customer.                                           06953010
+      *                                                                 06954010
+           If  RTFCE120-I-Operation-Type-D = 'ACCEPT-ILC'               06955010
+      *                                                                 06956010
+             Perform varying W-Ind                                      06957010
+             from +1 by +1 until  W-Ind >  RTFCE120-I-Charge-Type-A     06958010
+      *                                                                 06959010
+               If  RTFCE120-I-Paying-Party-D(W-Ind)                     06959411
+                                         not = 'CUSTM'                  06959511
+               Then                                                     06959611
+                   Move  'TF-SY-ROLE-VAR1-CH-VAR2-INV'                  06959715
+                                         To    R400CH01-Message-Code    06959811
+                   Move  'VAR1'          To    R400CH01-Message-Key(1)  06959911
+                   Move  'Benefisiant'   To    R400CH01-Message-Data(1) 06960016
+                   Move  'VAR2'          To    R400CH01-Message-Key(2)  06960115
+                   Move  'ACCEPT-ILC'    To    R400CH01-Message-Data(2) 06960215
+                   Perform Z700-Error-AE                                06960315
+               End-If                                                   06960415
+      *                                                                 06960515
+             End-Perform                                                06960618
+           End-If                                                       06960718
+      *                                                                 06960815
+      *----------------------------------------------------------------*06961010
+      * If Selected = 'Y', Paying-Party must be present, and the        06970001
+      * value depends on the Contract-Type.                             06980001
+      *                                                                 06990001
+           Initialize                          R115ISC0-Sys-Code        07000001
+           Set   R115ISC0-Version        To    True                     07010001
+           Set   R115ISC0-In-Select      To    True                     07020001
+           Move  'CONTRACT-TYPE'         To    R115ISC0-In-ST-Type      07030001
+           Move  RTFCE120-I-Fin-Inst-No-D                               07040001
+                                         To    R115ISC0-In-Fin-Inst-No  07050001
+           Move  RTFCE120-I-Contract-Type-D                             07060001
+                                         To    R115ISC0-In-SC-Code      07070001
+      *                                                                 07080001
+           Call  'F115ISC0'              Using R115ISC0-Sys-Code        07090001
+                                               R7919999-Error-Area      07100001
+           End-Call                                                     07110001
+      *                                                                 07120001
+           Evaluate True                                                07130001
+             When R7919999-Return-Abend                                 07140001
+               Move  'FM'                To    R400CH01-Message-Code    07150001
+               Move  'C521'              To    R7919999-Paragraph       07160001
+               Perform Z900-Abend                                       07170001
+      *                                                                 07180001
+             When R7919999-Return-Error                                 07190001
+               Move  'FM'                To    R400CH01-Message-Code    07200001
+               Move  'C522'              To    R7919999-Paragraph       07210001
+               Perform Z700-Error-AE                                    07220001
+      *                                                                 07230001
+             When R7919999-Return-OK                                    07240001
+               Continue                                                 07250001
+      *                                                                 07260001
+           End-Evaluate                                                 07270001
+      *                                                                 07280001
+           Perform varying W-Ind                                        07290001
+           from +1 by +1 until  W-Ind    >     RTFCE120-I-Charge-Type-A 07300001
+      *                                                                 07310001
+             Evaluate True also True                                    07320001
+               When RTFCE120-I-Selected-I(W-Ind)     not = 'U'          07330001
+               also any                                                 07340001
+                 Continue                                               07350001
+      *                                                                 07360001
+               When RTFCE120-I-Selected-D(W-Ind)         = 'Y'          07370001
+                and RTFCE120-I-Paying-Party-I(W-Ind) not = 'U'          07380001
+               also any                                                 07390001
+                 Move  'TF-SY-TYPE-MISSING'                             07400001
+                                         To    R400CH01-Message-Code    07410001
+                 Perform Z700-Error-AE                                  07420001
+      *                                                                 07430001
+               When RTFCE120-I-Selected-D(W-Ind)        =  'Y'          07440001
+               also R115ISC0-Contract-Name              =  'COLL'       07450001
+                 If RTFCE120-I-Paying-Party-D(W-Ind)    =  'DRWEE'      07460001
+                                                        or 'DRWER'      07470001
+                    Continue                                            07480001
+                 Else                                                   07490001
+                    If RTFCE120-I-Charge-Type-D(W-Ind) =                07500002
+                       'OTH-INTERB-CHARGES'                             07510002
+                       Continue                                         07520002
+                    Else                                                07530002
+                       Move  'TF-SY-PAY-PTY-VAR1-VAR2'                  07540002
+                                         To    R400CH01-Message-Code    07550001
+                       Move  'VAR1'      To    R400CH01-Message-Key(1)  07560002
+                       Move  'VAR2'      To    R400CH01-Message-Key(2)  07570002
+                       Move  'DRWEE'     To    R400CH01-Message-Data(1) 07580002
+                       Move  'DRWER'     To    R400CH01-Message-Data(2) 07590002
+                       Perform Z700-Error-AE                            07600002
+                    End-If                                              07610002
+                 End-If                                                 07620001
+      *                                                                 07630001
+               When RTFCE120-I-Selected-D(W-Ind)         = 'Y'          07640001
+               also R115ISC0-Contract-Name               = 'LC'         07650001
+                and R115ISC0-Contr-Imp-Exp               = 'EXPORT'     07660001
+                  If RTFCE120-I-Paying-Party-D(W-Ind)    = 'BENEF'      07670001
+                                                        or 'ISSUI'      07680001
+                     Continue                                           07690001
+                  Else                                                  07700001
+                    Move  'TF-SY-PAY-PTY-VAR1-VAR2'                     07710001
+                                         To    R400CH01-Message-Code    07720001
+                    Move  'VAR1'         To    R400CH01-Message-Key(1)  07730001
+                    Move  'VAR2'         To    R400CH01-Message-Key(2)  07740001
+                    Move  'BENEF'        To    R400CH01-Message-Data(1) 07750001
+                    Move  'ISSUI'        To    R400CH01-Message-Data(2) 07760001
+                    Perform Z700-Error-AE                               07770001
+                  End-If                                                07780001
+      *                                                                 07790001
+               When RTFCE120-I-Selected-D(W-Ind)         = 'Y'          07800001
+               also R115ISC0-Contract-Name               = 'LC'         07810001
+                and R115ISC0-Contr-Imp-Exp              or 'IMPORT'     07820001
+                  If RTFCE120-I-Paying-Party-D(W-Ind)    = 'BENEF'      07830001
+                                                        or 'CUSTM'      07840001
+                     Continue                                           07850001
+                  Else                                                  07860001
+                    Move  'TF-SY-PAY-PTY-VAR1-VAR2'                     07870001
+                                         To    R400CH01-Message-Code    07880001
+                    Move  'VAR1'         To    R400CH01-Message-Key(1)  07890001
+                    Move  'VAR2'         To    R400CH01-Message-Key(2)  07900001
+                    Move  'BENEF'        To    R400CH01-Message-Data(1) 07910001
+                    Move  'CUSTM'        To    R400CH01-Message-Data(2) 07920001
+                    Perform Z700-Error-AE                               07930001
+                  End-If                                                07940001
+      *                                                                 07950001
+             End-Evaluate                                               07960001
+      *                                                                 07970001
+           End-Perform                                                  07980001
+           .                                                            07990001
+      *                                                                 08000001
+      *<META C520-DEPENDENCIES-UA-EX>                                   08010001
+       C520-Dependencies-UA-Ex.                                         08020001
+           Exit.                                                        08030001
+      *</META>                                                          08040001
+                                                                        08050001
+      *################################################################*08060001
+      * Place code necessary to prepare control of input data against  *08070001
+      * database fields later here. add Perform statements of other    *08080001
+      * sections for your own logic here. Preferably seperate sections *08090001
+      * for each database element to be read.                          *08100001
+      *                                                                *08110001
+      * REMEMBER !!! Use database interfaces. No direct read from this *08120001
+      * module.                                                        *08130001
+      *                                                                *08140001
+      *----------------------------------------------------------------*08150001
+      *<META D000-PREPARE-DB-READ>                                      08160001
+       D000-Prepare-DB-Read              Section.                       08170001
+      *                                                                 08180001
+      *</META>                                                          08190001
+      *                                                                 08200001
+           Continue                                                     08210001
+           .                                                            08220001
+      *                                                                 08230001
+      *<META D000-PREPARE-DB-READ-EX>                                   08240001
+       D000-Prepare-DB-Read-Ex.                                         08250001
+           Exit.                                                        08260001
+      *</META>                                                          08270001
+      *################################################################*08280001
+      * Check dependencies against databas fields.                     *08290001
+      *                                                                *08300001
+      * Here we perform all nesecarry control , befor return to the    *08310001
+      * H-module.                                                      *08320001
+      *                                                                *08330001
+      * Add Perform statements to other sections that contain the      *08340001
+      * actual controls.                                               *08350001
+      *----------------------------------------------------------------*08360001
+      *<META E000-CONTROL-BASE>                                         08370001
+       E000-Control-Base                 Section.                       08380001
+      *                                                                 08390001
+      *</META>                                                          08400001
+      *                                                                 08410001
+           Perform E100-Initial-Checks                                  08420001
+      *    Continue                                                     08430001
+      *                                                                 08440001
+           .                                                            08450001
+      *                                                                 08460001
+      *<META E000-CONTROL-BASE-EX>                                      08470001
+       E000-Control-Base-Ex.                                            08480001
+           Exit.                                                        08490001
+      *</META>                                                          08500001
+                                                                        08510001
+      *################################################################*08520001
+       E100-Initial-Checks               Section.                       08530000
+      *                                                                 08540000
+           Initialize                          R115L050-Initial-Check   08550000
+           Set   R115L050-Version        To    True                     08560000
+      *                                                                 08570000
+           Move  R400CH01-Function       To    R115L050-Function        08580000
+           Move  R400CH01-Medium         To    R115L050-Medium          08590000
+      *                                                                 08600000
+           Move  RTFCE120-I-Fin-Inst-No-D                               08610000
+                                         To    R115L050-Fin-Inst-No     08620000
+           Move  RTFCE120-I-Contract-Type-D                             08630000
+                                         To    R115L050-Contr-Type      08640000
+           Move  RTFCE120-I-Contract-No-D                               08650000
+                                         To    R115L050-Contr-No        08660000
+      *                                                                 08670001
+           If RTFCE120-I-Part-Amount-No-I =     'U'                     08680001
+             Move  RTFCE120-I-Part-Amount-No-D                          08690000
+                                         To    R115L050-PA-Seq-No       08700000
+           End-If                                                       08710001
+      *                                                                 08720000
+           Move  RTFCE120-I-Operation-Type-D                            08730000
+                                         To    R115L050-Operation-Type  08740000
+      *                                                                 08750000
+           Move  RTFCE120-B-Last-Saved-Date-D                           08760000
+                                         To    R115L050-Last-Update-TX  08770000
+      *                                                                 08780000
+           Call  'F115L050'              Using R115L050-Initial-Check   08790000
+                                               R7919999-Error-Area      08800000
+           End-Call                                                     08810000
+      *                                                                 08820000
+           Evaluate True                                                08830000
+             When R7919999-Return-Abend                                 08840000
+               Move  'FM'                To    R400CH01-Message-Code    08850000
+               Move  'E101'              To    R7919999-Paragraph       08860000
+               Perform Z900-Abend                                       08870000
+                                                                        08880000
+             When R7919999-Return-Error                                 08890000
+               Move  'FM'                To    R400CH01-Message-Code    08900000
+               Move  'E102'              To    R7919999-Paragraph       08910000
+               Perform Z700-Error-AE                                    08920000
+                                                                        08930000
+             When R7919999-Return-OK                                    08940000
+               Continue                                                 08950000
+                                                                        08960000
+           End-Evaluate                                                 08970000
+           .                                                            08980000
+       E100-Initial-Checks-Ex.                                          08990000
+           Exit.                                                        09000000
+                                                                        09010000
+      *################################################################*09020001
+      * Set Warning status                                             *09030001
+      *                                                                *09040001
+      *----------------------------------------------------------------*09050001
+      *<META Z600-ERROR-AW>                                             09060001
+       Z600-Error-AW                     Section.                       09070001
+      *                                                                 09080001
+           Set   R7919999-Return-Warning To    True                     09090001
+           Move  'FTFCK120'              To    R400CH01-Message-Text    09100001
+           .                                                            09110001
+      *                                                                 09120001
+       Z600-Error-AW-Ex.                                                09130001
+           Exit.                                                        09140001
+      *</META>                                                          09150001
+                                                                        09160001
+      *################################################################*09170001
+      * Syntax Error status                                            *09180001
+      *                                                                *09190001
+      *----------------------------------------------------------------*09200001
+      *<META Z700-ERROR-AE>                                             09210001
+       Z700-Error-AE                     Section.                       09220001
+      *                                                                 09230001
+           Set   R7919999-Return-Error   To    True                     09240001
+           If    R400CH01-Message-Code   =     'FM'                     09250001
+                 String   'FTFCK120'           Delimited By Size        09260001
+                          ': '                 Delimited By Size        09270001
+                       R7919999-Message        Delimited By Size        09280001
+                                         Into  R400CH01-Message-Text    09290001
+                 End-String                                             09300001
+           Else                                                         09310001
+                 Move  'FTFCK120'        To    R400CH01-Message-Text    09320001
+           End-If                                                       09330001
+           .                                                            09340001
+      *                                                                 09350001
+       Z700-Error-AE-Ex.                                                09360001
+           Goback.                                                      09370001
+      *</META>                                                          09380001
+                                                                        09390001
+      *################################################################*09400001
+      * Severe error. Will genereate USER-ABEND in STG when the        *09410001
+      * function is executed in batch.                                 *09420001
+      *----------------------------------------------------------------*09430001
+      *<META Z800-ERROR-AS>                                             09440001
+       Z800-Error-AS                     Section.                       09450001
+      *                                                                 09460001
+           Set   R7919999-Return-Abend   To    True                     09470001
+           If    R400CH01-Message-Code   =     'FM'                     09480001
+                 String   'FTFCK120'           Delimited By Size        09490001
+                          ': '                 Delimited By Size        09500001
+                       R7919999-Message        Delimited By Size        09510001
+                                         Into  R400CH01-Message-Text    09520001
+                 End-String                                             09530001
+           Else                                                         09540001
+                 Move  'FTFCK120'        To    R400CH01-Message-Text    09550001
+           End-If                                                       09560001
+           .                                                            09570001
+      *                                                                 09580001
+       Z800-Error-AS-Ex.                                                09590001
+           Goback.                                                      09600001
+      *</META>                                                          09610001
+                                                                        09620001
+      *################################################################*09630001
+      * Severe error. Will genereate USER-ABEND in STG when the        *09640001
+      * function is executed in batch.                                 *09650001
+      *----------------------------------------------------------------*09660001
+      *<META Z900-ABEND>                                                09670001
+       Z900-Abend                        Section.                       09680001
+      *                                                                 09690001
+           Set   R7919999-Return-Abend   To    True                     09700001
+           If    R400CH01-Message-Code   =     'FM'                     09710001
+                 String   'FTFCK120'           Delimited By Size        09720001
+                          ': '                 Delimited By Size        09730001
+                       R7919999-Message        Delimited By Size        09740001
+                                         Into  R400CH01-Message-Text    09750001
+                 End-String                                             09760001
+           Else                                                         09770001
+                 Move  'FTFCK120'        To    R400CH01-Message-Text    09780001
+           End-If                                                       09790001
+      *                                                                 09800001
+      *----------------------------------------------------------------*09810001
+      *                                                                 09820001
+           If  R7919999-Return-Code      Not   Numeric                  09830001
+           or  Not R7919999-Return-Abend                                09840001
+               Move  +0                  To    R7919999-Module-Ind      09850001
+           End-If                                                       09860001
+           Add   +1                      To    R7919999-Module-Ind      09870001
+           If  R7919999-Module-Ind       Not >                          09880001
+                             ( Length    Of    R7919999-Module-Tab      09890001
+                             / Length    Of    R7919999-Module-Element )09900001
+               Move  'FTFCK120'          To    R7919999-Module-Name     09910001
+                                               (R7919999-Module-Ind)    09920001
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     09930001
+                                               (R7919999-Module-Ind)    09940001
+           End-If                                                       09950001
+           Set   R7919999-Return-Abend   To    True                     09960001
+           .                                                            09970001
+      *                                                                 09980001
+       Z900-Abend-Ex.                                                   09990001
+           Goback.                                                      10000001
+      *</META>                                                          10010001
+      *                                                                 10020001
+       End Program FTFCK120.                                            10030001

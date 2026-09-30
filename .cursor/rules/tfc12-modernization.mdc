@@ -1,0 +1,21 @@
+---
+description: TFC12 code-modernization orchestration and intent
+globs:
+  - analysis/TFC12/**
+  - legacy/**
+  - modernized/**
+alwaysApply: true
+---
+
+# TFC12 modernization (Cursor + code-modernization plugin)
+
+- **System label:** `TFC12`. Artifacts: `analysis/TFC12/`. Legacy: `legacy/STG/TFC12/` (also `legacy/TFC12/` symlink).
+- **Intent:** Charges and pricing STG flow (`FTFCH120` → `FTFCK120` → `FTFCL120`). Default track: **transform** to **Java 21 / Spring Boot** with exact legacy behavior including quirks.
+- **Orchestration:** At most **5** Task subagents in parallel unless the user explicitly approves more.
+- **Legacy COBOL is frozen:** Do **not** edit `legacy/**`. Write Java under `modernized/` and docs under `analysis/TFC12/`.
+- **Repository boundary:** Use only this repo; import missing COBOL into `legacy/` instead of reading external checkouts.
+- **Scope (closed):** Read `analysis/TFC12/SCOPE.md`, `TOOLCHAIN.md`, and `BOUNDARY_CATALOG.md` before plugin steps. External CALL/COPY entries are **ports**, not omissions. Expand `legacy/` only via the preflight Legacy expansion log + manifest refresh.
+
+When the user starts a modernization step, honor:
+
+> Cap parallel Task subagents at 5 for this project.

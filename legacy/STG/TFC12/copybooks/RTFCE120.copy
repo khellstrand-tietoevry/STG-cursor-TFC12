@@ -1,0 +1,156 @@
+      ******************************************************************
+      *  Program XCTGTG00 executed                                     *
+      *     Date      : 15 Mar 2012                                    *
+      *     Time      : 14:31:12                                       *
+      *     User      : Z2106NL                                        *
+      *     Copy      : RTFCE120                                       *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      *     Function  : TFC12                                          *
+      *     Version   : 01                                             *
+      *     Calls     : FTFCH120                                       *
+      *     Base      : DLI                                            *
+      *     Name      : CreateCharge                                   *
+      *     Num. Item : 13                                             *
+      *     Num Rep   : 1                                              *
+      *
+           02  TFC12-V01.
+      *****************************************************************
+      *     Item   : 005
+      *     Descr  : Fin-Inst-No
+      *
+           05  RTFCE120-I-Fin-Inst-No-G.
+                 15  RTFCE120-I-Fin-Inst-No-I        Pic  x(01).
+                 15  RTFCE120-I-Fin-Inst-No-O        Pic  x(01).
+                 15  RTFCE120-I-Fin-Inst-No-X.
+                   20  RTFCE120-I-Fin-Inst-No-D      Pic  x(18).
+      *****************************************************************
+      *     Item   : 010
+      *     Descr  : Kontrakt-Type
+      *
+           05  RTFCE120-I-Contract-Type-G.
+                 15  RTFCE120-I-Contract-Type-I      Pic  x(01).
+                 15  RTFCE120-I-Contract-Type-O      Pic  x(01).
+                 15  RTFCE120-I-Contract-Type-X.
+                   20  RTFCE120-I-Contract-Type-D    Pic  x(3).
+      *****************************************************************
+      *     Item   : 011
+      *     Descr  : Kontrakt-Nr
+      *
+           05  RTFCE120-I-Contract-No-G.
+                 15  RTFCE120-I-Contract-No-I        Pic  x(01).
+                 15  RTFCE120-I-Contract-No-O        Pic  x(01).
+                 15  RTFCE120-I-Contract-No-X.
+                   20  RTFCE120-I-Contract-No-D      Pic  9(7).
+      *****************************************************************
+      *     Item   : 012
+      *     Descr  : Rate-Nr
+      *
+           05  RTFCE120-I-Part-Amount-No-G.
+                 15  RTFCE120-I-Part-Amount-No-I     Pic  x(01).
+                 15  RTFCE120-I-Part-Amount-No-O     Pic  x(01).
+                 15  RTFCE120-I-Part-Amount-No-X.
+                   20  RTFCE120-I-Part-Amount-No-D   Pic  9(2).
+      *****************************************************************
+      *     Item   : 030
+      *     Descr  : Sist-Lagret-Dato
+      *
+           05  RTFCE120-B-Last-Saved-Date-G.
+                 15  RTFCE120-B-Last-Saved-Date-I    Pic  x(01).
+                 15  RTFCE120-B-Last-Saved-Date-O    Pic  x(01).
+                 15  RTFCE120-B-Last-Saved-Date-X.
+                   20  RTFCE120-B-Last-Saved-Date-D  Pic  x(26).
+      *****************************************************************
+      *     Item   : 035
+      *     Descr  : Operasjons-Type
+      *
+           05  RTFCE120-I-Operation-Type-G.
+                 15  RTFCE120-I-Operation-Type-I     Pic  x(01).
+                 15  RTFCE120-I-Operation-Type-O     Pic  x(01).
+                 15  RTFCE120-I-Operation-Type-X.
+                   20  RTFCE120-I-Operation-Type-D   Pic  x(20).
+      *****************************************************************
+      *     Item   : 400
+      *     Descr  : Omkostnings-type
+      *
+           05  RTFCE120-I-Charge-Type-G.
+               10  RTFCE120-I-Charge-Type-A          Pic  9(04) Comp.
+                 88  RTFCE120-I-Charge-Type-M        Value  50.
+               10  RTFCE120-I-Charge-Type-T          Occurs 50 Times.
+                 15  RTFCE120-I-Charge-Type-I        Pic  x(01).
+                 15  RTFCE120-I-Charge-Type-O        Pic  x(01).
+                 15  RTFCE120-I-Charge-Type-X.
+                   20  RTFCE120-I-Charge-Type-D      Pic  x(20).
+      *****************************************************************
+      *     Item   : 412
+      *     Descr  : Fritekst-Omk
+      *
+           05  RTFCE120-I-Charge-Text-G.
+               10  RTFCE120-I-Charge-Text-A          Pic  9(04) Comp.
+                 88  RTFCE120-I-Charge-Text-M        Value  50.
+               10  RTFCE120-I-Charge-Text-T          Occurs 50 Times.
+                 15  RTFCE120-I-Charge-Text-I        Pic  x(01).
+                 15  RTFCE120-I-Charge-Text-O        Pic  x(01).
+                 15  RTFCE120-I-Charge-Text-X.
+                   20  RTFCE120-I-Charge-Text-D      Pic  x(30).
+      *****************************************************************
+      *     Item   : 420
+      *     Descr  : Valgt
+      *
+           05  RTFCE120-I-Selected-G.
+               10  RTFCE120-I-Selected-A             Pic  9(04) Comp.
+                 88  RTFCE120-I-Selected-M           Value  50.
+               10  RTFCE120-I-Selected-T             Occurs 50 Times.
+                 15  RTFCE120-I-Selected-I           Pic  x(01).
+                 15  RTFCE120-I-Selected-O           Pic  x(01).
+                 15  RTFCE120-I-Selected-X.
+                   20  RTFCE120-I-Selected-D         Pic  x(1).
+      *****************************************************************
+      *     Item   : 430
+      *     Descr  : Beløp
+      *
+           05  RTFCE120-I-Charge-Amount-G.
+               10  RTFCE120-I-Charge-Amount-A        Pic  9(04) Comp.
+                 88  RTFCE120-I-Charge-Amount-M      Value  50.
+               10  RTFCE120-I-Charge-Amount-T        Occurs 50 Times.
+                 15  RTFCE120-I-Charge-Amount-I      Pic  x(01).
+                 15  RTFCE120-I-Charge-Amount-O      Pic  x(01).
+                 15  RTFCE120-I-Charge-Amount-X.
+                   20  RTFCE120-I-Charge-Amount-D    Pic  9(14)V9(3).
+      *****************************************************************
+      *     Item   : 431
+      *     Descr  : Beløp-Basisvaluta
+      *
+           05  RTFCE120-I-Charge-Am-Base-G.
+               10  RTFCE120-I-Charge-Am-Base-A       Pic  9(04) Comp.
+                 88  RTFCE120-I-Charge-Am-Base-M     Value  50.
+               10  RTFCE120-I-Charge-Am-Base-T       Occurs 50 Times.
+                 15  RTFCE120-I-Charge-Am-Base-I     Pic  x(01).
+                 15  RTFCE120-I-Charge-Am-Base-O     Pic  x(01).
+                 15  RTFCE120-I-Charge-Am-Base-X.
+                   20  RTFCE120-I-Charge-Am-Base-D   Pic  9(14)V9(3).
+      *****************************************************************
+      *     Item   : 440
+      *     Descr  : Betalende-Part
+      *
+           05  RTFCE120-I-Paying-Party-G.
+               10  RTFCE120-I-Paying-Party-A         Pic  9(04) Comp.
+                 88  RTFCE120-I-Paying-Party-M       Value  50.
+               10  RTFCE120-I-Paying-Party-T         Occurs 50 Times.
+                 15  RTFCE120-I-Paying-Party-I       Pic  x(01).
+                 15  RTFCE120-I-Paying-Party-O       Pic  x(01).
+                 15  RTFCE120-I-Paying-Party-X.
+                   20  RTFCE120-I-Paying-Party-D     Pic  x(20).
+      *****************************************************************
+      *     Item   : 445
+      *     Descr  : Prosent-Provisjon
+      *
+           05  RTFCE120-I-Percent-Comm-G.
+               10  RTFCE120-I-Percent-Comm-A         Pic  9(04) Comp.
+                 88  RTFCE120-I-Percent-Comm-M       Value  50.
+               10  RTFCE120-I-Percent-Comm-T         Occurs 50 Times.
+                 15  RTFCE120-I-Percent-Comm-I       Pic  x(01).
+                 15  RTFCE120-I-Percent-Comm-O       Pic  x(01).
+                 15  RTFCE120-I-Percent-Comm-X.
+                   20  RTFCE120-I-Percent-Comm-D     Pic  9(3)V9(3).
