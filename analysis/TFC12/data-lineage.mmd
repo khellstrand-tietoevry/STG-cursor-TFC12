@@ -1,0 +1,10 @@
+graph LR
+  subgraph programs [In-repo programs]
+    L[FTFCL120]
+    I[F115ICA0 F115ICH0 F115IMC0 F115IPA0 F115IPC0]
+  end
+  FN[(RTFCE120 function I/O)]
+  DB[(DB2 Trade Finance)]
+  H[FTFCH120] -->|read| FN
+  L -->|read write| FN
+  I -->|read write| DB

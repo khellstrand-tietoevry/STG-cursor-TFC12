@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>no.fellesdata.tfi.tfc12</groupId>
+    <artifactId>tfc12-reactor</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>TFC12 — Create charge modernization</name>
+
+    <properties>
+        <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>tfc12-envelope</module>
+        <module>tfc12-persistence</module>
+        <module>ftfc-l140</module>
+        <module>ftfc-fx130</module>
+        <module>ftfc-l120-api</module>
+        <module>ftfc-l120</module>
+        <module>ftfc-l050</module>
+        <module>ftfc-k120</module>
+        <module>ftfc-h120</module>
+        <module>tfc12-boot-smoke</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>tfc12-envelope</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>tfc12-persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-l140</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-fx130</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-l120-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-l120</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-l050</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-k120</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.fellesdata.tfi.tfc12</groupId>
+                <artifactId>ftfc-h120</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

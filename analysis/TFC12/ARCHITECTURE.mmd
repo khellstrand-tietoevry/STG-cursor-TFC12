@@ -1,0 +1,45 @@
+flowchart TB
+  subgraph entry [TFC12 STG entry — Create charge / omkostninger]
+    H[FTFCH120 H-module]
+    K[FTFCK120 K-module]
+    L[FTFCL120 L-module]
+  end
+  subgraph envelope [Shared data]
+    HDR[R400CH02 STG header]
+    FN[RTFCE120 function I/O]
+  end
+  H --> K
+  H --> L
+  H --> ExtTrace[F791TRAC F7918030 external]
+  K --> L050[F115L050 initial check in-repo]
+  K --> ISC0K[F115ISC0 sys-code in-repo]
+  L --> L030[F115L030 timestamp in-repo]
+  L --> L060[F115L060 charge compare in-repo]
+  L --> L070[F115L070 charge compare in-repo]
+  L --> L080[F115L080 charge compare in-repo]
+  L --> L140[F115L140 shadow in-repo]
+  L --> ICA0[F115ICA0 contract amount in-repo]
+  L --> ICH0[F115ICH0 main charge in-repo]
+  L --> IMC0[F115IMC0 main contract in-repo]
+  L --> IPA0[F115IPA0 part amount in-repo]
+  L --> IPC0[F115IPC0 part charge in-repo]
+  L --> ISR0L[F115ISR0 status relation in-repo]
+  L --> FX[F116L030 currency exchange in-repo]
+  L140 --> ExtL040[F115L040 F115ICC0 F115IRP0 F115IEI0 external]
+  L140 --> IMC0
+  subgraph imodules [DB I-modules — EXEC SQL]
+    ICA0
+    ICH0
+    IMC0
+    IPA0
+    IPC0
+    ISC0K
+    ISR0L
+  end
+  imodules --> ExtSQL[DB2 SQL includes not in COPY closure]
+  subgraph boundaries [Documented ports]
+    ExtTrace
+    ExtL040
+    ExtSQL
+    ExtI999[F115I999 F5879010 F7919100 etc — see BOUNDARY_CATALOG.md]
+  end

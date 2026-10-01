@@ -1,0 +1,42 @@
+{
+  "system": "TFC12",
+  "version": 1,
+  "generated": "2026-09-30",
+  "note": "Trace-based equivalence inventory (no local COBOL dual-run). Each case maps to JUnit characterization tests in modernized/TFC12.",
+  "cases": [
+    {
+      "id": "TFC12-HKL-HAPPY",
+      "persona": "back-office-operator",
+      "description": "Valid create-charge envelope passes K initial check and runs L shadow path",
+      "legacyPath": "FTFCH120 → FTFCK120 → F115L050 → FTFCL120 → F115L140",
+      "javaTests": [
+        "no.fellesdata.tfi.tfc12.h120.FtfcH120OrchestratorTest#rule015_invokesKModuleBeforeLModule",
+        "no.fellesdata.tfi.tfc12.l120.L120L140IntegrationTest#rule014_defaultStackUsesL140ShadowAndImc0"
+      ]
+    },
+    {
+      "id": "TFC12-K-INPUT-REJECT",
+      "persona": "back-office-operator",
+      "description": "Missing mandatory K fields stop before L; H maps AE and F7918030",
+      "legacyPath": "FTFCH120 C000 → FTFCK120 C100",
+      "javaTests": [
+        "no.fellesdata.tfi.tfc12.h120.H120BoundaryPortsTest#errorMessagePortInvokedOnKValidationFailure",
+        "no.fellesdata.tfi.tfc12.k120.CreateChargeK120InputControlTest"
+      ]
+    },
+    {
+      "id": "TFC12-ILC-RULES",
+      "persona": "pricing-specialist",
+      "description": "C520 ILC and LC/COLL paying-party dependencies",
+      "legacyPath": "FTFCK120 C520-Dependencies-UA",
+      "javaTests": ["no.fellesdata.tfi.tfc12.k120.CreateChargeK120UserDependenciesTest"]
+    },
+    {
+      "id": "TFC12-FX-CROSS",
+      "persona": "treasury-user",
+      "description": "Cross-currency charge base conversion (F116L030 subset)",
+      "legacyPath": "F116L030",
+      "javaTests": ["no.fellesdata.tfi.tfc12.fx.F116L030CurrencyExchangeTest#crossCurrencyPersona_nokToEurUsesDecimalCommaFormatting"]
+    }
+  ]
+}
