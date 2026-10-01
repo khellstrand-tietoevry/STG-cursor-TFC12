@@ -12,7 +12,7 @@ legacy/STG/TFC12/
 ├── copybooks/           19 copybooks (.copy) — record layouts and includes
 └── corpus-manifest.json Call-graph and COPY metadata for the imported closure
 analysis/                Plugin discovery output (assess, map, rules, brief, …)
-modernized/              Transformed or uplifted code (empty until a build track runs)
+modernized/              Java 21 Maven reactor (`modernized/TFC12/`)
 ```
 
 This mirrors the `legacy/$system` convention expected by **code-modernization**
@@ -60,12 +60,10 @@ copied here; this repo is legacy COBOL only.
 `F115ISC0`, `F115ISR0`, `F115L030`, `F115L050`, `F115L060`, `F115L070`, `F115L080`,
 `F115L140`, `F116L030`
 
-## Suggested next commands
+## Modernization journal
 
-```
-/modernize-preflight TFC12
-/modernize-assess TFC12
-/modernize-map TFC12
-```
+- [`RUN_SEQUENCE.md`](RUN_SEQUENCE.md) — command log and session index
+- [`analysis/TFC12/CURSOR_SESSION_EXPORT.md`](analysis/TFC12/CURSOR_SESSION_EXPORT.md) — readable chat export
+- [`analysis/TFC12/VERIFICATION.md`](analysis/TFC12/VERIFICATION.md) · [`modernized/TFC12/README.md`](modernized/TFC12/README.md)
 
 **System label:** `TFC12` · **Legacy:** `legacy/TFC12/` → `legacy/STG/TFC12/`
