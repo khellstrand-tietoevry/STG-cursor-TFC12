@@ -1,0 +1,278 @@
+{
+  "system": "TFC12",
+  "generated": "2026-09-30",
+  "extractionPass": "first",
+  "method": "B-direct (17 shards; lens-equivalent single pass — Workflow tool unavailable)",
+  "confirmedRules": [
+    {
+      "name": "Decimal point is comma",
+      "category": "Policy",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCH120.src:20",
+      "plainEnglish": "H/K/L use European decimal comma via Special-Names.",
+      "given": "FTFCH120, FTFCK120, or FTFCL120 Environment Division",
+      "when": "Numeric edited data is formatted",
+      "then": "Decimal-Point Is Comma applies",
+      "edgeCases": [],
+      "confidence": "High",
+      "alsoCited": "legacy/STG/TFC12/src/FTFCK120.src:23"
+    },
+    {
+      "name": "H invokes K then L in sequence",
+      "category": "Policy",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCH120.src:103-104",
+      "plainEnglish": "H-module always performs C000-Call-K-Module then D000-Call-L-Module after initialize.",
+      "given": "FTFCH120 A000-Main",
+      "when": "Main path runs",
+      "then": "FTFCK120 then FTFCL120 are CALLed with L-STG-Header, L-Input, R7919999-Error",
+      "edgeCases": ["L is invoked after K returns; K/L status handled in H via S000-Status-Code"],
+      "confidence": "High"
+    },
+    {
+      "name": "K mandatory envelope fields",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:166-218",
+      "plainEnglish": "K rejects missing Fin-Inst-No, Contract-Type, Contract-No, Last-Saved-Date, or Operation-Type when the respective *-I indicator is not 'U'.",
+      "given": "C100-Mandatory-Fields",
+      "when": "Required RTFCE120 field is absent while indicator demands input",
+      "then": "GL-ANGI-FELT& with Norwegian field label; Z700-Error-AE",
+      "parameters": "{\"messageCode\":\"GL-ANGI-FELT&\"}",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "Charge row requires Selected when Charge-Type present",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:542-559",
+      "plainEnglish": "If Charge-Type-I is not 'U' but Selected-I is 'U', K raises TF-SY-FIELD2-AND-FIELD1 (Omkostnings-type / Valgt).",
+      "given": "C500-Dependencies charge table loop",
+      "when": "Charge-Type-I not 'U' and Selected-I = 'U'",
+      "then": "TF-SY-FIELD2-AND-FIELD1 and Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "Charge row requires amount or percent when type present",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:562-619",
+      "plainEnglish": "When Charge-Type-I is not 'U', Charge-Amount-I and Percent-Comm-I cannot both be 'U' without error (separate dependency checks for Beløp and Prosent-Provisjon).",
+      "given": "C500-Dependencies",
+      "when": "Charge-Type-I not 'U' and Amount-I = 'U' (or Percent-I = 'U' in parallel check)",
+      "then": "TF-SY-FIELD2-AND-FIELD1 with field labels; Z700-Error-AE",
+      "edgeCases": ["Separate loops for amount and percent — both must be satisfied when type is supplied"],
+      "confidence": "High"
+    },
+    {
+      "name": "Charge row requires Paying-Party when type present",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:582-599",
+      "plainEnglish": "When Charge-Type-I is not 'U', Paying-Party-I must not be 'U'.",
+      "given": "C500-Dependencies",
+      "when": "Charge-Type-I not 'U' and Paying-Party-I = 'U'",
+      "then": "TF-SY-FIELD2-AND-FIELD1 (Betalende-Part); Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "RETURN or EXPIRE requires uniform paying party side",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:704-735",
+      "plainEnglish": "For RETURN or EXPIRE-* operations, all charge rows must target buyer side (DRWEE/CUSTM) or seller side (DRWER/BENEF), not a mix or other parties.",
+      "given": "Operation-Type RETURN or EXPIRE-*",
+      "when": "Paying parties counted across charge rows",
+      "then": "TF-SY-OP-RETURN-PAY-PTY if buyer and seller both used or any 'other' party appears",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "SETTLE-ILC PRES-BANK-CHARGES payer must be CUSTM",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:743-762",
+      "plainEnglish": "On SETTLE-ILC, PRES-BANK-CHARGES rows must have Paying-Party-D = CUSTM.",
+      "given": "Operation-Type-D = SETTLE-ILC",
+      "when": "Charge-Type-D = PRES-BANK-CHARGES and Paying-Party-D not CUSTM",
+      "then": "TF-SY-ROLE-VAR1-CH-VAR2-INV; Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "ACCEPT-ILC paying party must be CUSTM",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:772-787",
+      "plainEnglish": "On ACCEPT-ILC, every charge row Paying-Party-D must be CUSTM.",
+      "given": "Operation-Type-D = ACCEPT-ILC",
+      "when": "Any charge row Paying-Party-D not CUSTM",
+      "then": "TF-SY-ROLE-VAR1-CH-VAR2-INV; Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "Selected charge requires Paying-Party indicator",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:833-838",
+      "plainEnglish": "When Selected-D = 'Y', Paying-Party-I must be 'U' (value supplied).",
+      "given": "C520-Dependencies-UA after CONTRACT-TYPE sys-code read",
+      "when": "Selected-D = Y and Paying-Party-I not 'U'",
+      "then": "TF-SY-TYPE-MISSING; Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "K-module initial check calls F115L050",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/FTFCK120.src:975-988",
+      "plainEnglish": "K fills R115L050-Initial-Check from function/header and CALLs F115L050.",
+      "given": "E100-Initial-Checks",
+      "when": "Initial check runs",
+      "then": "F115L050 called; abend/error maps to E101/E102 with message FM",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "F115L050 requires function and medium",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/F115L050.src:164-175",
+      "plainEnglish": "Initial check abends if Function or Medium is spaces.",
+      "given": "F115L050 after C100-Initialize-Output",
+      "when": "R115L050-Function or R115L050-Medium is spaces",
+      "then": "TF-SY-FUNC-AND-MEDIUM; Z900-Abend paragraph C102",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "Invalid status and operation-type combination",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/F115L050.src:335-349",
+      "plainEnglish": "F115ISR0 VALID-ST-OP relation failure yields TF-SY-INVALID-STATUS-OPERTYP.",
+      "given": "F100-Read-Sys-Code-Rel",
+      "when": "R7919999-Return-Error from F115ISR0",
+      "then": "TF-SY-INVALID-STATUS-OPERTYP with operation and status variables; Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "Permanent status blocks in-progress main contract",
+      "category": "Validation",
+      "priority": "P0",
+      "source": "legacy/STG/TFC12/src/F115L050.src:420-430",
+      "plainEnglish": "If STATUS property contains PERM and main contract In-Progress-Yes, reject unless Function is TFD05.",
+      "given": "G000-Check-Properties",
+      "when": "Ws-Code-Count > 0 and R115IMC0-In-Progress-Yes and Function not TFD05",
+      "then": "TF-SY-MC-INPROG-Y; Z700-Error-AE",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "L creates shadow when main contract not in progress",
+      "category": "Lifecycle",
+      "priority": "P1",
+      "source": "legacy/STG/TFC12/src/FTFCL120.src:184-187",
+      "plainEnglish": "L-module D000-Preparations calls G060-Create-Shadow when R115IMC0-In-Progress-No.",
+      "given": "FTFCL120 after G030-Read-Main-Contract",
+      "when": "Main contract not in progress",
+      "then": "Perform G060-Create-Shadow (F115L140 path)",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "F115L050 PA-Seq-No zero skips part amount reads",
+      "category": "Validation",
+      "priority": "P1",
+      "source": "legacy/STG/TFC12/src/F115L050.src:106-114",
+      "plainEnglish": "When PA-Seq-No = 0, status comes from main contract only; part amount reads skipped.",
+      "given": "F115L050 main read path",
+      "when": "R115L050-PA-Seq-No = 0",
+      "then": "Move R115IMC0-Status to Ws-Status without C250/C300",
+      "edgeCases": [],
+      "confidence": "High"
+    },
+    {
+      "name": "F115L050 update-timestamp check disabled",
+      "category": "Policy",
+      "priority": "P2",
+      "source": "legacy/STG/TFC12/src/F115L050.src:119-123",
+      "plainEnglish": "E000-Check-Upd-Timestamp block is commented out (July test note).",
+      "given": "F115L050 after status reads",
+      "when": "Check-For-Upd-Yes would apply",
+      "then": "E000 not performed",
+      "edgeCases": [],
+      "confidence": "Medium",
+      "smeQuestion": "Confirm whether production mainframe re-enabled update-timestamp validation."
+    },
+    {
+      "name": "H-module must not be hand-edited",
+      "category": "Policy",
+      "priority": "P2",
+      "source": "legacy/STG/TFC12/src/FTFCH120.src:10",
+      "plainEnglish": "Header states THIS MODULE MUST NOT BE MODIFIED BY HUMAN HANDS.",
+      "given": "FTFCH120 Servo policy",
+      "when": "Maintenance targets H-module",
+      "then": "Regenerate from Servo tooling; do not hand-edit",
+      "edgeCases": [],
+      "confidence": "High"
+    }
+  ],
+  "rejectedRules": [],
+  "refutedCandidates": [],
+  "injectionFlags": [
+    "legacy/STG/TFC12/src/FTFCH120.src:10 — MUST NOT BE MODIFIED BY HUMAN HANDS",
+    "legacy/STG/TFC12/src/FTFCK120.src:11-12 — META: code between tags must not be modified"
+  ],
+  "dataObjects": [
+    {
+      "name": "RTFCE120",
+      "kind": "copybook",
+      "location": "legacy/STG/TFC12/copybooks/RTFCE120.copy",
+      "description": "TFC12 function I/O: charge table (type, amount, percent, paying party, selected flags), contract keys, operation type.",
+      "usedByRules": ["RULE-003", "RULE-004", "RULE-005", "RULE-006", "RULE-007", "RULE-008", "RULE-009", "RULE-010"]
+    },
+    {
+      "name": "R115L050-Initial-Check",
+      "kind": "linkage",
+      "location": "legacy/STG/TFC12/copybooks/R115L050.copy",
+      "description": "Initial-check parameter block: function, medium, contract keys, PA-Seq-No, operation type, last-update timestamp.",
+      "usedByRules": ["RULE-011", "RULE-012", "RULE-013", "RULE-014", "RULE-015", "RULE-016"]
+    },
+    {
+      "name": "R7919999-Error-Area",
+      "kind": "copybook",
+      "location": "external boundary (R7919999)",
+      "description": "Standard STG return/abend/error flags shared by H/K/L and helpers.",
+      "usedByRules": ["RULE-002", "RULE-011"]
+    },
+    {
+      "name": "R400CH02",
+      "kind": "copybook",
+      "location": "boundary — not in import closure",
+      "description": "STG fixed header in linkage; referenced by H/K/L.",
+      "usedByRules": ["RULE-002"]
+    }
+  ],
+  "stats": {
+    "confirmed": 18,
+    "p0": 14,
+    "p1": 2,
+    "p2": 2,
+    "skippedModules": [],
+    "failedModules": [],
+    "consolidated": 0
+  },
+  "coverageGaps": [
+    "Deep rules inside F115ICA0/ICH0/IMC0/IPA0/IPC0 (EXEC SQL — external COPY/SQL includes).",
+    "F115L140 shadow rules and external F115ICC0/F115IRP0/F115IEI0/F115L040 behavior.",
+    "L-module E000-Processing charge calc branches (SW-Percentage vs SW-Accumulate-Amount).",
+    "F116L030 currency exchange rate rules."
+  ]
+}

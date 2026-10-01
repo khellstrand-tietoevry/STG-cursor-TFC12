@@ -1,0 +1,1979 @@
+{
+  "system": "TFC12",
+  "generated": "2026-09-30",
+  "legacy_path": "legacy/STG/TFC12",
+  "stats": {
+    "programs_in_repo": 17,
+    "external_call_targets": 45,
+    "call_edges": 241,
+    "unresolved_copybooks": 83
+  },
+  "root": {
+    "id": "sys",
+    "name": "TFC12",
+    "kind": "system",
+    "children": [
+      {
+        "id": "dom:stg",
+        "name": "STG H/K/L",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "FTFCH120",
+            "name": "FTFCH120",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/FTFCH120.src",
+            "loc": 384,
+            "description": "H-module for TFC12 create charge (omkostninger). Orchestrates FTFCK120 then FTFCL120 under STG header R400CH02 and function copy RTFCE120. Uses trace F791TRAC and error helper F7918030 (external). Decimal-Point Is Comma."
+          },
+          {
+            "id": "FTFCK120",
+            "name": "FTFCK120",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/FTFCK120.src",
+            "loc": 1099,
+            "description": "K-module control for charge setup. Runs F115L050 initial check and F115ISC0 sys-code reads; validates paying party and charge acceptance rules before L-module work."
+          },
+          {
+            "id": "FTFCL120",
+            "name": "FTFCL120",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/FTFCL120.src",
+            "loc": 1930,
+            "description": "L-module logic for main and part charges, percent/fixed calculation, shadow via F115L140, timestamps F115L030, compare helpers L060/L070/L080, and I-module persistence ICA0/ICH0/IMC0/IPA0/IPC0."
+          }
+        ]
+      },
+      {
+        "id": "dom:helpers",
+        "name": "In-repo helpers",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "F115ICA0",
+            "name": "F115ICA0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115ICA0.src",
+            "loc": 1266,
+            "description": "Contract amount I-module (EXEC SQL). Called from FTFCL120 and F115L140; external read/update variants F115ICAR, F115ICAU."
+          },
+          {
+            "id": "F115ICH0",
+            "name": "F115ICH0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115ICH0.src",
+            "loc": 1395,
+            "description": "Main charge I-module (EXEC SQL). Called from FTFCL120."
+          },
+          {
+            "id": "F115IMC0",
+            "name": "F115IMC0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115IMC0.src",
+            "loc": 1458,
+            "description": "Main contract I-module (EXEC SQL). Called from FTFCL120 and F115L140."
+          },
+          {
+            "id": "F115IPA0",
+            "name": "F115IPA0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115IPA0.src",
+            "loc": 1461,
+            "description": "Part amount I-module (EXEC SQL). Called from FTFCL120 and F115L140."
+          },
+          {
+            "id": "F115IPC0",
+            "name": "F115IPC0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115IPC0.src",
+            "loc": 1476,
+            "description": "Part charge I-module (EXEC SQL). Called from FTFCL120."
+          },
+          {
+            "id": "F115ISC0",
+            "name": "F115ISC0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115ISC0.src",
+            "loc": 1180,
+            "description": "System code read (R115ISC0-Sys-Code). Called from FTFCK120 and FTFCL120."
+          },
+          {
+            "id": "F115ISR0",
+            "name": "F115ISR0",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115ISR0.src",
+            "loc": 1580,
+            "description": "Status relation sys-code (R115ISR0). Called from FTFCL120."
+          },
+          {
+            "id": "F115L030",
+            "name": "F115L030",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L030.src",
+            "loc": 576,
+            "description": "Sets operational timestamps (R115L030-Set-Timestamp). Called from FTFCL120."
+          },
+          {
+            "id": "F115L050",
+            "name": "F115L050",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L050.src",
+            "loc": 563,
+            "description": "Initial-check gate (R115L050-Initial-Check). Invoked from FTFCK120 before charge processing continues."
+          },
+          {
+            "id": "F115L060",
+            "name": "F115L060",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L060.src",
+            "loc": 1585,
+            "description": "Compare/compute charge tier helper (R115L060-Comp-Charge). Called from FTFCL120."
+          },
+          {
+            "id": "F115L070",
+            "name": "F115L070",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L070.src",
+            "loc": 1018,
+            "description": "Compare/compute charge tier helper (R115L070-Comp-Charge). Called from FTFCL120."
+          },
+          {
+            "id": "F115L080",
+            "name": "F115L080",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L080.src",
+            "loc": 733,
+            "description": "Compare/compute charge tier helper (R115L080-Comp-Charge). Called from FTFCL120."
+          },
+          {
+            "id": "F115L140",
+            "name": "F115L140",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L140.src",
+            "loc": 2892,
+            "description": "Shadow and status orchestration (~2.9k LOC). Called from FTFCL120; calls external F115L040, F115ICC0, F115IRP0, F115IEI0 and in-repo F115IMC0, F115ICA0, F115IPA0."
+          },
+          {
+            "id": "F116L030",
+            "name": "F116L030",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F116L030.src",
+            "loc": 1183,
+            "description": "Currency exchange helper (R116L030-Currency-Xchange). Called from FTFCL120."
+          }
+        ]
+      },
+      {
+        "id": "dom:boundary",
+        "name": "External CALL targets",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "F115I999",
+            "name": "F115I999",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115I999 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICA0, F115ICH0, F115IMC0, F115IPA0, F115IPC0, F115ISC0, F115ISR0."
+          },
+          {
+            "id": "F115ICAR",
+            "name": "F115ICAR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICAR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICA0."
+          },
+          {
+            "id": "F115ICAU",
+            "name": "F115ICAU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICAU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICA0."
+          },
+          {
+            "id": "F115ICC0",
+            "name": "F115ICC0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICC0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115ICHR",
+            "name": "F115ICHR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICHR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICH0."
+          },
+          {
+            "id": "F115ICHU",
+            "name": "F115ICHU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICHU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICH0."
+          },
+          {
+            "id": "F115ICT0",
+            "name": "F115ICT0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICT0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L060, F115L140."
+          },
+          {
+            "id": "F115IEI0",
+            "name": "F115IEI0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IEI0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L030, F115L140."
+          },
+          {
+            "id": "F115ILL0",
+            "name": "F115ILL0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ILL0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115ILM0",
+            "name": "F115ILM0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ILM0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115IMCR",
+            "name": "F115IMCR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IMCR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IMC0."
+          },
+          {
+            "id": "F115IMCU",
+            "name": "F115IMCU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IMCU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IMC0."
+          },
+          {
+            "id": "F115IPAR",
+            "name": "F115IPAR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IPAR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IPA0."
+          },
+          {
+            "id": "F115IPAU",
+            "name": "F115IPAU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IPAU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IPA0."
+          },
+          {
+            "id": "F115IPCR",
+            "name": "F115IPCR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IPCR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IPC0."
+          },
+          {
+            "id": "F115IPCU",
+            "name": "F115IPCU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IPCU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IPC0."
+          },
+          {
+            "id": "F115IRP0",
+            "name": "F115IRP0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IRP0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115ISCR",
+            "name": "F115ISCR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISCR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ISC0."
+          },
+          {
+            "id": "F115ISCU",
+            "name": "F115ISCU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISCU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ISC0."
+          },
+          {
+            "id": "F115ISE0",
+            "name": "F115ISE0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISE0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115ISRR",
+            "name": "F115ISRR",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISRR is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ISR0."
+          },
+          {
+            "id": "F115ISRU",
+            "name": "F115ISRU",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISRU is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ISR0."
+          },
+          {
+            "id": "F115IST0",
+            "name": "F115IST0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IST0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L050."
+          },
+          {
+            "id": "F115ITP0",
+            "name": "F115ITP0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ITP0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115IWF0",
+            "name": "F115IWF0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IWF0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115IWM0",
+            "name": "F115IWM0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IWM0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L140."
+          },
+          {
+            "id": "F115L040",
+            "name": "F115L040",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115L040 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L030, F115L140."
+          },
+          {
+            "id": "F115L150",
+            "name": "F115L150",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115L150 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L060."
+          },
+          {
+            "id": "F115L999",
+            "name": "F115L999",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115L999 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L030, F115L050, F115L060, F115L070, F115L080, F115L140."
+          },
+          {
+            "id": "F116I020",
+            "name": "F116I020",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F116I020 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F116L999",
+            "name": "F116L999",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F116L999 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F1781910",
+            "name": "F1781910",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F1781910 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IMC0."
+          },
+          {
+            "id": "F203L130",
+            "name": "F203L130",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F203L130 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F5879010",
+            "name": "F5879010",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F5879010 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICA0, F115ICH0, F115IMC0, F115IPA0, F115IPC0, F115ISC0, F115ISR0, F116L030."
+          },
+          {
+            "id": "F7918030",
+            "name": "F7918030",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7918030 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115ICA0, F115ICH0, F115IMC0, F115IPA0, F115IPC0, F115ISC0, F115ISR0, F115L030…."
+          },
+          {
+            "id": "F7918040",
+            "name": "F7918040",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7918040 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F7918110",
+            "name": "F7918110",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7918110 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F7919070",
+            "name": "F7919070",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919070 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115L030, F115L060."
+          },
+          {
+            "id": "F7919100",
+            "name": "F7919100",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919100 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IMC0, F115IPA0."
+          },
+          {
+            "id": "F7919270",
+            "name": "F7919270",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919270 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F115IMC0, F115L030."
+          },
+          {
+            "id": "F7919990",
+            "name": "F7919990",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919990 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F791I020",
+            "name": "F791I020",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F791I020 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F791I080",
+            "name": "F791I080",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F791I080 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F791IET0",
+            "name": "F791IET0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F791IET0 is an external boundary (no .src in legacy/STG/TFC12). Callers include: F116L030."
+          },
+          {
+            "id": "F791TRAC",
+            "name": "F791TRAC",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F791TRAC is an external boundary (no .src in legacy/STG/TFC12). Callers include: FTFCH120."
+          }
+        ]
+      },
+      {
+        "id": "dom:data",
+        "name": "Data stores",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "ds:DB2-TFC12",
+            "name": "DB2 (Trade Finance)",
+            "kind": "datastore",
+            "description": "Mainframe DB2 accessed via EXEC SQL in F115I* modules; table layouts partly in unresolved COPY members."
+          },
+          {
+            "id": "ds:RTFCE120",
+            "name": "RTFCE120 function I/O",
+            "kind": "datastore",
+            "description": "STG function envelope copybook RTFCE120 — charge/pricing request and response fields for TFC12."
+          }
+        ]
+      }
+    ]
+  },
+  "edges": [
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115ICAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115ICHU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7919270",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115IMCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7919270",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F1781910",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F1781910",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115IPAU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F7919100",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115IPCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115ISCU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRR",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115ISRU",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F115I999",
+      "kind": "call"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F7919070",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115L040",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F7919270",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L030",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ISR0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ISC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IST0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F7919070",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115ISR0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115ICT0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115ICT0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F116L030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115L150",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L060",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F115L060",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F115L060",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L070",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F115L070",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L080",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115L040",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IRP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IRP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IRP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IRP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ISE0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ISE0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ISE0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ISE0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ICT0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILL0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILL0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILL0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ILL0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWM0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWF0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWF0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWF0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115IWF0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ITP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ITP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ITP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115ITP0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L140",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F7918110",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F7918040",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F5879010",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F203L130",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F791I080",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F116I020",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F791IET0",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F791I020",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F791I020",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F116L999",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F116L999",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F7919990",
+      "kind": "call"
+    },
+    {
+      "source": "F116L030",
+      "target": "F7919990",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH120",
+      "target": "FTFCK120",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH120",
+      "target": "FTFCL120",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH120",
+      "target": "F791TRAC",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH120",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK120",
+      "target": "F115ISC0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK120",
+      "target": "F115L050",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115ISR0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115L080",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115L070",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F116L030",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115L140",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115L060",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115ISC0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115L030",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115ICA0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115ICH0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115IMC0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115IPA0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115IPC0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115ISC0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "ds:DB2-TFC12",
+      "kind": "read"
+    },
+    {
+      "source": "F115ISR0",
+      "target": "ds:DB2-TFC12",
+      "kind": "write"
+    },
+    {
+      "source": "FTFCH120",
+      "target": "ds:RTFCE120",
+      "kind": "read"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "ds:RTFCE120",
+      "kind": "read"
+    },
+    {
+      "source": "FTFCL120",
+      "target": "ds:RTFCE120",
+      "kind": "write"
+    }
+  ],
+  "entryPoints": [
+    "FTFCH120"
+  ],
+  "deadEnds": [],
+  "observations": [
+    "F115L140 is the largest in-repo hub (~2.9k LOC) and fans out to both in-repo I-modules and external ICC0/IRP0/IEI0/L040 ports.",
+    "All seven F115I* helpers use EXEC SQL; DB2 access must be modeled as adapters, not inlined without schema imports.",
+    "45 external CALL targets are boundary modules; map edges are complete but sources live outside this repo per SCOPE.md.",
+    "H-module always invokes K then L (Servo pattern); Java transform should preserve ordering even when K rejects.",
+    "Charge compare helpers L060/L070/L080 form a parallel tier called from FTFCL120 — candidate for shared Java strategy.",
+    "No JCL/CICS entry config in-repo; FTFCH120 is the documented STG entry for this closure."
+  ],
+  "flows": [
+    {
+      "name": "Register a trade finance charge",
+      "persona": "Back-office operator",
+      "description": "Operator submits a create-charge STG request for a contract or part.",
+      "steps": [
+        {
+          "label": "STG invokes H-module",
+          "nodes": [
+            "FTFCH120",
+            "ds:RTFCE120"
+          ]
+        },
+        {
+          "label": "Control validation (K)",
+          "nodes": [
+            "FTFCK120",
+            "F115L050",
+            "F115ISC0"
+          ]
+        },
+        {
+          "label": "Charge logic (L)",
+          "nodes": [
+            "FTFCL120",
+            "F115L060",
+            "F115ICH0",
+            "F115IPC0"
+          ]
+        },
+        {
+          "label": "Persist amounts",
+          "nodes": [
+            "F115ICA0",
+            "F115IPA0",
+            "F115IMC0",
+            "ds:DB2-TFC12"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Percent-based charge with shadow update",
+      "persona": "Pricing specialist",
+      "description": "Specialist sets percent charges that trigger shadow processing.",
+      "steps": [
+        {
+          "label": "K initial check passes",
+          "nodes": [
+            "FTFCK120",
+            "F115L050"
+          ]
+        },
+        {
+          "label": "L selects percent path",
+          "nodes": [
+            "FTFCL120"
+          ]
+        },
+        {
+          "label": "Shadow orchestration",
+          "nodes": [
+            "F115L140",
+            "F115IMC0"
+          ]
+        },
+        {
+          "label": "External status/event ports",
+          "nodes": [
+            "F115ICC0",
+            "F115IEI0",
+            "F115IRP0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cross-currency charge",
+      "persona": "Treasury user",
+      "description": "Charge requires currency conversion before amounts are stored.",
+      "steps": [
+        {
+          "label": "L-module charge path",
+          "nodes": [
+            "FTFCL120"
+          ]
+        },
+        {
+          "label": "Currency exchange",
+          "nodes": [
+            "F116L030"
+          ]
+        },
+        {
+          "label": "Amount helpers",
+          "nodes": [
+            "F115ICA0",
+            "F115IPA0",
+            "ds:DB2-TFC12"
+          ]
+        }
+      ]
+    }
+  ]
+}

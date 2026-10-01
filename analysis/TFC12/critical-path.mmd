@@ -1,0 +1,9 @@
+flowchart TD
+  A[Operator STG request] --> B[FTFCH120 H]
+  B --> C[FTFCK120 K]
+  C --> D[F115L050 initial check]
+  C --> E[FTFCL120 L]
+  E --> F[Charge compare L060/L070/L080]
+  E --> G[I-modules persist]
+  G --> H[(DB2)]
+  E --> I[F115L140 shadow optional]

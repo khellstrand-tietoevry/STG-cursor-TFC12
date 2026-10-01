@@ -1,0 +1,21 @@
+graph TD
+  EP[FTFCH120 STG entry]:::entry
+  EP --> K[FTFCK120 K-module]
+  EP --> L[FTFCL120 L-module]
+  K --> L050[F115L050 initial check]
+  K --> ISC0[F115ISC0]
+  L --> L030[F115L030 timestamp]
+  L --> L060[F115L060]
+  L --> L070[F115L070]
+  L --> L080[F115L080]
+  L --> L140[F115L140 shadow]
+  L --> ICA0[F115ICA0]
+  L --> ICH0[F115ICH0]
+  L --> IMC0[F115IMC0]
+  L --> IPA0[F115IPA0]
+  L --> IPC0[F115IPC0]
+  L --> ISR0[F115ISR0]
+  L --> FX[F116L030 FX]
+  L140 --> EXT[F115ICC0 F115IRP0 F115IEI0 F115L040 external]
+  EP --> EXT2[F7918030 F791TRAC external]
+  classDef entry fill:#6bb85a,stroke:#333,color:#111;

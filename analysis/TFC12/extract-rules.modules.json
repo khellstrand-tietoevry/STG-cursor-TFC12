@@ -1,0 +1,138 @@
+[
+ {
+  "name": "FTFCH120",
+  "domain": "STG H/K/L",
+  "files": [
+   "src/FTFCH120.src"
+  ],
+  "loc": 384
+ },
+ {
+  "name": "FTFCK120",
+  "domain": "STG H/K/L",
+  "files": [
+   "src/FTFCK120.src"
+  ],
+  "loc": 1099
+ },
+ {
+  "name": "FTFCL120",
+  "domain": "STG H/K/L",
+  "files": [
+   "src/FTFCL120.src"
+  ],
+  "loc": 1930
+ },
+ {
+  "name": "F115ICA0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115ICA0.src"
+  ],
+  "loc": 1266
+ },
+ {
+  "name": "F115ICH0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115ICH0.src"
+  ],
+  "loc": 1395
+ },
+ {
+  "name": "F115IMC0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115IMC0.src"
+  ],
+  "loc": 1458
+ },
+ {
+  "name": "F115IPA0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115IPA0.src"
+  ],
+  "loc": 1461
+ },
+ {
+  "name": "F115IPC0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115IPC0.src"
+  ],
+  "loc": 1476
+ },
+ {
+  "name": "F115ISC0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115ISC0.src"
+  ],
+  "loc": 1180
+ },
+ {
+  "name": "F115ISR0",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115ISR0.src"
+  ],
+  "loc": 1580
+ },
+ {
+  "name": "F115L030",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L030.src"
+  ],
+  "loc": 576
+ },
+ {
+  "name": "F115L050",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L050.src"
+  ],
+  "loc": 563
+ },
+ {
+  "name": "F115L060",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L060.src"
+  ],
+  "loc": 1585
+ },
+ {
+  "name": "F115L070",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L070.src"
+  ],
+  "loc": 1018
+ },
+ {
+  "name": "F115L080",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L080.src"
+  ],
+  "loc": 733
+ },
+ {
+  "name": "F115L140",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L140.src"
+  ],
+  "loc": 2892
+ },
+ {
+  "name": "F116L030",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F116L030.src"
+  ],
+  "loc": 1183
+ }
+]

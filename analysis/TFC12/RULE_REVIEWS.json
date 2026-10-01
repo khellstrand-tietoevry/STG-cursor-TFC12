@@ -1,0 +1,13 @@
+{
+  "system": "TFC12",
+  "version": 1,
+  "scope": "flagged",
+  "reviews": {
+    "RULE-017": {
+      "verdict": "confirmed",
+      "at": "2026-09-30T14:35:00+02:00",
+      "title": "F115L050 update-timestamp check disabled",
+      "note": "Match legacy snapshot: do not enforce E000-Check-Upd-Timestamp on main path in Java (same as TFC11 decision)."
+    }
+  }
+}
